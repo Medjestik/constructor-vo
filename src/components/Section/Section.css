@@ -1,0 +1,121 @@
+.section {
+  margin: 0px;
+  width: 100%;
+}
+.section_type_page {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+}
+.section__list {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}
+.section__item {
+  width: min-content;
+  min-width: 164px;
+  height: 120px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background: var(--gradient-blue-color);
+  border-radius: var(--border-radius);
+}
+.section__item_type_small {
+  width: min-content;
+  min-width: 164px;
+}
+.section__item_type_medium {
+  width: min-content;
+  min-width: 256px;
+}
+.section__item_type_large {
+  width: 100%;
+  min-width: 100%;
+}
+.section__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--main-white-color);
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.section__container {
+  width: 100%;
+  margin: -80px 0px 0px 0px;
+  min-height: 80px;
+  padding: 36px;
+  background: var(--main-white-color);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  position: relative;
+}
+.section__container_type_page {
+  flex-grow: 2;
+}
+.section__header {
+  margin: 0px 0px 24px 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section__header_margin_top {
+  margin: 20px 0px 24px 0px;
+}
+.section__header-btn-container {
+  margin: auto 0px 0px 0px;
+  display: flex;
+  align-items: center;
+}
+.section__header-btn {
+  margin: 0px 0px 0px 0px;
+  width: 324px;
+  padding: 11px;
+  background: var(--gradient-blue-color);
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--main-white-color);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  transition: all .3s ease-in-out;
+}
+.section__header-btn_type_small {
+  width: auto;
+  margin: 0px 0px 0px 20px;
+  padding: 11px 22px;
+  flex-shrink: 0;
+}
+.section__header-btn_margin_left {
+  margin: 0px 0px 0px 20px;
+}
+.section__header-btn:hover  {
+  cursor: pointer;
+  user-select: auto;
+  pointer-events: all;
+  opacity: .8;
+  box-shadow: 0px 8px 12px -8px rgba(0, 55, 196, 0.9);
+}
+
+@media all and (max-width: 833px) {
+  .section__student-container {
+    padding: 20px;
+  }
+  .section__student-item {
+    padding: 7px 16px;
+    height: 112px;
+  }
+  .section__student-title {
+    font-size: 15px;
+    line-height: 18px;
+  }
+}

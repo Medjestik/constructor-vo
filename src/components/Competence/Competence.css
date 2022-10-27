@@ -1,0 +1,119 @@
+.competence-header {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+.competence-header__caption {
+  width: 100%;
+  margin: 0px 0px 8px 0px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--main-black-color);
+}
+.competence-container {
+  width: 100%;
+  margin: 12px 0px 0px 0px;
+  display: flex;
+  flex-grow: 2;
+}
+.competence-container_type_left {
+  width: 50%;
+  margin: 12px 0px 0px 0px;
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+}
+.competence-container_type_right {
+  width: 50%;
+  margin: 12px 0px 0px 0px;
+  box-sizing: border-box;
+  padding: 0px 0px 0px 20px;
+}
+.competence-container_type_scroll {
+  box-sizing: border-box;
+  padding-right: 20px;
+  overflow-y: scroll;
+}
+.competence__list {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+  box-sizing: border-box;
+}
+.competence__list_padding_left {
+  padding: 0px 0px 0px 20px;
+}
+.competence-list__item {
+  margin: 0px;
+}
+.competence-list__name {
+  position: relative;
+  width: 100%;
+  margin: 0px;
+  padding: 4px 0px;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--main-black-color);
+  transition: .3s ease-in-out;
+}
+.competence-list__name_type_active:hover {
+  color: var(--accent-blue-color);
+  cursor: pointer;
+}
+.competence-list__name_weight_bold {
+  font-weight: 600;
+}
+.competence-list__name_type_ability {
+  color: var(--accent-blue-color);
+}
+.competence-list__name_type_discipline {
+  color: var(--accent-blue-color);
+}
+.competence-list__name_type_process {
+  color: var(--accent-blue-color);
+}
+.competence-list__name_type_knowledge:before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  width: 16px;
+  height: 6px;
+  border-radius: 10px;
+  background: var(--gradient-orange-color);
+}
+.competence-list__name_type_stage::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: -20px;
+  width: 16px;
+  height: 16px;
+  background-image: url('../../images/button/setting.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.competence-list__name_type_process::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: -20px;
+  width: 16px;
+  height: 16px;
+  background-image: url('../../images/button/play.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.competence-list__name_type_empty {
+  color: var(--accent-grey-color);
+  font-weight: 300;
+}

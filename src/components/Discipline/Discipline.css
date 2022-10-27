@@ -1,0 +1,7 @@
+.discipline {
+  margin: 0px;
+  width: 100%;
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+}

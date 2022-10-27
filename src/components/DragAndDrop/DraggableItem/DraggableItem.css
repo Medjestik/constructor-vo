@@ -1,0 +1,33 @@
+.draggable-item {
+  width: 100%;
+  margin: 0px 0px 4px 0px;
+  padding: 11px 16px;
+  background-color: var(--main-white-color);
+  border-bottom: 1px solid var(--slider-color);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.draggable-item:last-of-type {
+  border-bottom: none;
+}
+.draggable-item_type_dragging {
+  box-shadow: 0px 8px 12px -8px rgba(0, 55, 196, 0.9);
+}
+.draggable-item__count {
+  margin: 0px 12px 0px 0px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
+}
+.draggable-item__text {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
+}
