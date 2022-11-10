@@ -6,6 +6,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import Preloader from '../Preloader/Preloader.js';
 import HomePage from '../Homepage/HomePage.js';
 import Header from '../Header/Header.js';
+import Main from '../Main/Main.js';
 import Person from '../Person/Person.js';
 import Program from '../Program/Program.js';
 import RegisterPopup from '../Popup/RegisterPopup/RegisterPopup.js';
@@ -173,17 +174,23 @@ function App() {
                       onLogout={handleLogout}
                     />
                     
-                    <div className='main-container'>
+                    <div className='main-container'> 
                       <Routes>
 
+                      <Route exact path='main' element={
+                          <Main
+                            windowWidth={windowWidth}
+                          />
+                        }/>
+
                         <Route exact path='person' element={
-                          <Person 
+                          <Person
                             windowWidth={windowWidth}
                           />
                         }/>
 
                         <Route exact path='program/*' element={
-                          <Program 
+                          <Program
                             windowWidth={windowWidth}
                             onLogout={handleLogout}
                           />

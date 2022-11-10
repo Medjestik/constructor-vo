@@ -1,0 +1,96 @@
+.main {
+  margin: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.main__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 44px;
+  text-align: left;
+  color: var(--main-black-color);
+}
+.main__subtitle {
+  margin: 20px 0px 0px 0px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: left;
+  color: var(--main-black-color);
+}
+.main__list {
+  margin: 20px 0px 0px 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.main__item {
+  margin: 0px 40px 0px 0px;
+  padding: 40px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--slider-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 12px -8px hsl(0deg 0% 65% / 90%);
+}
+.main__item:last-of-type {
+  margin: 0px;
+}
+.main__item-text {
+  margin: 20px 0px 0px 0px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: left;
+  color: var(--main-black-color);
+}
+.main__item-links {
+  margin: 20px 0px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.main__item-link {
+  margin: 0px;
+  border-radius: var(--border-radius);
+  color: var(--main-white-color);
+  width: 180px;
+  display: flex;
+  justify-content: center;
+  padding: 11px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 19px;
+  text-decoration: none;
+  transition: all .3s ease-in-out;
+  flex-shrink: 0;
+}
+.main__item-link_type_video {
+  background: var(--accent-orange-color);
+}
+.main__item-link_type_info {
+  background: var(--accent-blue-color);
+}
+.main__item-link_type_video:hover {
+  cursor: pointer;
+  user-select: auto;
+  pointer-events: all;
+  opacity: .8;
+  box-shadow: 0px 8px 12px -8px rgba(213, 102, 0, 0.9);
+}
+.main__item-link_type_info:hover {
+  cursor: pointer;
+  user-select: auto;
+  pointer-events: all;
+  opacity: .8;
+  box-shadow: 0px 8px 12px -8px rgba(0, 55, 196, 0.9);
+}

@@ -53,6 +53,15 @@ function Header({ windowWidth, pathname, onLogout }) {
           <h3 className='header__name'>{currentUser.name || ''}</h3>
           <nav className='scroll header__nav'>
 
+            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/main'>
+              <div className='header__nav-link-icon'>
+                <div className='header__nav-link-icon-container'>
+                  <div className='header__nav-link-icon_type_person'></div>
+                </div>
+              </div>
+              <p className='header__nav-link-text'>Главная</p>
+            </NavLink>
+
             <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/person'>
               <div className='header__nav-link-icon'>
                 <div className='header__nav-link-icon-container'>
