@@ -5,9 +5,7 @@ import * as api from '../../utils/api.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import Preloader from '../Preloader/Preloader.js';
 import HomePage from '../Homepage/HomePage.js';
-import Header from '../Header/Header.js';
-import Main from '../Main/Main.js';
-import Person from '../Person/Person.js';
+import Pages from '../Pages/Pages.js';
 import Program from '../Program/Program.js';
 import RegisterPopup from '../Popup/RegisterPopup/RegisterPopup.js';
 
@@ -84,7 +82,7 @@ function App() {
           setCurrentUser(res);
           setLoggedIn(true);
           if (pathname === '/') {
-            navigate('/person');
+            navigate('page/main');
             setIsLoadingPage(false);
           } else {
             navigate(pathname);
@@ -167,37 +165,24 @@ function App() {
               ? 
               <div className='wrapper'>
                 <div className='container'>
+                  <Routes>
 
-                    <Header 
-                      windowWidth={windowWidth}
-                      pathname={pathname}
-                      onLogout={handleLogout}
-                    />
-                    
-                    <div className='main-container'> 
-                      <Routes>
+                    <Route exact path='page/*' element={
+                        <Pages
+                          windowWidth={windowWidth}
+                          pathname={pathname}
+                          onLogout={handleLogout}
+                        />
+                      }/>
 
-                      <Route exact path='main' element={
-                          <Main
-                            windowWidth={windowWidth}
-                          />
-                        }/>
+                      <Route exact path='program/:programId/*' element={
+                        <Program
+                          windowWidth={windowWidth}
+                          onLogout={handleLogout}
+                        />
+                      }/>
 
-                        <Route exact path='person' element={
-                          <Person
-                            windowWidth={windowWidth}
-                          />
-                        }/>
-
-                        <Route exact path='program/*' element={
-                          <Program
-                            windowWidth={windowWidth}
-                            onLogout={handleLogout}
-                          />
-                        }/>
-
-                      </Routes>
-                    </div>    
+                    </Routes>
                   </div>
                 </div>
               :

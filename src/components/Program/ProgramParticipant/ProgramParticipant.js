@@ -21,9 +21,9 @@ function ProgramParticipant({ participants, onEdit, onRemove, isEditRights }) {
             <p className='table__text table__text_type_header'>Роль</p>
           </div>
         </div>
-        <div className='table__column_type_btn table__column_type_btn-header'>
-          <button className='btn btn_type_download btn_type_download_status_active'></button> 
-          <button className='btn btn_type_download btn_type_download_status_active table__btn'></button> 
+        <div className='table__column table__column_type_header table__column_type_btn table__column_type_btn-header'>
+          <div className='btn-icon'></div> 
+          <div className='btn-icon btn-icon_margin_left'></div> 
         </div>
       </div>
       <ul className='table__main scroll'>
@@ -44,13 +44,15 @@ function ProgramParticipant({ participants, onEdit, onRemove, isEditRights }) {
               <div className='table__column table__column_type_btn'>
                 <button
                   disabled={isEditRights ? '': 'disabled'}
-                  className={`btn btn_type_gear ${isEditRights ? 'btn_type_gear_status_active' : ''}`}
+                  className={`btn-icon btn-icon_type_edit ${isEditRights && 'btn-icon_color_accent-blue'}`}
+                  type='button'
                   onClick={() => (onEdit(item))}
                 >
                 </button>
                 <button
                   disabled={isEditRights && currentUser.id !== item.id ? '': 'disabled'}
-                  className={`btn btn_type_cancel table__btn ${isEditRights && currentUser.id !== item.id ? 'btn_type_cancel_status_active' : ''}`}
+                  className={`btn-icon btn-icon_margin_left btn-icon_type_cancel ${isEditRights && currentUser.id !== item.id && 'btn-icon_color_accent-orange'}`}
+                  type='button'
                   onClick={() => (onRemove(item))}
                 >
                 </button>

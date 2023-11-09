@@ -2,7 +2,7 @@ import React from 'react';
 import './Navigation.css';
 import { useNavigate, NavLink } from "react-router-dom";
 
-function Navigation({ isPerformFunction, onBack, onLogout }) {
+function Navigation({ title, isPerformFunction, onBack, onLogout }) {
 
   const navigate = useNavigate();
 
@@ -13,12 +13,12 @@ function Navigation({ isPerformFunction, onBack, onLogout }) {
         isPerformFunction
         ?
         <button className='navigation__btn-back' type='button' onClick={() => onBack()}> 
-          <p className='navigation__btn-back-text'>Назад</p>
+          <p className='navigation__btn-back-text'>{title}</p>
           <div className='navigation__btn-back-arrow'></div>
         </button>
         :
         <button className='navigation__btn-back' type='button' onClick={() => navigate(-1)}> 
-          <p className='navigation__btn-back-text'>Назад</p>
+          <p className='navigation__btn-back-text'>{title}</p>
           <div className='navigation__btn-back-arrow'></div>
         </button>
       }

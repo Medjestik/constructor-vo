@@ -134,7 +134,7 @@ function ProgramList() {
   }
 
   function openProgram(program) {
-    navigate('/program/' + program.id + '/info-tab');
+    navigate('/program/' + program.id + '/program-info');
   }
 
   React.useEffect(() => {
@@ -156,7 +156,6 @@ function ProgramList() {
         <Preloader />
         :
         <>
-
         <Section title='Программы' heightType='page' headerType='small'>
 
           <div className='section__header'>

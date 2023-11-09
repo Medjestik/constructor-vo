@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 import HeaderMobile from './HeaderMobile/HeaderMobile.js';
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import useOnClickOutside from '../../hooks/useOnClickOutside.js';
 
@@ -53,7 +53,7 @@ function Header({ windowWidth, pathname, onLogout }) {
           <h3 className='header__name'>{currentUser.name || ''}</h3>
           <nav className='scroll header__nav'>
 
-            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/main'>
+            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/page/main'>
               <div className='header__nav-link-icon'>
                 <div className='header__nav-link-icon-container'>
                   <div className='header__nav-link-icon_type_person'></div>
@@ -62,17 +62,8 @@ function Header({ windowWidth, pathname, onLogout }) {
               <p className='header__nav-link-text'>Главная</p>
             </NavLink>
 
-            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/person'>
-              <div className='header__nav-link-icon'>
-                <div className='header__nav-link-icon-container'>
-                  <div className='header__nav-link-icon_type_person'></div>
-                </div>
-              </div>
-              <p className='header__nav-link-text'>Личный кабинет</p>
-            </NavLink>
-
             <NavLink onClick={hideMobileMenu} className={`header__nav-link + ${isProgramOpen ? 'header__nav-link_type_active' : ''}`} 
-            to={`/program/list`}
+            to={`/page/program/list`}
             >
               <div className='header__nav-link-icon'>
                 <div className='header__nav-link-icon-container'>

@@ -26,9 +26,9 @@ function ProgramTable({ programs, onOpen, onEdit, onRemove }) {
             <p className='table__text table__text_type_header'>Роль</p>
           </div>
         </div>
-        <div className='table__column_type_btn table__column_type_btn-header'>
-          <button className='btn btn_type_download btn_type_download_status_active'></button> 
-          <button className='btn btn_type_download btn_type_download_status_active table__btn'></button> 
+        <div className='table__column table__column_type_header table__column_type_btn table__column_type_btn-header'>
+          <div className='btn-icon'></div> 
+          <div className='btn-icon btn-icon_margin_left'></div> 
         </div>
       </div>
       <ul className='table__main scroll'>
@@ -54,14 +54,16 @@ function ProgramTable({ programs, onOpen, onEdit, onRemove }) {
               </div>
               <div className='table__column table__column_type_btn'>
                 <button
-                  disabled={currentUser.id !== item.authorId ? 'disabled': ''}
-                  className={`btn btn_type_gear ${currentUser.id === item.authorId ? 'btn_type_gear_status_active' : ''}`}
+                  disabled={currentUser.id !== item.authorId ? 'disabled': ''}  
+                  className={`btn-icon btn-icon_type_edit ${currentUser.id === item.authorId && 'btn-icon_color_accent-blue'}`}
+                  type='button'
                   onClick={() => (onEdit(item))}
                 >
                 </button>
                 <button
                   disabled={currentUser.id !== item.authorId ? 'disabled': ''}
-                  className={`btn btn_type_cancel table__btn ${currentUser.id === item.authorId ? 'btn_type_cancel_status_active' : ''}`}
+                  className={`btn-icon btn-icon_margin_left btn-icon_type_cancel ${currentUser.id === item.authorId && 'btn-icon_color_accent-orange'}`}
+                  type='button'
                   onClick={() => (onRemove(item))}
                 >
                 </button>

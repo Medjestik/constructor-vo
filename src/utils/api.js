@@ -1,4 +1,4 @@
-import { API_URL } from './config.js';
+import { API_URL, LOCAL_URL } from './config.js';
 
 function handleResponse (res) {
     if (res.ok) {

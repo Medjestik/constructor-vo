@@ -14,8 +14,8 @@ function DisciplineKnowledgeTable({ currentItem, onDisconnectKnowledge }) {
             <p className='table__text table__text_type_header'>Наименование</p>
           </div>
         </div>
-        <div className='table__column_type_btn table__column_type_btn-header'>
-          <button className='btn btn_type_download btn_type_download_status_active'></button> 
+        <div className='table__column table__column_type_header table__column_type_btn table__column_type_btn-header'>
+          <div className='btn-icon'></div> 
         </div>
       </div>
       <ul className='table__main scroll'>
@@ -32,8 +32,9 @@ function DisciplineKnowledgeTable({ currentItem, onDisconnectKnowledge }) {
               </div>
               <div className='table__column table__column_type_btn'>
                 <button
-                  className={`btn btn_type_clip btn_type_clip_status_active`}
+                  className={`btn-icon btn-icon_color_accent-blue btn-icon_type_link`}
                   onClick={() => (onDisconnectKnowledge(knowledge))}
+                  type='button'
                 >
                 </button>
               </div>

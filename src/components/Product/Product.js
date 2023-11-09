@@ -3,6 +3,7 @@ import './Product.css';
 import { useNavigate } from 'react-router-dom';
 import * as productApi from '../../utils/product.js';
 import Preloader from '../Preloader/Preloader.js';
+import Section from '../Section/Section.js';
 import Search from '../Search/Search.js';
 import ProductTable from './ProductTable/ProductTable.js';
 import AddProductPopup from './ProductPopup/AddProductPopup/AddProductPopup.js';
@@ -125,7 +126,7 @@ function Product({ currentProgram, isEditRights }) {
   }
 
   function openProgram(product) {
-    navigate('/program/' + currentProgram.id + '/product/' + product.id);
+    navigate('/program/' + currentProgram.id + '/program-product/' + product.id);
   }
 
   React.useEffect(() => {
@@ -138,13 +139,13 @@ function Product({ currentProgram, isEditRights }) {
   }, []);
 
   return (
-    <div className='product'>
+    <>
       {
         isLoadingPage 
         ?
         <Preloader />
         :
-        <>
+        <Section title={'Реконструкция деятельности'} heightType={'page'} headerType={'large'}>
 
           <div className='section__header'>
             <Search type='medium' id='program' data={products} onSearch={handleSearch} />
@@ -158,7 +159,7 @@ function Product({ currentProgram, isEditRights }) {
             onRemove={openRemoveProductPopup}
           />
 
-        </>
+        </Section>
       }
       {
         isOpenAddProductPopup &&
@@ -192,7 +193,7 @@ function Product({ currentProgram, isEditRights }) {
           isLoadingRequest={isLoadingRequest}
         />
       }
-    </div>
+    </>
   )
 }
 

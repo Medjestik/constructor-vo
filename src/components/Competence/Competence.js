@@ -6,6 +6,7 @@ import CompetenceAbility from './CompetenceAbility/CompetenceAbility.js';
 import CompetenceKnowledge from './CompetenceKnowledge/CompetenceKnowledge.js';
 import * as competenceApi from '../../utils/competence.js';
 import Preloader from '../Preloader/Preloader.js';
+import Section from '../Section/Section.js';
 import AddAbilityPopup from './CompetencePopup/AddAbilityPopup/AddAbilityPopup.js';
 import ConnectAbilityPopup from './CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
 import DisconnectAbilityPopup from './CompetencePopup/DisconnectAbilityPopup/DisconnectAbilityPopup.js';
@@ -157,12 +158,12 @@ function Competence({ currentProgram, isEditRights }) {
     setCurrentItem({});
     if (option.id === '1') {
       setCurrentOption(competenceOptions[1]);
-      navigate('/program/' + currentProgram.id + '/competence-tab/ability');
+      navigate('/program/' + currentProgram.id + '/program-profile/ability');
     } else if (option.id === '2') {
       setCurrentOption(competenceOptions[2]);
-      navigate('/program/' + currentProgram.id + '/competence-tab/knowledge');
+      navigate('/program/' + currentProgram.id + '/program-profile/knowledge');
     } else {
-      navigate('/program/' + currentProgram.id + '/competence-tab');
+      navigate('/program/' + currentProgram.id + '/program-profile');
     }
   }
 
@@ -488,46 +489,47 @@ function Competence({ currentProgram, isEditRights }) {
         ?
         <Preloader />
         :
-        <>
-        <div className='competence-header'>
-          <h2 className='competence-header__caption'>Выберите этап проектирования компетентносного профиля:</h2>
-          <PopupSelect options={competenceOptions} currentOption={currentOption} onChooseOption={handleChangeOption} />
-        </div>
+        <Section title={'Компетентностный профиль'} heightType={'page'} headerType={'large'}>
+          <div className='competence-header'>
+            <h2 className='competence-header__caption'>Выберите этап проектирования компетентносного профиля:</h2>
+            <PopupSelect options={competenceOptions} currentOption={currentOption} onChooseOption={handleChangeOption} />
+          </div>
 
-        <Routes>
+          <Routes>
 
-          <Route exact path='ability' element={
-              <CompetenceAbility 
-                competenceProfile={competenceProfile}
-                onAddAbility={openAddAbilitiesPopup}
-                onConnectAbility={openConnectAbilitiesPopup}
-                onDisconnectAbility={openDisconnectAbilitiesPopup}
-                onEditAbility={openEditAbilitiesPopup}
-                onRemoveAbility={openRemoveAbilitiesPopup}
-                isShowAbilities={isShowAbilities}
-                currentItem={currentItem}
-                chooseItem={handleChooseAbility}
-              />
-            }
-          />
+            <Route exact path='ability' element={
+                <CompetenceAbility 
+                  competenceProfile={competenceProfile}
+                  onAddAbility={openAddAbilitiesPopup}
+                  onConnectAbility={openConnectAbilitiesPopup}
+                  onDisconnectAbility={openDisconnectAbilitiesPopup}
+                  onEditAbility={openEditAbilitiesPopup}
+                  onRemoveAbility={openRemoveAbilitiesPopup}
+                  isShowAbilities={isShowAbilities}
+                  currentItem={currentItem}
+                  chooseItem={handleChooseAbility}
+                />
+              }
+            />
 
-          <Route exact path='knowledge' element={
-              <CompetenceKnowledge
-                competenceProfile={competenceProfile}
-                isShowKnowledge={isShowKnowledge}
-                onAddKnowledge={openAddKnowledgePopup}
-                onConnectKnowledge={openConnectKnowledgePopup}
-                onDisconnectKnowledge={openDisconnectKnowledgePopup}
-                onEditKnowledge={openEditKnowledgePopup}
-                onRemoveKnowledge={openRemoveKnowledgePopup}
-                currentItem={currentItem}
-                chooseItem={handleChooseKnowledge}
-              />
-            }
-          />
+            <Route exact path='knowledge' element={
+                <CompetenceKnowledge
+                  competenceProfile={competenceProfile}
+                  isShowKnowledge={isShowKnowledge}
+                  onAddKnowledge={openAddKnowledgePopup}
+                  onConnectKnowledge={openConnectKnowledgePopup}
+                  onDisconnectKnowledge={openDisconnectKnowledgePopup}
+                  onEditKnowledge={openEditKnowledgePopup}
+                  onRemoveKnowledge={openRemoveKnowledgePopup}
+                  currentItem={currentItem}
+                  chooseItem={handleChooseKnowledge}
+                />
+              }
+            />
 
-        </Routes>
-      </>
+          </Routes>
+
+        </Section>
       }
       {
         isAddAbilitiesPopupOpen &&

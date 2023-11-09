@@ -21,7 +21,7 @@ function CompetenceKnowledge({ competenceProfile, isShowKnowledge, onAddKnowledg
     <div className='competence-container'>
       <div ref={containerHeightRef} className='competence-container_type_left'>
         <h3 className='competence-header__caption'>Компетентностный профиль:</h3>
-        <div style={Object.assign({}, listStyle)} className='competence-container_type_scroll scroll'>
+        <div className='competence-container_type_scroll scroll'>
           <ul className='competence__list'>
             {
               competenceProfile.abilities.length > 0 &&
