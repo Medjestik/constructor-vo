@@ -285,6 +285,7 @@ function Competence({ currentProgram, isEditRights }) {
           const newProcess = {...findProcess, abilities: newAbilities};
           if (openProcess.id === item) {
             setOpenProcess(newProcess);
+            setIsShowKnowledge(false);
           }
           return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
         })
@@ -312,9 +313,12 @@ function Competence({ currentProgram, isEditRights }) {
           const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
           const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
           const newKnowledges = [...findAbility.knowledges, res];
-          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
-          setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
-          //setAbilities(newAbilities);
+          const newAbility = {...findAbility, knowledges: newKnowledges};
+          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), newAbility, ...findProcess.abilities.slice(indexAbility + 1)];
+          const newProcess = {...findProcess, abilities: newAbilities};
+          setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
+          setOpenAbility(newAbility);
+          setOpenProcess(newProcess);
           closeCompetencePopup();
         })
         .catch((err) => {
