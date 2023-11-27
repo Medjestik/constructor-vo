@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import * as programApi from '../../../utils/program.js';
 import Preloader from '../../Preloader/Preloader.js';
 import Section from '../../Section/Section.js';
-import Search from '../../Search/Search.js';
-import ProgramTable from '../ProgramTable/ProgramTable.js';
 import AddProgramPopup from '../ProgramPopup/AddProgramPopup/AddProgramPopup.js';
 import EditProgramPopup from '../ProgramPopup/EditProgramPopup/EditProgramPopup.js';
 import ConfirmRemovePopup from '../../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
@@ -15,7 +13,6 @@ function ProgramList() {
   const navigate = useNavigate();
 
   const [programs, setPrograms] = React.useState([]);
-  const [filteredPrograms, setFilteredPrograms] = React.useState(programs);
   const [levels, setLevels] = React.useState([]);
   const [directions, setDirections] = React.useState([]);
 
@@ -37,12 +34,12 @@ function ProgramList() {
       programApi.getDirection({ token }),
     ])
       .then(([program, level, direction]) => {
-        console.log('Programs:', program.data);
-        console.log('Levels:', level.data);
-        console.log('Direction:', direction.data);
-        setPrograms(program.data);
-        setLevels(level.data);
-        setDirections(direction.data);
+        console.log('Programs:', program);
+        console.log('Levels:', level);
+        console.log('Direction:', direction);
+        setPrograms(program);
+        setLevels(level);
+        setDirections(direction);
       })
       .catch((err) => {
         console.log(err);
@@ -57,8 +54,7 @@ function ProgramList() {
     const token = localStorage.getItem('token');
     programApi.addProgram({ token, program })
       .then((res) => {
-        setPrograms([...programs, res.data]);
-        setFilteredPrograms([...programs, res.data]);
+        setPrograms([...programs, res]);
         closeProgramPopup();
       })
       .catch((err) => {
@@ -75,9 +71,8 @@ function ProgramList() {
     const token = localStorage.getItem('token');
     programApi.editProgram({ token, program })
       .then((res) => {     
-        const index = programs.indexOf(programs.find((elem) => (elem.id === res.data.id)));
-        setPrograms([...programs.slice(0, index), res.data, ...programs.slice(index + 1)]);
-        setFilteredPrograms([...programs.slice(0, index), res.data, ...programs.slice(index + 1)]);
+        const index = programs.indexOf(programs.find((elem) => (elem.id === res.id)));
+        setPrograms([...programs.slice(0, index), res, ...programs.slice(index + 1)]);
         closeProgramPopup();
       })
       .catch((err) => {
@@ -94,9 +89,8 @@ function ProgramList() {
     const token = localStorage.getItem('token');
     programApi.removeProgram({ token, program })
     .then((res) => {     
-      const arrPrograms = programs.filter((elem) => elem.id !== res);
+      const arrPrograms = programs.filter((elem) => elem.id !== res.id);
       setPrograms(arrPrograms);
-      setFilteredPrograms(arrPrograms);
       closeProgramPopup();
     })
     .catch((err) => {
@@ -129,10 +123,6 @@ function ProgramList() {
     setIsShowRequestError({ isShow: false, text: '' });
   }
 
-  function handleSearch(data) {
-    setFilteredPrograms(data);
-  }
-
   function openProgram(program) {
     navigate('/program/' + program.id + '/program-info');
   }
@@ -157,18 +147,30 @@ function ProgramList() {
         :
         <>
         <Section title='Программы' heightType='page' headerType='small'>
+          <ul className='program__list'>
+            <li className='program__item program__item_type_add'>
+            <div className='program__item-header'></div>
+              <h3 className='program__item-title'>Добавить новую программу</h3>
+              <p className='program__item-description'></p>
+              <button className='badge badge_margin_top_20 badge_type_white badge-btn badge-btn_type_add' type='button' onClick={openAddProgramPopup}>Добавить</button>
+            </li>
+            {
+              programs.map((item) => (
+                <li className='program__item' key={item.id}>
+                  <div className='program__item-header'>
+                    <div className='program__item-header-btn'>
+                      <button className='icon icon_size_20 icon_type_edit-grey' type='button' onClick={() => openEditProgramPopup(item)}></button>
+                      <button className='icon icon_size_20 icon_margin_left-8 icon_type_remove-grey' type='button' onClick={() => openRemoveProgramPopup(item)}></button>
+                    </div>
+                  </div>
+                  <h3 className='program__item-title' onClick={() => openProgram(item)}>{item.profile}</h3>
+                  <p className='program__item-description'>id программы: {item.id}</p>
+                  <span className='badge badge_margin_top_20 badge_type_green'>{item.my_role}</span>
+                </li>
+              ))
+            }
+          </ul>
 
-          <div className='section__header'>
-            <Search type='medium' id='program' data={programs} onSearch={handleSearch} />
-            <button className='section__header-btn' type='button' onClick={openAddProgramPopup}>Создать программу</button>
-          </div>
-
-          <ProgramTable
-            programs={filteredPrograms}
-            onOpen={openProgram}
-            onEdit={openEditProgramPopup}
-            onRemove={openRemoveProgramPopup}
-          />
 
         </Section>
         </>

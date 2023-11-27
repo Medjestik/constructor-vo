@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function AddProductProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
+function EditProcessPopup({ isOpen, onClose, currentProcess, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function AddProductProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, is
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAdd({ name: name, })
+    onEdit({ ...currentProcess, name: name, })
   }
 
   function handleChangeName(e) {
@@ -32,7 +32,7 @@ function AddProductProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, is
   }, [name]);
 
   React.useEffect(() => {
-    setName('');
+    setName(currentProcess.name);
     setNameError({ isShow: false, text: '' });
   // eslint-disable-next-line
   }, [isOpen]);
@@ -42,20 +42,20 @@ function AddProductProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, is
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'add-product-process-popup'}
+    formName={'edit-process-popup'}
     >
-      <h2 className='popup__title'>Добавление процесса</h2>
+      <h2 className='popup__title'>Редактирование процесса</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование этапа:</h4>
+        <h4 className='popup__input-caption'>Наименование процесса:</h4>
         <div className='popup__input-field'>
           <input 
           className='popup__input'
           type='text'
-          id='add-program-product-process'
+          id='edit-process-name'
           value={name}
           onChange={handleChangeName}
-          name='add-program-product-process' 
+          name='edit-process-name' 
           placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
@@ -81,4 +81,4 @@ function AddProductProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, is
   )
 }
 
-export default AddProductProcessPopup; 
+export default EditProcessPopup; 

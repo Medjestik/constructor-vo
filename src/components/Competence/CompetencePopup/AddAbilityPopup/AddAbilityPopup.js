@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function AddAbilityPopup({ isOpen, onClose, currentItem, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddAbilityPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function AddAbilityPopup({ isOpen, onClose, currentItem, onAdd, isShowRequestErr
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAdd(currentItem, { name: name, })
+    onAdd({ name: name, });
   }
 
   function handleChangeName(e) {

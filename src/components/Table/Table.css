@@ -228,6 +228,9 @@
   color: var(--accent-blue-color);
   cursor: pointer;
 }
+.table__text_align_center {
+  text-align: center;
+}
 .table__text_color_orange {
   color: var(--accent-orange-color);
 }
@@ -270,6 +273,27 @@
 }
 .table__btn {
   margin: 0px;
+}
+.table__status-list {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+}
+.table__status-item {
+  margin: 0px 4px 0px 0px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--background-color);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.table__status-item:last-of-type {
+  margin: 0px;
+}
+.table__status-item_type_active {
+  background-color: var(--accent-blue-color);
 }
 @media all and (max-width: 833px) {
   .table__title {

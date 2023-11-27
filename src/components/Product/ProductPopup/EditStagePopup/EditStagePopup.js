@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditStagePopup({ isOpen, onClose, currentStage, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdi
 
   function handleSubmit(e) {
     e.preventDefault();
-    onEdit({ ...currentProductProcess, name: name, })
+    onEdit({ ...currentStage, name: name, })
   }
 
   function handleChangeName(e) {
@@ -32,7 +32,7 @@ function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdi
   }, [name]);
 
   React.useEffect(() => {
-    setName(currentProductProcess.name);
+    setName(currentStage.name);
     setNameError({ isShow: false, text: '' });
   // eslint-disable-next-line
   }, [isOpen]);
@@ -42,7 +42,7 @@ function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdi
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'edit-product-process-popup'}
+    formName={'edit-program-stage-popup'}
     >
       <h2 className='popup__title'>Редактирование этапа продукта</h2>
 
@@ -52,10 +52,10 @@ function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdi
           <input 
           className='popup__input'
           type='text'
-          id='edit-program-product-process'
+          id='edit-program-stage'
           value={name}
           onChange={handleChangeName}
-          name='edit-program-product-process' 
+          name='edit-program-stage' 
           placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
@@ -81,4 +81,4 @@ function EditProductProcessPopup({ isOpen, onClose, currentProductProcess, onEdi
   )
 }
 
-export default EditProductProcessPopup; 
+export default EditStagePopup; 

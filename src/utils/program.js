@@ -45,7 +45,7 @@ export const getDirection = ({ token }) => {
 };
 
 export const addProgram = ({ token, program }) => {
-  return fetch(`${API_URL}/programs`, {
+  return fetch(`${API_URL}/programs/`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -58,7 +58,7 @@ export const addProgram = ({ token, program }) => {
 };
 
 export const editProgram = ({ token, program }) => {
-  return fetch(`${API_URL}/programs/${program.id}`, {
+  return fetch(`${API_URL}/programs/${program.id}/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -71,7 +71,7 @@ export const editProgram = ({ token, program }) => {
 };
 
 export const removeProgram = ({ token, program }) => {
-  return fetch(`${API_URL}/programs/${program.id}`, {
+  return fetch(`${API_URL}/programs/${program.id}/`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -121,7 +121,7 @@ export const getProgramInfo = ({ token, programId }) => {
 
 
 export const addParticipant = ({ token, programId, participant }) => {
-  return fetch(`${API_URL}/programs/${programId}/add_participant`, {
+  return fetch(`${API_URL}/programs/${programId}/add_participant/`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -134,7 +134,7 @@ export const addParticipant = ({ token, programId, participant }) => {
 };
 
 export const editParticipant = ({ token, programId, participant }) => {
-  return fetch(`${API_URL}/programs/${programId}/update_participant`, {
+  return fetch(`${API_URL}/programs/${programId}/update_participant/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -147,7 +147,7 @@ export const editParticipant = ({ token, programId, participant }) => {
 };
 
 export const removeParticipant = ({ token, programId, participant }) => {
-  return fetch(`${API_URL}/programs/${programId}/remove_participant/${participant.id}`, {
+  return fetch(`${API_URL}/programs/${programId}/remove_participant/${participant.id}/`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',

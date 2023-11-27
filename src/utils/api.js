@@ -1,4 +1,4 @@
-import { API_URL, LOCAL_URL } from './config.js';
+import { API_URL } from './config.js';
 
 function handleResponse (res) {
     if (res.ok) {
@@ -9,7 +9,7 @@ function handleResponse (res) {
 }
 
 export const login = ({ login: email, password }) => {
-  return fetch(`${API_URL}/login`, {
+  return fetch(`${API_URL}/auth/login/`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',
@@ -33,7 +33,7 @@ export const getUsers = ({ token }) => {
 };
 
 export const getUser = ({ token }) => {
-  return fetch(`${API_URL}/user`, {
+  return fetch(`${API_URL}/auth/user/`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',

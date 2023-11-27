@@ -44,7 +44,7 @@ function EditProductPopup({ isOpen, onClose, currentProduct, onEdit, isShowReque
     formWidth={'medium'}
     formName={'edit-product-popup'}
     >
-      <h2 className='popup__title'>Добавление нового продукта</h2>
+      <h2 className='popup__title'>Редактирование продукта</h2>
 
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Наименование продукта:</h4>

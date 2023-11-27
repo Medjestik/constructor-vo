@@ -1,0 +1,190 @@
+.test {
+  width: 100%;
+  margin: 0px;
+  background-color: var(--main-grey-color);;
+  display: flex;
+  flex-grow: 2;
+  border-radius: var(--border-radius);
+}
+.test__container {
+  width: 100%;
+  margin: 0px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+.test__navigation {
+  width: 320px;
+  margin: 0px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: var(--gradient-blue-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  flex-shrink: 0;
+}
+.test__navigation-header {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+}
+.test__navigation-title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: var(--main-white-color);
+}
+.test__navigation-count {
+  margin: 0px 0px 0px auto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 24px;
+  text-align: center;
+  color: var(--main-white-color);
+}
+.test__navigation-btn {
+  width: calc(100% - 4px);
+  margin: 12px 2px 8px 0px;
+  padding: 9px 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background: var(--gradient-green-color);
+  border-radius: var(--border-radius);
+  transition: all .3s ease-in-out;
+}
+.test__navigation-btn:hover {
+  opacity: .7;
+  cursor: pointer;
+}
+.test__navigation-btn-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0px 8px 0px 0px;
+  background-image: url('../../../images/icons/main-black/add.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex-shrink: 0;
+}
+.test__navigation-btn-text {
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: left;
+  color: var(--main-black-color);
+}
+.test__navigation-list {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  flex-grow: 2;
+  height: 400px;
+  overflow-y: auto;
+}
+.test__navigation-item {
+  width: calc(100% - 8px);
+  margin: 0px 4px 8px 0px;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--main-white-color);
+  border-radius: var(--border-radius);
+  transition: all .3s ease-in-out;
+}
+.test__navigation-item:hover {
+  cursor: pointer;
+  background-color: hsla(0,0%,100%,.3);
+}
+.test__navigation-item_type_active {
+  cursor: auto;
+  user-select: none;
+  pointer-events: none;
+  cursor: pointer;
+  background-color: hsla(0,0%,100%,.3);
+}
+.test__navigation-item_type_active:hover  {
+  cursor: auto;
+  user-select: none;
+  pointer-events: none;
+  cursor: pointer;
+  background-color: hsla(0,0%,100%,.3);
+}
+.test__navigation-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0px 8px 0px 0px;
+  background-image: url('../../../images/icons/main-white/attention.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex-shrink: 0;
+}
+.test__navigation-item:last-of-type {
+  margin: 0px 4px 0px 0px;
+}
+.test__navigation-text {
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: left;
+  color: var(--main-white-color);
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.test__navigation-item_type_add .test__navigation-text {
+  color: var(--main-black-color);
+}
+.test__control {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.test__control-type {
+  width: calc(100% - 8px);
+  margin: 0px 8px 0px 0px;
+  padding: 9px 16px 9px 16px;
+  border: 2px solid var(--accent-blue-color);
+  box-sizing: border-box;
+  background: var(--main-grey-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+}
+.test__control-text {
+  margin: 0px 22px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.test__control-text_weight_bold {
+  font-weight: bold;
+}
+
+
+
+

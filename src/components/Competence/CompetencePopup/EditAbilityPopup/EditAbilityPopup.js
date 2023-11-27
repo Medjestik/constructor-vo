@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditAbilityPopup({ isOpen, onClose, currentItem, currentAbility, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditAbilityPopup({ isOpen, onClose, currentAbility, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function EditAbilityPopup({ isOpen, onClose, currentItem, currentAbility, onEdit
 
   function handleSubmit(e) {
     e.preventDefault();
-    onEdit(currentItem, { ...currentAbility, name: name, });
+    onEdit({ ...currentAbility, name: name, });
   }
 
   function handleChangeName(e) {

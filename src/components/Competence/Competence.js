@@ -1,17 +1,18 @@
 import React from 'react';
 import './Competence.css';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import PopupSelect from '../Popup/PopupSelect/PopupSelect.js';
-import CompetenceAbility from './CompetenceAbility/CompetenceAbility.js';
-import CompetenceKnowledge from './CompetenceKnowledge/CompetenceKnowledge.js';
 import * as competenceApi from '../../utils/competence.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
+import Levels from '../Levels/Levels.js';
+import CompetenceProcessList from './CompetenceProcessList/CompetenceProcessList.js';
+import CompetenceAbilityList from './CompetenceAbilityList/CompetenceAbilityList.js';
+import CompetenceKnowledgeList from './CompetenceKnowledgeList/CompetenceKnowledgeList.js';
 import AddAbilityPopup from './CompetencePopup/AddAbilityPopup/AddAbilityPopup.js';
 import ConnectAbilityPopup from './CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
 import DisconnectAbilityPopup from './CompetencePopup/DisconnectAbilityPopup/DisconnectAbilityPopup.js';
 import EditAbilityPopup from './CompetencePopup/EditAbilityPopup/EditAbilityPopup.js';
 import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
+import WarningRemovePopup from '../Popup/WarningRemovePopup/WarningRemovePopup.js';
 import AddKnowledgePopup from './CompetencePopup/AddKnowledgePopup/AddKnowledgePopup.js';
 import ConnectKnowledgePopup from './CompetencePopup/ConnectKnowledgePopup/ConnectKnowledgePopup.js';
 import DisconnectKnowledgePopup from './CompetencePopup/DisconnectKnowledgePopup/DisconnectKnowledgePopup.js';
@@ -19,25 +20,21 @@ import EditKnowledgePopup from './CompetencePopup/EditKnowledgePopup/EditKnowled
 
 function Competence({ currentProgram, isEditRights }) {
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [processes, setProcesses] = React.useState([]);
 
-  const competenceOptions = [
-    { name: 'Выберите этап проектирования...', id: 'placeholder', },
-    { name: 'Проектирование умений', id: '1', },
-    { name: 'Проектирование знаний', id: '2', },
-  ]
-
-  const [competenceProfile, setCompetenceProfile] = React.useState({});
-
-  const [currentOption, setCurrentOption] = React.useState(competenceOptions[0]);
-  const [currentItem, setCurrentItem] = React.useState({});
-  const [currentAbility, setCurrentAbility] = React.useState({});
-  const [currentKnowledge, setCurrentKnowledge] = React.useState({});
+  const [abilityBase, setAbilityBase] = React.useState([]);
+  const [knowledgeBase, setKnowledgeBase] = React.useState([]);
 
   const [isShowAbilities, setIsShowAbilities] = React.useState(false);
   const [isShowKnowledge, setIsShowKnowledge] = React.useState(false);
-  
+
+  const [openProcess, setOpenProcess] = React.useState({});
+  const [openAbility, setOpenAbility] = React.useState({});
+
+  const [currentProcess, setCurrentProcess] = React.useState({});
+  const [currentAbility, setCurrentAbility] = React.useState({});
+  const [currentKnowledge, setCurrentKnowledge] = React.useState({});
+
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' });
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
@@ -54,68 +51,48 @@ function Competence({ currentProgram, isEditRights }) {
   const [isEditKnowledgePopupOpen, setIsEditKnowledgePopupOpen] = React.useState(false);
   const [isRemoveKnowledgePopupOpen, setIsRemoveKnowledgePopupOpen] = React.useState(false);
 
-  function handleChooseAbility(item, stageIndex, productIndex, processIndex) {
-    setCurrentItem({...item, stageIndex: stageIndex, productIndex: productIndex, processIndex: processIndex });
-    setIsShowAbilities(true);
-  }
-
-  function handleChooseKnowledge(item, abilityIndex) {
-    setCurrentItem({...item, abilityIndex: abilityIndex});
-    setIsShowKnowledge(true);
-  }
-
-  function openAddAbilitiesPopup(item) {
-    setCurrentItem(item);
+  function openAddAbilityPopup() {
     setIsAddAbilitiesPopupOpen(true);
   }
 
-  function openConnectAbilitiesPopup(item) {
-    setCurrentItem(item);
+  function openConnectAbilitiesPopup() {
     setIsConnectAbilitiesPopupOpen(true);
   }
 
-  function openDisconnectAbilitiesPopup(item, ability) {
-    setCurrentItem(item);
+  function openDisconnectAbilitiesPopup(ability) {
     setCurrentAbility(ability);
     setIsDisconnectAbilitiesPopupOpen(true);
   }
 
-  function openEditAbilitiesPopup(item, ability) {
-    setCurrentItem(item);
+  function openEditAbilityPopup(ability) {
     setCurrentAbility(ability);
     setIsEditAbilitiesPopupOpen(true);
   }
 
-  function openRemoveAbilitiesPopup(item, ability) {
-    setCurrentItem(item);
+  function openRemoveAbilitiesPopup(ability) {
     setCurrentAbility(ability);
     setIsRemoveAbilitiesPopupOpen(true);
   }
 
-  function openAddKnowledgePopup(item) {
-    setCurrentItem(item);
+  function openAddKnowledgePopup() {
     setIsAddKnowledgePopupOpen(true);
   }
 
-  function openConnectKnowledgePopup(item) {
-    setCurrentItem(item);
+  function openConnectKnowledgePopup() {
     setIsConnectKnowledgePopupOpen(true);
   }
 
-  function openDisconnectKnowledgePopup(item, knowledge) {
-    setCurrentItem(item);
+  function openDisconnectKnowledgePopup(knowledge) {
     setCurrentKnowledge(knowledge);
     setIsDisconnectKnowledgePopupOpen(true);
   }
 
-  function openEditKnowledgePopup(item, knowledge) {
-    setCurrentItem(item);
+  function openEditKnowledgePopup(knowledge) {
     setCurrentKnowledge(knowledge);
     setIsEditKnowledgePopupOpen(true);
   }
 
-  function openRemoveKnowledgePopup(item, knowledge) {
-    setCurrentItem(item);
+  function openRemoveKnowledgePopup(knowledge) {
     setCurrentKnowledge(knowledge);
     setIsRemoveKnowledgePopupOpen(true);
   }
@@ -135,14 +112,30 @@ function Competence({ currentProgram, isEditRights }) {
     setIsLoadingRequest(false);
   }
 
+  function handleOpenProcess(data, i) {
+    setOpenProcess({...data, code: i});
+    setOpenAbility({});
+    setIsShowAbilities(true);
+    setIsShowKnowledge(false);
+  }
+
+  function handleOpenAbility(data, i) {
+    setOpenAbility({...data, code: i});
+    setIsShowKnowledge(true);
+  }
+
   function getCompetenceProfile() {
     const token = localStorage.getItem('token');
     Promise.all([
-      competenceApi.getCompetenceProfile({ token, programId: currentProgram.id }),
+      competenceApi.getCompetenceProcesses({ token: token, programId: currentProgram.id }),
+      competenceApi.getAbilityBase({ token: token, programId: currentProgram.id }),
+      competenceApi.getKnowledgeBase({ token: token, programId: currentProgram.id }),
     ])
-      .then(([profile]) => {
-        console.log('CompetenceProfile:', profile.data);
-        setCompetenceProfile(profile.data);
+      .then(([processes, ab, kn]) => {
+        console.log('CompetenceProcesses:', processes);
+        setProcesses(processes);
+        setAbilityBase(ab);
+        setKnowledgeBase(kn);
       })
       .catch((err) => {
         console.log(err);
@@ -152,86 +145,54 @@ function Competence({ currentProgram, isEditRights }) {
       });
   }
 
-  function handleChangeOption(option) {
-    setIsShowAbilities(false);
-    setIsShowKnowledge(false);
-    setCurrentItem({});
-    if (option.id === '1') {
-      setCurrentOption(competenceOptions[1]);
-      navigate('/program/' + currentProgram.id + '/program-profile/ability');
-    } else if (option.id === '2') {
-      setCurrentOption(competenceOptions[2]);
-      navigate('/program/' + currentProgram.id + '/program-profile/knowledge');
-    } else {
-      navigate('/program/' + currentProgram.id + '/program-profile');
+  function handleAddAbilities(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    if (token) {
+      competenceApi.addAbility({ token, processId: openProcess.id, ability: item })
+      .then((res) => {
+        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+        const newAbilities = [...findProcess.abilities, res];
+        const newProcess = {...findProcess, abilities: newAbilities};
+        setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
+        setOpenProcess(newProcess);
+        setAbilityBase([...abilityBase, res]);
+        closeCompetencePopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
     }
   }
 
-  function handleAddAbilities(item, data) {
+  function handleConnectAbilities(abilityId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.addAbilities({ token, processId: item.id, ability: data })
-      .then((res) => {
-        const newAbilities = [...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities, res.data]
-        const newProcesses = [
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(0, item.processIndex),
-          {
-            ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex], 
-            abilities: newAbilities
-          },
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(item.processIndex + 1),
-        ]
-        const newStages = [
-          ...competenceProfile.products[item.productIndex].stages.slice(0, item.stageIndex),
-          { ...competenceProfile.products[item.productIndex].stages[item.stageIndex], processes: newProcesses, },
-          ...competenceProfile.products[item.productIndex].stages.slice(item.stageIndex + 1),
-        ]
-        const newProducts = [
-          ...competenceProfile.products.slice(0, item.productIndex),
-          { ...competenceProfile.products[item.productIndex], stages: newStages, },
-          ...competenceProfile.products.slice(item.productIndex + 1),
-        ]
-        const newAllAbilities = ([...competenceProfile.abilities, res.data]);
-
-        setCompetenceProfile({...competenceProfile, products: newProducts, abilities: newAllAbilities});
-        setCurrentItem({...currentItem, abilities: newAbilities});
-        closeCompetencePopup();
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
-      })
-      .finally(() => {
-        setIsLoadingRequest(false);
-      });
-  }
-
-  function handleConnectAbilities(item, abilityId) {
-    setIsLoadingRequest(true);
-    const token = localStorage.getItem('token');
-    competenceApi.connectAbilities({ token, processId: item.id, abilityId: abilityId })
+    competenceApi.connectAbilities({ token, processId: openProcess.id, abilityId: abilityId })
     .then((res) => {
-      const newAbilities = [...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities, res.data]
-      const newProcesses = [
-        ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(0, item.processIndex),
-        {
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex], 
-          abilities: newAbilities
-        },
-        ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(item.processIndex + 1),
-      ]
-      const newStages = [
-        ...competenceProfile.products[item.productIndex].stages.slice(0, item.stageIndex),
-        { ...competenceProfile.products[item.productIndex].stages[item.stageIndex], processes: newProcesses, },
-        ...competenceProfile.products[item.productIndex].stages.slice(item.stageIndex + 1),
-      ]
-      const newProducts = [
-        ...competenceProfile.products.slice(0, item.productIndex),
-        { ...competenceProfile.products[item.productIndex], stages: newStages, },
-        ...competenceProfile.products.slice(item.productIndex + 1),
-      ]
-      setCompetenceProfile({...competenceProfile, products: newProducts});
-      setCurrentItem({...currentItem, abilities: newAbilities});
+      let newProcesses = processes;
+      res.parent_id.forEach((item) => {
+        const findProcess = processes.find((elem) => (elem.id === item));
+        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
+        let newProcess = {};
+        if (openProcess.id === item) {
+          const newAbilities = [...findProcess.abilities, res];
+          newProcess = {...findProcess, abilities: newAbilities};
+          setOpenProcess(newProcess);
+        } else {
+          const findAbility = findProcess.abilities.find((elem) => (elem.id === res.id));
+          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
+          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, parent_id: res.parent_id}, ...findProcess.abilities.slice(indexAbility + 1)];
+          newProcess = {...findProcess, abilities: newAbilities};
+        }
+        return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
+      })
+      setProcesses(newProcesses);
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -243,34 +204,25 @@ function Competence({ currentProgram, isEditRights }) {
     });
   }
 
-  function handleDisconnectAbilities(item, ability) {
+  function handleEditAbilities(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.disconnectAbilities({ token, processId: item.id, abilityId: ability.id })
+    if (token) {
+      competenceApi.editAbilities({ token, programId: currentProgram.id, ability: item })
       .then((res) => {
-        const newAbilities = [...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.filter((elem) => elem.id !== res.data.id)];
-
-        const newProcesses = [
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(0, item.processIndex),
-          {
-            ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex], 
-            abilities: newAbilities
-          },
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes.slice(item.processIndex + 1),
-        ]
-        const newStages = [
-          ...competenceProfile.products[item.productIndex].stages.slice(0, item.stageIndex),
-          { ...competenceProfile.products[item.productIndex].stages[item.stageIndex], processes: newProcesses, },
-          ...competenceProfile.products[item.productIndex].stages.slice(item.stageIndex + 1),
-        ]
-        const newProducts = [
-          ...competenceProfile.products.slice(0, item.productIndex),
-          { ...competenceProfile.products[item.productIndex], stages: newStages, },
-          ...competenceProfile.products.slice(item.productIndex + 1),
-        ]
-
-        setCompetenceProfile({...competenceProfile, products: newProducts});
-        setCurrentItem({...currentItem, abilities: newAbilities});
+        let newProcesses = processes;
+        res.parent_id.forEach((item) => {
+          const findProcess = processes.find((elem) => (elem.id === item));
+          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
+          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
+          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), res, ...findProcess.abilities.slice(indexAbility + 1)];
+          const newProcess = {...findProcess, abilities: newAbilities};
+          if (openProcess.id === item) {
+            setOpenProcess(newProcess);
+          }
+          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
+        })
+        setProcesses(newProcesses);
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -280,23 +232,34 @@ function Competence({ currentProgram, isEditRights }) {
       .finally(() => {
         setIsLoadingRequest(false);
       });
-}
+    }
+  }
 
-  function handleEditAbilities(item, data) {
+  function handleDisconnectAbilities(ability) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.editAbilities({ token, programId: currentProgram.id, ability: data })
+    competenceApi.disconnectAbilities({ token, processId: openProcess.id, abilityId: ability.id })
       .then((res) => {
-        const index = competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.indexOf(competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.find((elem) => (elem.id === data.id)));
-
-        const newAbilities = [
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.slice(0, index), 
-          data,
-          ...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.slice(index + 1)
-        ]
-
-        setCompetenceProfile(res.data);
-        setCurrentItem({...currentItem, abilities: newAbilities});
+        let newProcesses = processes;
+        res.parent_id.forEach((item) => {
+          const findProcess = processes.find((elem) => (elem.id === item));
+          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
+          let newProcess = {};
+          const findAbility = findProcess.abilities.find((elem) => (elem.id === res.id));
+          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
+          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, parent_id: res.parent_id}, ...findProcess.abilities.slice(indexAbility + 1)];
+          newProcess = {...findProcess, abilities: newAbilities};
+          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
+        })
+        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+        const newAbilities = findProcess.abilities.filter((elem) => elem.id !== res.id);
+        const newProcess = {...findProcess, abilities: newAbilities};
+        setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
+        setOpenProcess({...findProcess, abilities: newAbilities});
+        if (openAbility.id === res.id) {
+          setIsShowKnowledge(false);
+        }
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -308,15 +271,24 @@ function Competence({ currentProgram, isEditRights }) {
       });
   }
 
-  function handleRemoveAbilities(data) {
+  function handleRemoveAbilities(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    const item = currentItem;
-    competenceApi.removeAbilities({ token, programId: currentProgram.id, abilityId: data.id })
+    if (token) {
+      competenceApi.removeAbilities({ token, programId: currentProgram.id, abilityId: item.id })
       .then((res) => {
-        const newAbilities = [...competenceProfile.products[item.productIndex].stages[item.stageIndex].processes[item.processIndex].abilities.filter((elem) => elem.id !== data.id)];
-        setCompetenceProfile(res.data);
-        setCurrentItem({...currentItem, abilities: newAbilities});
+        let newProcesses = processes;
+        item.parent_id.forEach((item) => {
+          const findProcess = processes.find((elem) => (elem.id === item));
+          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
+          const newAbilities = findProcess.abilities.filter((elem) => elem.id !== res.id);
+          const newProcess = {...findProcess, abilities: newAbilities};
+          if (openProcess.id === item) {
+            setOpenProcess(newProcess);
+          }
+          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
+        })
+        setProcesses(newProcesses);
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -326,51 +298,50 @@ function Competence({ currentProgram, isEditRights }) {
       .finally(() => {
         setIsLoadingRequest(false);
       });
+    }
   }
 
-  function handleAddKnowledge(item, data) {
+  function handleAddKnowledge(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.addKnowledge({ token, abilityId: item.id, knowledge: data })
-      .then((res) => {
-        const newKnowledge = [...competenceProfile.abilities[item.abilityIndex].knowledges, res.data];
-
-        const newAbilities = [
-          ...competenceProfile.abilities.slice(0, item.abilityIndex),
-          {
-            ...competenceProfile.abilities[item.abilityIndex], 
-            knowledges: newKnowledge
-          },
-          ...competenceProfile.abilities.slice(item.abilityIndex + 1),
-        ]
-
-        setCompetenceProfile({...competenceProfile, abilities: newAbilities, knowledges: [...competenceProfile.knowledges, res.data]});
-        setCurrentItem({...currentItem, knowledges: newKnowledge});
-        closeCompetencePopup();
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
-      })
-      .finally(() => {
-        setIsLoadingRequest(false);
-      });
+    if (token) {
+      competenceApi.addKnowledge({ token, abilityId: openAbility.id, knowledge: item })
+        .then((res) => {
+          const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+          const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
+          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+          const newKnowledges = [...findAbility.knowledges, res];
+          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
+          setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
+          //setAbilities(newAbilities);
+          closeCompetencePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+    }
   }
 
-  function handleConnectKnowledge(item, knowledgeId) {
+  function handleConnectKnowledge(knowledgeId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.connectKnowledge({ token, abilityId: item.id, knowledgeId: knowledgeId })
+    competenceApi.connectKnowledge({ token, abilityId: openAbility.id, knowledgeId: knowledgeId })
     .then((res) => {
-      const index = competenceProfile.abilities.indexOf(competenceProfile.abilities.find((elem) => (elem.id === res.data.id)));
-      const newAbilities = [
-        ...competenceProfile.abilities.slice(0, index), 
-        res.data,
-        ...competenceProfile.abilities.slice(index + 1),
-      ]
-
-      setCompetenceProfile({...competenceProfile, abilities: newAbilities});
-      setCurrentItem(res.data);
+      const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+      const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+      const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
+      const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+      const newKnowledges = [...findAbility.knowledges, res];
+      const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
+      setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
+      setOpenProcess({...findProcess, abilities: newAbilities});
+      //setAbilities(newAbilities);
+      setOpenAbility({...findAbility, knowledges: newKnowledges});
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -380,6 +351,33 @@ function Competence({ currentProgram, isEditRights }) {
     .finally(() => {
       setIsLoadingRequest(false);
     });
+  }
+
+  function handleEditKnowledge(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    if (token) {
+      competenceApi.editKnowledge({ token, programId: currentProgram.id, knowledge: item })
+      .then((res) => {
+        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+        const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
+        const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+        const indexKnowledge = findAbility.knowledges.indexOf(findAbility.knowledges.find((elem) => (elem.id === res.id)));
+        const newKnowledges = [...findAbility.knowledges.slice(0, indexKnowledge), res, ...findAbility.knowledges.slice(indexKnowledge + 1)];
+        const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
+        setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
+        //setAbilities(newAbilities);
+        closeCompetencePopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+    }
   }
 
   function handleDisconnectKnowledge(item, knowledgeId) {
@@ -387,16 +385,14 @@ function Competence({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     competenceApi.disconnectKnowledge({ token, abilityId: item.id, knowledgeId: knowledgeId })
     .then((res) => {
-      console.log(res);
-      const index = competenceProfile.abilities.indexOf(competenceProfile.abilities.find((elem) => (elem.id === res.data.id)));
-      const newAbilities = [
-       ...competenceProfile.abilities.slice(0, index), 
-        res.data,
-        ...competenceProfile.abilities.slice(index + 1),
-      ]
-
-      setCompetenceProfile({...competenceProfile, abilities: newAbilities});
-      setCurrentItem(res.data);
+      const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+      const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+      const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
+      const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+      const newKnowledges = findAbility.knowledges.filter((elem) => elem.id !== res.id);
+      const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
+      setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
+      //setAbilities(newAbilities);
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -408,23 +404,23 @@ function Competence({ currentProgram, isEditRights }) {
     });
   }
 
-  function handleEditKnowledge(item, data) {
+  function handleRemoveKnowledge(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.editKnowledge({ token, programId: currentProgram.id, knowledge: data })
+    if (token) {
+      competenceApi.removeKnowledge({ token, programId: currentProgram.id, knowledgeId: item.id })
       .then((res) => {
-        const index = item.knowledges.indexOf(item.knowledges.find((elem) => (elem.id === data.id)));
-        const indexAll = competenceProfile.knowledges.indexOf(competenceProfile.knowledges.find((elem) => (elem.id === data.id)));
-        setCompetenceProfile({
-          ...competenceProfile, 
-          abilities: res.data,
-          knowledges: [...competenceProfile.knowledges.slice(0, indexAll), data, ...competenceProfile.knowledges.slice(indexAll + 1)],
-        });
-        setCurrentItem({
-          ...currentItem, 
-          knowledges: [...item.knowledges.slice(0, index), data, ...item.knowledges.slice(index + 1)],
-        });
+        /*
+        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
+        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
+        const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
+        const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+        const newKnowledges = findAbility.knowledges.filter((elem) => elem.id !== res.id);
+        const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
+        setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
+        setAbilities(newAbilities);
         closeCompetencePopup();
+        */
       })
       .catch((err) => {
         console.log(err);
@@ -433,51 +429,21 @@ function Competence({ currentProgram, isEditRights }) {
       .finally(() => {
         setIsLoadingRequest(false);
       });
-  }
-
-  function handleRemoveKnowledge(data) {
-    setIsLoadingRequest(true);
-    const token = localStorage.getItem('token');
-    competenceApi.removeKnowledge({ token, programId: currentProgram.id, knowledge: data })
-      .then((res) => {
-        setCompetenceProfile({
-          ...competenceProfile, 
-          abilities: res.data, 
-          knowledges: [...competenceProfile.knowledges.filter((elem) => elem.id !== data.id)]
-        });
-        setCurrentItem({
-          ...currentItem, 
-          knowledges: currentItem.knowledges.filter((elem) => elem.id !== data.id)
-        });
-        closeCompetencePopup();
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
-      })
-      .finally(() => {
-        setIsLoadingRequest(false);
-      });
-  }
-
-  React.useEffect(() => {
-    if (location.pathname.includes('ability')) {
-      setCurrentOption(competenceOptions[1]);
-    } else if (location.pathname.includes('knowledge')) {
-      setCurrentOption(competenceOptions[2]);
-    } else {
-      setCurrentOption(competenceOptions[0]);
     }
-  // eslint-disable-next-line
-  }, [location]);
+  }
 
   React.useEffect(() => {
     getCompetenceProfile();
     return(() => {
-      setCompetenceProfile({});
-      setCurrentItem({});
+      setProcesses([]);
+      setAbilityBase([]);
+      setKnowledgeBase([]);
+      setOpenProcess({});
+      setOpenAbility({});
+      setCurrentProcess({});
       setCurrentAbility({});
       setCurrentKnowledge({});
+      setIsShowRequestError({ isShow: false, text: '' });
     })
     // eslint-disable-next-line
   }, []);
@@ -490,45 +456,48 @@ function Competence({ currentProgram, isEditRights }) {
         <Preloader />
         :
         <Section title={'Компетентностный профиль'} heightType={'page'} headerType={'large'}>
-          <div className='competence-header'>
-            <h2 className='competence-header__caption'>Выберите этап проектирования компетентносного профиля:</h2>
-            <PopupSelect options={competenceOptions} currentOption={currentOption} onChooseOption={handleChangeOption} />
-          </div>
-
-          <Routes>
-
-            <Route exact path='ability' element={
-                <CompetenceAbility 
-                  competenceProfile={competenceProfile}
-                  onAddAbility={openAddAbilitiesPopup}
-                  onConnectAbility={openConnectAbilitiesPopup}
-                  onDisconnectAbility={openDisconnectAbilitiesPopup}
-                  onEditAbility={openEditAbilitiesPopup}
-                  onRemoveAbility={openRemoveAbilitiesPopup}
-                  isShowAbilities={isShowAbilities}
-                  currentItem={currentItem}
-                  chooseItem={handleChooseAbility}
-                />
-              }
+          <Levels>
+            <CompetenceProcessList 
+              data={processes} 
+              openProcess={openProcess} 
+              onOpen={handleOpenProcess} 
             />
-
-            <Route exact path='knowledge' element={
-                <CompetenceKnowledge
-                  competenceProfile={competenceProfile}
-                  isShowKnowledge={isShowKnowledge}
-                  onAddKnowledge={openAddKnowledgePopup}
-                  onConnectKnowledge={openConnectKnowledgePopup}
-                  onDisconnectKnowledge={openDisconnectKnowledgePopup}
-                  onEditKnowledge={openEditKnowledgePopup}
-                  onRemoveKnowledge={openRemoveKnowledgePopup}
-                  currentItem={currentItem}
-                  chooseItem={handleChooseKnowledge}
-                />
-              }
-            />
-
-          </Routes>
-
+            {
+              isShowAbilities 
+              ?
+              <CompetenceAbilityList
+                openProcess={openProcess}
+                openAbility={openAbility}
+                onAdd={openAddAbilityPopup} 
+                onOpen={handleOpenAbility} 
+                onEdit={openEditAbilityPopup}
+                onRemove={openRemoveAbilitiesPopup}
+                onConnect={openConnectAbilitiesPopup}
+                onDisconnect={openDisconnectAbilitiesPopup}
+              />
+              :
+              <div className='level__tab'>
+                <h3 className='levels__tab-title'>Умения</h3>
+              </div>
+            }
+            {
+              isShowKnowledge
+              ?
+              <CompetenceKnowledgeList
+                openProcess={openProcess}
+                openAbility={openAbility}
+                onAdd={openAddKnowledgePopup} 
+                onEdit={openEditKnowledgePopup}
+                onRemove={openRemoveKnowledgePopup}
+                onConnect={openConnectKnowledgePopup}
+                onDisconnect={openDisconnectKnowledgePopup}
+              />
+              :
+              <div className='level__tab'>
+                <h3 className='levels__tab-title'>Знания</h3>
+              </div>
+            }
+          </Levels>
         </Section>
       }
       {
@@ -536,7 +505,6 @@ function Competence({ currentProgram, isEditRights }) {
         <AddAbilityPopup
           isOpen={isAddAbilitiesPopupOpen}
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
           onAdd={handleAddAbilities}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -547,9 +515,9 @@ function Competence({ currentProgram, isEditRights }) {
         <ConnectAbilityPopup
           isOpen={isConnectAbilitiesPopupOpen}
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
+          currentItem={openProcess}
           onConnect={handleConnectAbilities}
-          abilities={competenceProfile.abilities}
+          abilityBase={abilityBase}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -560,7 +528,6 @@ function Competence({ currentProgram, isEditRights }) {
           isOpen={isDisconnectAbilitiesPopupOpen}
           onClose={closeCompetencePopup}
           onConfirm={handleDisconnectAbilities}
-          currentItem={currentItem}
           currentAbility={currentAbility}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -571,7 +538,6 @@ function Competence({ currentProgram, isEditRights }) {
         <EditAbilityPopup
           isOpen={isEditAbilitiesPopupOpen} 
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
           currentAbility={currentAbility}
           onEdit={handleEditAbilities}
           isShowRequestError={isShowRequestError}
@@ -580,9 +546,16 @@ function Competence({ currentProgram, isEditRights }) {
       }
       {
         isRemoveAbilitiesPopupOpen &&
-        <ConfirmRemovePopup
+        <WarningRemovePopup
           isOpen={isRemoveAbilitiesPopupOpen}
           onClose={closeCompetencePopup}
+          text={
+            currentAbility.parent_id.length > 1
+            ?
+            'Вы пытаетесь удалить умение, которое привязано еще к ' + (currentAbility.parent_id.length - 1) + ' процессам. Вы действительно хотите это сделать?' 
+            :
+            'Вы действительно хотите удалить умение? Этот процесс нельзя будет отменить.'
+          }
           onConfirm={handleRemoveAbilities}
           item={currentAbility}
           isShowRequestError={isShowRequestError}
@@ -594,7 +567,6 @@ function Competence({ currentProgram, isEditRights }) {
         <AddKnowledgePopup
           isOpen={isAddKnowledgePopupOpen}
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
           onAdd={handleAddKnowledge}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -605,9 +577,9 @@ function Competence({ currentProgram, isEditRights }) {
         <ConnectKnowledgePopup
           isOpen={isConnectKnowledgePopupOpen}
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
+          currentItem={openAbility}
           onConnect={handleConnectKnowledge}
-          knowledges={competenceProfile.knowledges}
+          knowledgeBase={knowledgeBase}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -618,7 +590,7 @@ function Competence({ currentProgram, isEditRights }) {
           isOpen={isDisconnectKnowledgePopupOpen}
           onClose={closeCompetencePopup}
           onConfirm={handleDisconnectKnowledge}
-          currentItem={currentItem}
+          currentItem={currentKnowledge}
           currentKnowledge={currentKnowledge}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -629,7 +601,6 @@ function Competence({ currentProgram, isEditRights }) {
         <EditKnowledgePopup
           isOpen={isEditKnowledgePopupOpen} 
           onClose={closeCompetencePopup}
-          currentItem={currentItem}
           currentKnowledge={currentKnowledge}
           onEdit={handleEditKnowledge}
           isShowRequestError={isShowRequestError}

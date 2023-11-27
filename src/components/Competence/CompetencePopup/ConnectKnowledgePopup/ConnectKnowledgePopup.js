@@ -1,14 +1,14 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
-import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
+import SelectSearch from '../../../SelectSearch/SelectSearch.js';
 
-function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledges, onConnect, isShowRequestError, isLoadingRequest }) {
+function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledgeBase, onConnect, isShowRequestError, isLoadingRequest }) {
 
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  const uniqueKnowledges = knowledges.filter(( el ) => {
+  const uniqueKnowledges = knowledgeBase.filter(( el ) => {
     if (currentItem.knowledges.map((elem => elem.id)).indexOf( el.id ) < 0) {
       return el;
     } else {
@@ -55,7 +55,7 @@ function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledges, onCon
 
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Знания:</h4>
-        <PopupSelect 
+        <SelectSearch 
           options={knowledgeOptions} 
           currentOption={currentKnowledge} 
           onChooseOption={handleChangeKnowledge} 

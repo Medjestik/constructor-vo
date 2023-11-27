@@ -8,8 +8,8 @@ function handleResponse (res) {
     }
 }
 
-export const getProductList = ({ token, programId }) => {
-  return fetch(`${API_URL}/programs/${programId}/products`, {
+export const getProductsData = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/products_data`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -21,7 +21,7 @@ export const getProductList = ({ token, programId }) => {
 };
 
 export const addProduct = ({ token, programId, product }) => {
-  return fetch(`${API_URL}/programs/${programId}/products`, {
+  return fetch(`${API_URL}/programs/${programId}/products/`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -34,7 +34,7 @@ export const addProduct = ({ token, programId, product }) => {
 };
 
 export const editProduct = ({ token, programId, product }) => {
-  return fetch(`${API_URL}/programs/${programId}/products/${product.id}`, {
+  return fetch(`${API_URL}/programs/${programId}/products/${product.id}/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -47,7 +47,7 @@ export const editProduct = ({ token, programId, product }) => {
 };
 
 export const removeProduct = ({ token, programId, product }) => {
-  return fetch(`${API_URL}/programs/${programId}/products/${product.id}`, {
+  return fetch(`${API_URL}/programs/${programId}/products/${product.id}/`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -70,7 +70,7 @@ export const getProduct = ({ token, programId, productId }) => {
   .then(res => handleResponse(res))
 };
 
-export const getProductStageList = ({ token, productId }) => {
+/*export const getProductStageList = ({ token, productId }) => {
   return fetch(`${API_URL}/products/${productId}/stages`, {
     method: 'GET',
     headers: {
@@ -80,10 +80,10 @@ export const getProductStageList = ({ token, productId }) => {
     }
   })
   .then(res => handleResponse(res))
-};
+};*/
 
-export const addProductStage = ({ token, productId, stage }) => {
-  return fetch(`${API_URL}/products/${productId}/stages`, {
+export const addStage = ({ token, productId, stage }) => {
+  return fetch(`${API_URL}/products/${productId}/stages/`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -95,8 +95,8 @@ export const addProductStage = ({ token, productId, stage }) => {
   .then(res => handleResponse(res))
 };
 
-export const editProductStage = ({ token, productId, stage }) => {
-  return fetch(`${API_URL}/products/${productId}/stages/${stage.id}`, {
+export const editStage = ({ token, productId, stage }) => {
+  return fetch(`${API_URL}/products/${productId}/stages/${stage.id}/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -108,8 +108,8 @@ export const editProductStage = ({ token, productId, stage }) => {
   .then(res => handleResponse(res))
 };
 
-export const removeProductStage = ({ token, productId, stage }) => {
-  return fetch(`${API_URL}/products/${productId}/stages/${stage.id}`, {
+export const removeStage = ({ token, productId, stage }) => {
+  return fetch(`${API_URL}/products/${productId}/stages/${stage.id}/`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -120,8 +120,8 @@ export const removeProductStage = ({ token, productId, stage }) => {
   .then(res => handleResponse(res))
 };
 
-export const changeOrderProductStage = ({ token, productId, stages }) => {
-  return fetch(`${API_URL}/products/${productId}/stages/reorder`, {
+export const changeOrderStage = ({ token, productId, stages }) => {
+  return fetch(`${API_URL}/products/${productId}/stages/reorder/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -133,7 +133,7 @@ export const changeOrderProductStage = ({ token, productId, stages }) => {
   .then(res => handleResponse(res))
 };
 
-
+/*
 export const getProductProcessList = ({ token, stageId }) => {
   return fetch(`${API_URL}/stages/${stageId}/processes`, {
     method: 'GET',
@@ -144,11 +144,11 @@ export const getProductProcessList = ({ token, stageId }) => {
     }
   })
   .then(res => handleResponse(res))
-};
+};*/
 
 
-export const addProductProcess = ({ token, stageId, process }) => {
-  return fetch(`${API_URL}/stages/${stageId}/processes`, {
+export const addProcess = ({ token, stageId, process }) => {
+  return fetch(`${API_URL}/stages/${stageId}/processes/`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -160,8 +160,8 @@ export const addProductProcess = ({ token, stageId, process }) => {
   .then(res => handleResponse(res))
 };
 
-export const editProductProcess = ({ token, stageId, process }) => {
-  return fetch(`${API_URL}/stages/${stageId}/processes/${process.id}`, {
+export const editProcess = ({ token, stageId, process }) => {
+  return fetch(`${API_URL}/stages/${stageId}/processes/${process.id}/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -173,8 +173,8 @@ export const editProductProcess = ({ token, stageId, process }) => {
   .then(res => handleResponse(res))
 };
 
-export const removeProductProcess = ({ token, stageId, process }) => {
-  return fetch(`${API_URL}/stages/${stageId}/processes/${process.id}`, {
+export const removeProcess = ({ token, stageId, process }) => {
+  return fetch(`${API_URL}/stages/${stageId}/processes/${process.id}/`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -186,7 +186,7 @@ export const removeProductProcess = ({ token, stageId, process }) => {
 };
 
 export const changeOrderProductProcess = ({ token, stageId, processes }) => {
-  return fetch(`${API_URL}/stages/${stageId}/processes/reorder`, {
+  return fetch(`${API_URL}/stages/${stageId}/processes/reorder/`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',

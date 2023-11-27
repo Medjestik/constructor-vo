@@ -1,31 +1,36 @@
 import React from 'react';
 import './SelectSearch.css';
+import useOnClickOutside from '../../hooks/useOnClickOutside.js';
 
-function SelectSearch() {
+function SelectSearch({ options, currentOption, onChooseOption }) {
+
+  const selectRef = React.createRef();
 
   const [isOpenSelectOptions, setIsOpenSelectOptions] = React.useState(false);
 
-  const options = [{id: 1, name: '123'}, {id: 2, name: '456'}, {id: 3, name: '111'}, {id: 4, name: '222'}, {id: 5, name: '333'}];
-
   const [filteredOptions, setFilteredOptions] = React.useState(options);
 
-  const [currentOption, setCurrentOption] = React.useState(options[0]);
   const [searchText, setSearchText] = React.useState('');
 
   function handleChangeOption(option) {
-    setCurrentOption(option);
+    onChooseOption(option);
     setIsOpenSelectOptions(false);
     setSearchText('');
     setFilteredOptions(options);
   }
 
   function handleChangeSearchText(e) {
+    e.stopPropagation();
     setSearchText(e.target.value);
-    setFilteredOptions(options.filter(item => item.name.includes(e.target.value)));
+    setFilteredOptions(options.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase())));
   }
 
   function openSelectOptions() {
-    setIsOpenSelectOptions(!isOpenSelectOptions);
+    setIsOpenSelectOptions(true);
+  }
+
+  function closeSelectOptions() {
+    setIsOpenSelectOptions(false);
   }
 
   React.useEffect(() => {
@@ -33,28 +38,50 @@ function SelectSearch() {
     // eslint-disable-next-line
   }, []);
 
+  useOnClickOutside(selectRef, closeSelectOptions);
+
   return (
-    <div className={`select-search ${isOpenSelectOptions ? 'select-search_status_open' : ''}`}>
-      <div className='select-search__main' onClick={openSelectOptions}>
+    <div ref={selectRef} className={`select-search ${isOpenSelectOptions ? 'select-search_status_open' : ''}`}>
+      <div className='select-search__main' onClick={!isOpenSelectOptions ? openSelectOptions : undefined}>
         {
           isOpenSelectOptions
           ?
-          <input autoFocus value={searchText} placeholder={currentOption.name} onChange={handleChangeSearchText} className='popup__input'></input>
+          <input autoFocus value={searchText} placeholder={currentOption.name} onChange={(e) => handleChangeSearchText(e)} className='select-search__input'></input>
           :
           <p className={`select-search__text ${currentOption.id === 'placeholder' ? 'select-search__text_type_placeholder' : ''}`}>{currentOption.name}</p>
         }
-        <div className={`select-search__arrow ${isOpenSelectOptions ? 'select-search__arrow_status_open' : ''}`}></div>
+        <div className={`select-search__arrow ${isOpenSelectOptions ? 'select-search__arrow_status_open' : ''}`} onClick={isOpenSelectOptions ? closeSelectOptions : undefined}></div>
       </div>
       <div className={`select-search__options-container scroll ${isOpenSelectOptions ? 'select-search__options-container_status_open' : ''}`}>
-        <ul className='select-search__options-list scroll'>
-          {
-            filteredOptions.filter(item => item.id !== currentOption.id && item.id !== 'placeholder').map((item, i) => (
-              <li className='select-search__options-item' key={i} onClick={() => handleChangeOption(item)}>
-                <p className='select-search__options-text'>{item.name}</p>
+        {
+          ((filteredOptions.length === 1) && (filteredOptions[0].id === 'placeholder')) 
+          ?
+          <ul className='select-search__options-list scroll'>
+            <li className='select-search__options-item'>
+              <p className='select-search__options-text select-search__options-text_type_empty'>Список доступных вариантов пуст</p>
+            </li>
+          </ul>
+          :
+          <ul className='select-search__options-list scroll'>
+            {
+              filteredOptions.length > 0 
+              ?
+              <>
+              {
+                filteredOptions.filter(item => item.id !== currentOption.id && item.id !== 'placeholder').map((item, i) => (
+                  <li className='select-search__options-item' key={i} onClick={() => handleChangeOption(item)}>
+                    <p className='select-search__options-text'>{item.name}</p>
+                  </li>
+                ))
+              }
+              </>
+              :
+              <li className='select-search__options-item'>
+                <p className='select-search__options-text select-search__options-text_type_empty'>Результаты не найдены, измените запрос</p>
               </li>
-            ))
-          }
-        </ul>
+            }
+          </ul>
+        }
       </div>
     </div>
   );

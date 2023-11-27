@@ -1,14 +1,14 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
-import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
+import SelectSearch from '../../../SelectSearch/SelectSearch.js';
 
-function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilities, onConnect, isShowRequestError, isLoadingRequest }) {
+function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilityBase, onConnect, isShowRequestError, isLoadingRequest }) {
 
   const [currentAbility, setCurrentAbility] = React.useState({});
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  const uniqueAbilities = abilities.filter(( el ) => {
+  const uniqueAbilities = abilityBase.filter(( el ) => {
     if (currentItem.abilities.map((elem => elem.id)).indexOf( el.id ) < 0) {
       return el;
     } else {
@@ -23,7 +23,7 @@ function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilities, onConnec
 
   function handleSubmit(e) {
     e.preventDefault();
-    onConnect(currentItem, currentAbility.id);
+    onConnect(currentAbility.id);
   }
 
   function handleChangeAbility(option) {
@@ -55,11 +55,11 @@ function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilities, onConnec
 
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Умение:</h4>
-        <PopupSelect 
+        <SelectSearch
           options={abilityOptions} 
           currentOption={currentAbility} 
           onChooseOption={handleChangeAbility} 
-          />
+        />
       </label>
 
       <div className='popup__btn-container'>

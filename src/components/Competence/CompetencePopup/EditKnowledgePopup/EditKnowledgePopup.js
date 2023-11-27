@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditKnowledgePopup({ isOpen, onClose, currentItem, currentKnowledge, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditKnowledgePopup({ isOpen, onClose, currentKnowledge, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function EditKnowledgePopup({ isOpen, onClose, currentItem, currentKnowledge, on
 
   function handleSubmit(e) {
     e.preventDefault();
-    onEdit(currentItem, { ...currentKnowledge, name: name, });
+    onEdit({ ...currentKnowledge, name: name, });
   }
 
   function handleChangeName(e) {

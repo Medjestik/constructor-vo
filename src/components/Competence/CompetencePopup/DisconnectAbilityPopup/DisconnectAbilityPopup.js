@@ -5,7 +5,7 @@ function DisconnectAbilityPopup({ isOpen, onClose, onConfirm, currentItem, curre
 
   function handleSubmit(e) {
     e.preventDefault();
-    onConfirm(currentItem, currentAbility);
+    onConfirm(currentAbility);
   }
 
   return (

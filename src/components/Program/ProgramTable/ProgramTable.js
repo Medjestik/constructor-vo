@@ -49,7 +49,7 @@ function ProgramTable({ programs, onOpen, onEdit, onRemove }) {
                   <p className='table__text'>{item.level.name}</p>
                 </div>
                 <div className='table__column table__column_type_medium'>
-                  <p className='table__text'>{item.myRole.role.name}</p>
+                  <p className='table__text'>{item.my_role}</p>
                 </div>
               </div>
               <div className='table__column table__column_type_btn'>

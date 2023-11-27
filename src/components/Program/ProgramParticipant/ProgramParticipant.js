@@ -35,7 +35,7 @@ function ProgramParticipant({ participants, onEdit, onRemove, isEditRights }) {
                   <p className='table__text'>{i + 1}</p>
                 </div>
                 <div className='table__column table__column_type_full'>
-                  <p className='table__text table__text_weight_bold'>{item.name}</p>
+                  <p className='table__text table__text_weight_bold'>{item.user.name}</p>
                 </div>
                 <div className='table__column table__column_type_large'>
                   <p className='table__text'>{item.role.name}</p>

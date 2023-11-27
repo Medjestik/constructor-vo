@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditProductStagePopup({ isOpen, onClose, currentProductStage, onEdit, isShowRequestError, isLoadingRequest }) {
+function AddProcessPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -10,7 +10,7 @@ function EditProductStagePopup({ isOpen, onClose, currentProductStage, onEdit, i
 
   function handleSubmit(e) {
     e.preventDefault();
-    onEdit({ ...currentProductStage, name: name, })
+    onAdd({ name: name, })
   }
 
   function handleChangeName(e) {
@@ -32,7 +32,7 @@ function EditProductStagePopup({ isOpen, onClose, currentProductStage, onEdit, i
   }, [name]);
 
   React.useEffect(() => {
-    setName(currentProductStage.name);
+    setName('');
     setNameError({ isShow: false, text: '' });
   // eslint-disable-next-line
   }, [isOpen]);
@@ -42,20 +42,20 @@ function EditProductStagePopup({ isOpen, onClose, currentProductStage, onEdit, i
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'edit-product-stage-popup'}
+    formName={'add-process-popup'}
     >
-      <h2 className='popup__title'>Редактирование этапа продукта</h2>
+      <h2 className='popup__title'>Добавление процесса</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование этапа:</h4>
+        <h4 className='popup__input-caption'>Наименование процесса:</h4>
         <div className='popup__input-field'>
           <input 
           className='popup__input'
           type='text'
-          id='edit-program-product-stage'
+          id='add-process-name'
           value={name}
           onChange={handleChangeName}
-          name='edit-program-product-stage' 
+          name='add-process-name' 
           placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
@@ -81,4 +81,4 @@ function EditProductStagePopup({ isOpen, onClose, currentProductStage, onEdit, i
   )
 }
 
-export default EditProductStagePopup; 
+export default AddProcessPopup; 

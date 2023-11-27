@@ -4,7 +4,6 @@ import * as usersApi from '../../../utils/api.js';
 import * as programApi from '../../../utils/program.js';
 import Preloader from '../../Preloader/Preloader.js';
 import Section from '../../Section/Section.js';
-import Search from '../../Search/Search.js';
 import ProgramParticipant from '../ProgramParticipant/ProgramParticipant.js';
 import AddParticipantPopup from '../ProgramPopup/AddParticipantPopup/AddParticipantPopup.js';
 import EditParticipantPopup from '../ProgramPopup/EditParticipantPopup/EditParticipantPopup.js';
@@ -15,7 +14,6 @@ import SelectSearch from '../../SelectSearch/SelectSearch';
 function ProgramInfo({ currentProgram, isEditRights }) {
 
   const [participants, setParticipants] = React.useState([]);
-  const [filteredParticipants, setFilteredParticipants] = React.useState(participants);
   const [currentParticipant, setCurrentParticipant] = React.useState({});
 
   const [programInfo, setProgramInfo] = React.useState({});
@@ -46,10 +44,6 @@ function ProgramInfo({ currentProgram, isEditRights }) {
     setIsOpenRemoveParticipantPopup(true);
   }
 
-  function handleSearch(data) {
-    setFilteredParticipants(data);
-  }
-
   function getProgramInfo() {
     const token = localStorage.getItem('token');
     setIsLoadingPage(true);
@@ -59,10 +53,10 @@ function ProgramInfo({ currentProgram, isEditRights }) {
       usersApi.getUsers({ token }),
     ])
     .then(([info, roles, users]) => {
-      setProgramInfo(info.data);
-      setParticipants(info.data.participants);
-      setProgramRoles(roles.data);
-      setUsers(users.data);
+      setProgramInfo(info);
+      setParticipants(info.participants);
+      setProgramRoles(roles);
+      setUsers(users);
     })
     .catch((err) => {
       console.log(err);
@@ -83,8 +77,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     programApi.addParticipant({ token, programId: currentProgram.id, participant: item })
     .then((res) => {   
-      setParticipants(res.data);
-      setFilteredParticipants(res.data);
+      setParticipants(res);
       closeProgramInfoPopup();
     })
     .catch((err) => {
@@ -101,8 +94,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     programApi.editParticipant({ token, programId: currentProgram.id, participant: item })
     .then((res) => {   
-      setParticipants(res.data);
-      setFilteredParticipants(res.data);
+      setParticipants(res);
       closeProgramInfoPopup();
     })
     .catch((err) => {
@@ -119,8 +111,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     programApi.removeParticipant({ token, programId: currentProgram.id, participant: item })
     .then((res) => {   
-      setParticipants(res.data);
-      setFilteredParticipants(res.data);
+      setParticipants(res);
       closeProgramInfoPopup();
     })
     .catch((err) => {
@@ -187,11 +178,10 @@ function ProgramInfo({ currentProgram, isEditRights }) {
           <h3 className='program-info__title'>Участники программы</h3>
           <p className='program-info__subtitle'>Ваша роль в программе: <span className='program-info__text_type_accent'>Методист</span></p>
           <div className='section__header section__header_margin_top'>
-            <Search type='medium' id='program' data={participants} onSearch={handleSearch} />
             <button className='section__header-btn' type='button' onClick={openAddParticipantPopup}>Добавить участника</button>
           </div>
           <ProgramParticipant
-            participants={filteredParticipants}
+            participants={participants}
             onEdit={openEditParticipantPopup}
             onRemove={openRemoveParticipantPopup}
             isEditRights={isEditRights}
@@ -230,7 +220,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
         isOpen={isOpenRemoveParticipantPopup}
         onClose={closeProgramInfoPopup}
         onConfirm={handleRemoveParticipant}
-        item={currentParticipant}
+        item={{...currentParticipant, id: currentParticipant.user.id}}
         isShowRequestError={isShowRequestError}
         isLoadingRequest={isLoadingRequest}
       />

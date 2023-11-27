@@ -31,8 +31,9 @@ function Program({ windowWidth, onLogout }) {
     setIsLoadingPage(true);
     programApi.getProgramItem({ token, id: params.programId })
     .then((res) => {
-      setCurrentProgram(res.data);
-      setIsEditRights(currentUser.id === res.data.authorId ? true : false);
+      console.log(res, 'Program');
+      setCurrentProgram(res);
+      setIsEditRights(currentUser.id === res.authorId ? true : false);
     })
     .catch((err) => {
       console.log(err);

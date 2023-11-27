@@ -10,7 +10,7 @@ function EditParticipantPopup({ isOpen, onClose, currentParticipant, roles, onEd
 
   function handleSubmit(e) {
     e.preventDefault();
-    const participant = { user_id: currentParticipant.id, role_id: currentRole.id, }
+    const participant = { user_id: currentParticipant.user.id, role_id: currentRole.id, }
     onEdit(participant);
   }
 
@@ -44,7 +44,7 @@ function EditParticipantPopup({ isOpen, onClose, currentParticipant, roles, onEd
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Участник:</h4>
         <div className='popup__input-field'>
-          <div className='popup__input'>{currentParticipant.name}</div>
+          <div className='popup__input'>{currentParticipant.user.name}</div>
         </div>
       </label>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function AddProductStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -42,9 +42,9 @@ function AddProductStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLo
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'add-product-stage-popup'}
+    formName={'add-stage-popup'}
     >
-      <h2 className='popup__title'>Добавление этапа продукта</h2>
+      <h2 className='popup__title'>Добавление этапа ЖЦ</h2>
 
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Наименование этапа:</h4>
@@ -52,10 +52,10 @@ function AddProductStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLo
           <input 
           className='popup__input'
           type='text'
-          id='add-program-product-stage'
+          id='add-program-stage'
           value={name}
           onChange={handleChangeName}
-          name='add-program-product-stage' 
+          name='add-program-stage' 
           placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
@@ -81,4 +81,4 @@ function AddProductStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLo
   )
 }
 
-export default AddProductStagePopup; 
+export default AddStagePopup; 

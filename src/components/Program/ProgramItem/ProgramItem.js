@@ -28,8 +28,9 @@ function ProgramItem() {
     setIsLoadingPage(true);
     programApi.getProgramItem({ token, id: params.programId })
     .then((res) => {
-      setCurrentProgram(res.data);
-      setIsEditRights(currentUser.id === res.data.authorId ? true : false);
+      setCurrentProgram(res);
+      console.log(res);
+      setIsEditRights(currentUser.id === res.authorId ? true : false);
     })
     .catch((err) => {
       console.log(err);

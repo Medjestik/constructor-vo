@@ -2,7 +2,6 @@ import React from 'react';
 import './DraggableItem.css';
 import { Draggable } from 'react-beautiful-dnd';
 
-
 function DraggableItem ({ part, index }) {
 
   return (
