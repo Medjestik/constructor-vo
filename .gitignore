@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# Исключаем файлы с окончанием .env
+.env
+
 # misc
 .DS_Store
 .env.local
