@@ -22,9 +22,6 @@ function Competence({ currentProgram, isEditRights }) {
 
   const [processes, setProcesses] = React.useState([]);
 
-  const [abilityBase, setAbilityBase] = React.useState([]);
-  const [knowledgeBase, setKnowledgeBase] = React.useState([]);
-
   const [isShowAbilities, setIsShowAbilities] = React.useState(false);
   const [isShowKnowledge, setIsShowKnowledge] = React.useState(false);
 
@@ -128,14 +125,10 @@ function Competence({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     Promise.all([
       competenceApi.getCompetenceProcesses({ token: token, programId: currentProgram.id }),
-      competenceApi.getAbilityBase({ token: token, programId: currentProgram.id }),
-      competenceApi.getKnowledgeBase({ token: token, programId: currentProgram.id }),
     ])
-      .then(([processes, ab, kn]) => {
+      .then(([processes, kn]) => {
         console.log('CompetenceProcesses:', processes);
         setProcesses(processes);
-        setAbilityBase(ab);
-        setKnowledgeBase(kn);
       })
       .catch((err) => {
         console.log(err);
@@ -151,13 +144,16 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.addAbility({ token, processId: openProcess.id, ability: item })
       .then((res) => {
-        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-        const newAbilities = [...findProcess.abilities, res];
-        const newProcess = {...findProcess, abilities: newAbilities};
-        setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
-        setOpenProcess(newProcess);
-        setAbilityBase([...abilityBase, res]);
+        const updatedProcesses = processes.map((process) => {
+          if (process.id === openProcess.id) {
+            const updatedProcess = { ...process, abilities: [...process.abilities, res] };
+            setOpenProcess({ ...updatedProcess, code: processes.indexOf(process) + 1 });
+            setOpenAbility(res);
+            return updatedProcess;
+          }
+          return process;
+        });
+        setProcesses(updatedProcesses);
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -175,24 +171,23 @@ function Competence({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     competenceApi.connectAbilities({ token, processId: openProcess.id, abilityId: abilityId })
     .then((res) => {
-      let newProcesses = processes;
-      res.parent_id.forEach((item) => {
-        const findProcess = processes.find((elem) => (elem.id === item));
-        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
-        let newProcess = {};
-        if (openProcess.id === item) {
-          const newAbilities = [...findProcess.abilities, res];
-          newProcess = {...findProcess, abilities: newAbilities};
-          setOpenProcess(newProcess);
-        } else {
-          const findAbility = findProcess.abilities.find((elem) => (elem.id === res.id));
-          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
-          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, parent_id: res.parent_id}, ...findProcess.abilities.slice(indexAbility + 1)];
-          newProcess = {...findProcess, abilities: newAbilities};
+      const updatedProcesses = processes.map((process) => {
+        if (res.parent_id.includes(process.id)) {
+          if (openProcess.id === process.id) {
+            const updatedProcess = {...process, abilities: [...process.abilities, res]};
+            setOpenProcess({ ...updatedProcess, code: processes.indexOf(process) + 1 });
+            return updatedProcess;
+          } else {
+            const findAbility = process.abilities.find((ability) => ability.id === res.id);
+            const indexAbility = process.abilities.indexOf(findAbility);
+            const newAbilities = [...process.abilities.slice(0, indexAbility), { ...findAbility, parent_id: res.parent_id }, ...process.abilities.slice(indexAbility + 1)];
+            const updatedProcess = { ...process, abilities: newAbilities };
+            return updatedProcess;
+          }
         }
-        return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
-      })
-      setProcesses(newProcesses);
+        return process;
+      });
+      setProcesses(updatedProcesses);
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -210,19 +205,23 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.editAbilities({ token, programId: currentProgram.id, ability: item })
       .then((res) => {
-        let newProcesses = processes;
-        res.parent_id.forEach((item) => {
-          const findProcess = processes.find((elem) => (elem.id === item));
-          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
-          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
-          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), res, ...findProcess.abilities.slice(indexAbility + 1)];
-          const newProcess = {...findProcess, abilities: newAbilities};
-          if (openProcess.id === item) {
-            setOpenProcess(newProcess);
+        const updatedProcesses = processes.map((process) => {
+          if (res.parent_id.includes(process.id)) {
+            const updatedAbilities = process.abilities.map((ability) => {
+              if (ability.id === res.id) {
+                return res;
+              }
+              return ability;
+            });
+            const updatedProcess = { ...process, abilities: updatedAbilities };
+            if (openProcess.id === process.id) {
+              setOpenProcess({ ...updatedProcess, code: processes.indexOf(process) + 1 });
+            }
+            return updatedProcess;
           }
-          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
-        })
-        setProcesses(newProcesses);
+          return process;
+        });
+        setProcesses(updatedProcesses);
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -235,28 +234,27 @@ function Competence({ currentProgram, isEditRights }) {
     }
   }
 
-  function handleDisconnectAbilities(ability) {
+  function handleDisconnectAbilities(abilityId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.disconnectAbilities({ token, processId: openProcess.id, abilityId: ability.id })
+    competenceApi.disconnectAbilities({ token, processId: openProcess.id, abilityId: abilityId })
       .then((res) => {
-        let newProcesses = processes;
-        res.parent_id.forEach((item) => {
-          const findProcess = processes.find((elem) => (elem.id === item));
-          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
-          let newProcess = {};
-          const findAbility = findProcess.abilities.find((elem) => (elem.id === res.id));
-          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === res.id)));
-          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, parent_id: res.parent_id}, ...findProcess.abilities.slice(indexAbility + 1)];
-          newProcess = {...findProcess, abilities: newAbilities};
-          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
-        })
-        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-        const newAbilities = findProcess.abilities.filter((elem) => elem.id !== res.id);
-        const newProcess = {...findProcess, abilities: newAbilities};
-        setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
-        setOpenProcess({...findProcess, abilities: newAbilities});
+        const newProcesses = processes.map((process) => {
+          if (res.parent_id.includes(process.id)) {
+            const findAbility = process.abilities.find((ability) => ability.id === res.id);
+            const indexAbility = process.abilities.indexOf(findAbility);
+            const newAbilities = [...process.abilities.slice(0, indexAbility), { ...findAbility, parent_id: res.parent_id }, ...process.abilities.slice(indexAbility + 1)];
+            const updatedProcess = { ...process, abilities: newAbilities };
+            return updatedProcess;
+          } else if (process.abilities.some(ability => ability.id === res.id)) {
+            const newAbilities = process.abilities.filter((ability) => ability.id !== res.id);
+            setOpenProcess({ ...process, code: processes.indexOf(process) + 1, abilities: newAbilities });
+            const updatedProcess = { ...process, abilities: newAbilities };
+            return updatedProcess;
+          }
+          return process;
+        });
+        setProcesses(newProcesses);
         if (openAbility.id === res.id) {
           setIsShowKnowledge(false);
         }
@@ -277,18 +275,18 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.removeAbilities({ token, programId: currentProgram.id, abilityId: item.id })
       .then((res) => {
-        let newProcesses = processes;
-        item.parent_id.forEach((item) => {
-          const findProcess = processes.find((elem) => (elem.id === item));
-          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === item)));
-          const newAbilities = findProcess.abilities.filter((elem) => elem.id !== res.id);
-          const newProcess = {...findProcess, abilities: newAbilities};
-          if (openProcess.id === item) {
-            setOpenProcess(newProcess);
-            setIsShowKnowledge(false);
+        const newProcesses = processes.map((process) => {
+          if (item.parent_id.includes(process.id)) {
+            const newAbilities = process.abilities.filter((ability) => ability.id !== res.id);
+            const updatedProcess = { ...process, abilities: newAbilities };
+            if (openProcess.id === process.id) {
+              setOpenProcess({ ...updatedProcess, code: processes.indexOf(process) + 1 });
+              setIsShowKnowledge(false);
+            }
+            return updatedProcess;
           }
-          return newProcesses = [...newProcesses.slice(0, indexProcess), newProcess, ...newProcesses.slice(indexProcess + 1)];
-        })
+          return process;
+        });
         setProcesses(newProcesses);
         closeCompetencePopup();
       })
@@ -308,17 +306,16 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.addKnowledge({ token, abilityId: openAbility.id, knowledge: item })
         .then((res) => {
-          const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-          const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-          const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
-          const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
+          const findProcess = processes.find((elem) => elem.id === openProcess.id);
+          const findAbility = findProcess.abilities.find((elem) => elem.id === openAbility.id);
           const newKnowledges = [...findAbility.knowledges, res];
-          const newAbility = {...findAbility, knowledges: newKnowledges};
-          const newAbilities = [...findProcess.abilities.slice(0, indexAbility), newAbility, ...findProcess.abilities.slice(indexAbility + 1)];
-          const newProcess = {...findProcess, abilities: newAbilities};
-          setProcesses([...processes.slice(0, indexProcess), newProcess, ...processes.slice(indexProcess + 1)]);
-          setOpenAbility(newAbility);
-          setOpenProcess(newProcess);
+          const newAbility = { ...findAbility, knowledges: newKnowledges };
+          const newAbilities = findProcess.abilities.map((ability) => (ability.id === openAbility.id ? newAbility : ability));
+          const newProcess = { ...findProcess, abilities: newAbilities };
+          const updatedProcesses = processes.map((process) => (process.id === openProcess.id ? newProcess : process));
+          setProcesses(updatedProcesses);
+          setOpenProcess({ ...newProcess, code: updatedProcesses.indexOf(newProcess) + 1 });
+          setOpenAbility({...newAbility, code: newProcess.abilities.indexOf(newAbility) + 1 });
           closeCompetencePopup();
         })
         .catch((err) => {
@@ -336,16 +333,31 @@ function Competence({ currentProgram, isEditRights }) {
     const token = localStorage.getItem('token');
     competenceApi.connectKnowledge({ token, abilityId: openAbility.id, knowledgeId: knowledgeId })
     .then((res) => {
-      const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-      const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-      const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
-      const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
-      const newKnowledges = [...findAbility.knowledges, res];
-      const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
-      setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
-      setOpenProcess({...findProcess, abilities: newAbilities});
-      //setAbilities(newAbilities);
-      setOpenAbility({...findAbility, knowledges: newKnowledges});
+      const updatedProcesses = processes.map((process) => {
+        const updatedAbilities = process.abilities.map((ability) => {
+          if (res.parent_id.includes(ability.id)) {
+            if (openAbility.id === ability.id) {
+              const updatedKnowledges = [...ability.knowledges, res];
+              const updatedAbility = {...ability, knowledges: updatedKnowledges};
+              const findAbility = process.abilities.find((elem) => elem.id === openAbility.id);
+              setOpenAbility({...updatedAbility, code: process.abilities.indexOf(findAbility) + 1});
+              return updatedAbility;
+            } else {
+              const updatedKnowledges = ability.knowledges.map(knowledge => knowledge.id === res.id ? {...knowledge, parent_id: res.parent_id} : knowledge);
+              const updatedAbility = {...ability, knowledges: updatedKnowledges};
+              return updatedAbility;
+            }
+          }
+          return ability;
+        })
+        const updatedProcess = {...process, abilities: updatedAbilities};
+        if (openProcess.id === process.id) {
+          const findProcess = processes.find((elem) => elem.id === openProcess.id);
+          setOpenProcess({ ...updatedProcess, code: processes.indexOf(findProcess) + 1});
+        }
+        return updatedProcess;
+      })
+      setProcesses(updatedProcesses);
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -363,15 +375,27 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.editKnowledge({ token, programId: currentProgram.id, knowledge: item })
       .then((res) => {
-        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-        const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
-        const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
-        const indexKnowledge = findAbility.knowledges.indexOf(findAbility.knowledges.find((elem) => (elem.id === res.id)));
-        const newKnowledges = [...findAbility.knowledges.slice(0, indexKnowledge), res, ...findAbility.knowledges.slice(indexKnowledge + 1)];
-        const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
-        setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
-        //setAbilities(newAbilities);
+        const updatedProcesses = processes.map((process) => {
+          const updatedAbilities = process.abilities.map((ability) => {
+            if (item.parent_id.includes(ability.id)) {
+              const updatedKnowledges = ability.knowledges.map(knowledge => knowledge.id === res.id ? res : knowledge);
+              const updatedAbility = {...ability, knowledges: updatedKnowledges};
+              if (openAbility.id === ability.id) {
+                const findAbility = process.abilities.find((elem) => elem.id === openAbility.id);
+                setOpenAbility({...updatedAbility, code: process.abilities.indexOf(findAbility) + 1});
+              }
+              return updatedAbility;
+            }
+            return ability;
+          })
+          const updatedProcess = {...process, abilities: updatedAbilities};
+          if (openProcess.id === process.id) {
+            const findProcess = processes.find((elem) => elem.id === openProcess.id);
+            setOpenProcess({ ...updatedProcess, code: processes.indexOf(findProcess) + 1});
+          }
+          return updatedProcess;
+        })
+        setProcesses(updatedProcesses);
         closeCompetencePopup();
       })
       .catch((err) => {
@@ -384,19 +408,35 @@ function Competence({ currentProgram, isEditRights }) {
     }
   }
 
-  function handleDisconnectKnowledge(item, knowledgeId) {
+  function handleDisconnectKnowledge(knowledgeId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    competenceApi.disconnectKnowledge({ token, abilityId: item.id, knowledgeId: knowledgeId })
+    competenceApi.disconnectKnowledge({ token, abilityId: openAbility.id, knowledgeId: knowledgeId })
     .then((res) => {
-      const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-      const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-      const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
-      const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
-      const newKnowledges = findAbility.knowledges.filter((elem) => elem.id !== res.id);
-      const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
-      setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
-      //setAbilities(newAbilities);
+      const updatedProcesses = processes.map((process) => {
+        const updatedAbilities = process.abilities.map((ability) => {
+          if (openAbility.id === ability.id) {
+            const updatedKnowledges = ability.knowledges.filter(knowledge => knowledge.id !== res.id);
+            const updatedAbility = {...ability, knowledges: updatedKnowledges};
+            const findAbility = process.abilities.find((elem) => elem.id === openAbility.id);
+            setOpenAbility({...updatedAbility, code: process.abilities.indexOf(findAbility) + 1});
+            return updatedAbility;
+          }
+          if (res.parent_id.includes(ability.id)) {
+            const updatedKnowledges = ability.knowledges.map(knowledge => knowledge.id === res.id ? {...knowledge, parent_id: res.parent_id} : knowledge);
+            const updatedAbility = {...ability, knowledges: updatedKnowledges};
+            return updatedAbility;
+          }
+          return ability;
+        })
+        const updatedProcess = {...process, abilities: updatedAbilities};
+        if (openProcess.id === process.id) {
+          const findProcess = processes.find((elem) => elem.id === openProcess.id);
+          setOpenProcess({ ...updatedProcess, code: processes.indexOf(findProcess) + 1});
+        }
+        return updatedProcess;
+      })
+      setProcesses(updatedProcesses);
       closeCompetencePopup();
     })
     .catch((err) => {
@@ -414,17 +454,25 @@ function Competence({ currentProgram, isEditRights }) {
     if (token) {
       competenceApi.removeKnowledge({ token, programId: currentProgram.id, knowledgeId: item.id })
       .then((res) => {
-        /*
-        const findProcess = processes.find((elem) => (elem.id === openProcess.id));
-        const indexProcess = processes.indexOf(processes.find((elem) => (elem.id === openProcess.id)));
-        const findAbility = findProcess.abilities.find((elem) => (elem.id === openAbility.id));
-        const indexAbility = findProcess.abilities.indexOf(findProcess.abilities.find((elem) => (elem.id === openAbility.id)));
-        const newKnowledges = findAbility.knowledges.filter((elem) => elem.id !== res.id);
-        const newAbilities = [...findProcess.abilities.slice(0, indexAbility), {...findAbility, knowledges: newKnowledges}, ...findProcess.abilities.slice(indexAbility + 1)];
-        setProcesses([...processes.slice(0, indexProcess), {...findProcess, abilities: newAbilities}, ...processes.slice(indexProcess + 1)]);
-        setAbilities(newAbilities);
+        const updatedProcesses = processes.map((process) => {
+          const updatedAbilities = process.abilities.map((ability) => {
+            const updatedKnowledges = ability.knowledges.filter(knowledge => knowledge.id !== res.id);
+            const updatedAbility = {...ability, knowledges: updatedKnowledges};
+            if (openAbility.id === ability.id) {
+              const findAbility = process.abilities.find((elem) => elem.id === openAbility.id);
+              setOpenAbility({...updatedAbility, code: process.abilities.indexOf(findAbility) + 1});
+            }
+            return updatedAbility;
+          })
+          const updatedProcess = {...process, abilities: updatedAbilities};
+          if (openProcess.id === process.id) {
+            const findProcess = processes.find((elem) => elem.id === openProcess.id);
+            setOpenProcess({ ...updatedProcess, code: processes.indexOf(findProcess) + 1});
+          }
+          return updatedProcess;
+        })
+        setProcesses(updatedProcesses);
         closeCompetencePopup();
-        */
       })
       .catch((err) => {
         console.log(err);
@@ -440,8 +488,6 @@ function Competence({ currentProgram, isEditRights }) {
     getCompetenceProfile();
     return(() => {
       setProcesses([]);
-      setAbilityBase([]);
-      setKnowledgeBase([]);
       setOpenProcess({});
       setOpenAbility({});
       setCurrentProcess({});
@@ -519,9 +565,9 @@ function Competence({ currentProgram, isEditRights }) {
         <ConnectAbilityPopup
           isOpen={isConnectAbilitiesPopupOpen}
           onClose={closeCompetencePopup}
+          programId={currentProgram.id}
           currentItem={openProcess}
           onConnect={handleConnectAbilities}
-          abilityBase={abilityBase}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -581,9 +627,9 @@ function Competence({ currentProgram, isEditRights }) {
         <ConnectKnowledgePopup
           isOpen={isConnectKnowledgePopupOpen}
           onClose={closeCompetencePopup}
+          programId={currentProgram.id}
           currentItem={openAbility}
           onConnect={handleConnectKnowledge}
-          knowledgeBase={knowledgeBase}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -613,9 +659,16 @@ function Competence({ currentProgram, isEditRights }) {
       }
       {
         isRemoveKnowledgePopupOpen &&
-        <ConfirmRemovePopup
+        <WarningRemovePopup
           isOpen={isRemoveKnowledgePopupOpen}
           onClose={closeCompetencePopup}
+          text={
+            currentKnowledge.parent_id.length > 1
+            ?
+            'Вы пытаетесь удалить знание, которое привязано еще к ' + (currentKnowledge.parent_id.length - 1) + ' умениям. Вы действительно хотите это сделать?' 
+            :
+            'Вы действительно хотите удалить знание? Этот процесс нельзя будет отменить.'
+          }
           onConfirm={handleRemoveKnowledge}
           item={currentKnowledge}
           isShowRequestError={isShowRequestError}

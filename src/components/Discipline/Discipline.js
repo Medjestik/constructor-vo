@@ -1,42 +1,40 @@
 import React from 'react';
 import './Discipline.css';
-import * as disciplineApi from '../../utils/discipline';
+import * as disciplineApi from '../../utils/discipline.js';
+import * as competenceApi from '../../utils/competence.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
-import Search from '../Search/Search.js';
-import DisciplineKnowledgeTable from './DisciplineKnowledgeTable/DisciplineKnowledgeTable.js';
+import Levels from '../Levels/Levels.js';
+import DisciplineList from './DisciplineList/DisciplineList.js';
+import DisciplineAbilityList from './DisciplineAbilityList/DisciplineAbilityList.js';
+import DisciplineKnowledgeList from './DisciplineKnowledgeList/DisciplineKnowledgeList.js';
 import AddDisciplinePopup from './DisciplinePopup/AddDisciplinePopup/AddDisciplinePopup.js';
 import EditDisciplinePopup from './DisciplinePopup/EditDisciplinePopup/EditDisciplinePopup.js';
+import ConnectAbilityPopup from '../Competence/CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
+import DisconnectAbilityPopup from '../Competence/CompetencePopup/DisconnectAbilityPopup/DisconnectAbilityPopup.js';
 import ConnectKnowledgePopup from '../Competence/CompetencePopup/ConnectKnowledgePopup/ConnectKnowledgePopup.js';
 import DisconnectKnowledgePopup from '../Competence/CompetencePopup/DisconnectKnowledgePopup/DisconnectKnowledgePopup.js';
 import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
 
 function Discipline({ currentProgram, isEditRights }) {
 
-  const [discipline, setDiscipline] = React.useState({});
-  const [filteredDisciplines, setFilteredDisciplines] = React.useState([]);
+  const [disciplines, setDisciplines] = React.useState({});
+  const [abilityBase, setAbilityBase] = React.useState([]);
+  const [knowledgeBase, setKnowledgeBase] = React.useState([]);
 
-  const containerHeightRef = React.createRef();
-  const [listHeight, setListHeight] = React.useState(0);
-
-  React.useEffect(() => {
-    if (containerHeightRef.current) {
-      setListHeight(containerHeightRef.current.clientHeight - 28);
-    }
-  }, [containerHeightRef]);
-
-  const listStyle = {
-    height: listHeight,
-  };
+  const [openDiscipline, setOpenDiscipline] = React.useState({});
 
   const [currentDiscipline, setCurrentDiscipline] = React.useState({});
+  const [currentAbility, setCurrentAbility] = React.useState({});
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
 
-  const [isShowKnowledge, setIsShowKnowledge] = React.useState(false);
+  const [isOpenDiscipline, setIsOpenDiscipline] = React.useState(false);
 
   const [isOpenAddDisciplinePopup, setIsOpenAddDisciplinePopup] = React.useState(false);
   const [isOpenEditDisciplinePopup, setIsOpenEditDisciplinePopup] = React.useState(false);
   const [isOpenRemoveDisciplinePopup, setIsOpenRemoveDisciplinePopup] = React.useState(false);
+  const [isConnectAbilityPopupOpen, setIsConnectAbilityPopupOpen] = React.useState(false);
+  const [isDisconnectAbilityPopupOpen, setIsDisconnectAbilityPopupOpen] = React.useState(false);
   const [isConnectKnowledgePopupOpen, setIsConnectKnowledgePopupOpen] = React.useState(false);
   const [isDisconnectKnowledgePopupOpen, setIsDisconnectKnowledgePopupOpen] = React.useState(false);
 
@@ -44,20 +42,27 @@ function Discipline({ currentProgram, isEditRights }) {
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
-  function handleSearch(data) {
-    setFilteredDisciplines(data);
-  }
-
   function openAddDisciplinePopup() {
     setIsOpenAddDisciplinePopup(true);
   }
 
-  function openEditDisciplinePopup() {
+  function openEditDisciplinePopup(item) {
+    setCurrentDiscipline(item);
     setIsOpenEditDisciplinePopup(true);
   }
 
-  function openRemoveDisciplinePopup() {
+  function openRemoveDisciplinePopup(item) {
+    setCurrentDiscipline(item);
     setIsOpenRemoveDisciplinePopup(true);
+  }
+
+  function openConnectAbilityPopup() {
+    setIsConnectAbilityPopupOpen(true);
+  }
+
+  function openDisconnectAbilityPopup(ability) {
+    setCurrentAbility(ability);
+    setIsDisconnectAbilityPopupOpen(true);
   }
 
   function openConnectKnowledgePopup() {
@@ -73,26 +78,26 @@ function Discipline({ currentProgram, isEditRights }) {
     setIsOpenAddDisciplinePopup(false);
     setIsOpenEditDisciplinePopup(false);
     setIsOpenRemoveDisciplinePopup(false);
+    setIsConnectAbilityPopupOpen(false);
+    setIsDisconnectAbilityPopupOpen(false);
     setIsConnectKnowledgePopupOpen(false);
     setIsDisconnectKnowledgePopupOpen(false);
     setIsLoadingRequest(false);
     setIsShowRequestError({ isShow: false, text: '' });
   }
 
-  function chooseItem(discipline, disciplineIndex) {
-    setCurrentDiscipline({...discipline, disciplineIndex: disciplineIndex});
-    setIsShowKnowledge(true);
-  }
-
   function getDiscipline() {
     const token = localStorage.getItem('token');
     Promise.all([
-      disciplineApi.getDiscipline({ token, programId: currentProgram.id }),
+      disciplineApi.getDiscipline({ token: token, programId: currentProgram.id }),
+      competenceApi.getAbilityBase({ token: token, programId: currentProgram.id }),
+      competenceApi.getKnowledgeBase({ token: token, programId: currentProgram.id }),
     ])
-      .then(([discipline]) => {
+      .then(([discipline, abilities, knowledges]) => {
         console.log('Discipline:', discipline);
-        setDiscipline(discipline.data);
-        setFilteredDisciplines(discipline.data.disciplines);
+        setDisciplines(discipline);
+        setAbilityBase(abilities);
+        setKnowledgeBase(knowledges);
       })
       .catch((err) => {
         console.log(err);
@@ -105,10 +110,10 @@ function Discipline({ currentProgram, isEditRights }) {
   function handleAddDiscipline(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.addDiscipline({ token, programId: currentProgram.id, discipline: item })
+    disciplineApi.addDiscipline({ token: token, programId: currentProgram.id, discipline: item })
       .then((res) => {
-        setDiscipline({...discipline, disciplines: [...discipline.disciplines, res.data]});
-        setFilteredDisciplines([...discipline.disciplines, res.data]);
+        setDisciplines([...disciplines, res]);
+        handleOpenDiscipline(res);
         closeDisciplinePopup();
       })
       .catch((err) => {
@@ -123,15 +128,10 @@ function Discipline({ currentProgram, isEditRights }) {
   function handleEditDiscipline(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.editDiscipline({ token, programId: currentProgram.id, discipline: item })
+    disciplineApi.editDiscipline({ token: token, programId: currentProgram.id, discipline: item })
       .then((res) => {
-        const index = discipline.disciplines.indexOf(discipline.disciplines.find((elem) => (elem.id === res.data.id)));
-        const newDisciplines = [...discipline.disciplines.slice(0, index), res.data, ...discipline.disciplines.slice(index + 1)];
-        setDiscipline({
-          ...discipline, 
-          disciplines: newDisciplines,
-        });
-        setFilteredDisciplines(newDisciplines);
+        const updatedDisciplines = disciplines.map((discipline) => discipline.id === res.id ? res : discipline);
+        setDisciplines(updatedDisciplines);
         closeDisciplinePopup();
       })
       .catch((err) => {
@@ -146,13 +146,19 @@ function Discipline({ currentProgram, isEditRights }) {
   function handleRemoveDiscipline(item) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.removeDiscipline({ token, programId: currentProgram.id, discipline: item })
+    disciplineApi.removeDiscipline({ token: token, programId: currentProgram.id, discipline: item })
       .then((res) => {
-        const newDisciplines = discipline.disciplines.filter((elem) => elem.id !== res);
-        setDiscipline({...discipline, disciplines: newDisciplines});
-        setFilteredDisciplines(newDisciplines);
-        setCurrentDiscipline({});
-        setIsShowKnowledge(false);
+        const updatedDisciplines = disciplines.filter((elem) => elem.id !== res.id);
+        const updatedAbilities = abilityBase.map((ability) => {
+          return ability.discipline_id.includes(res.id) ? { ...ability, discipline_id: ability.discipline_id.filter((id) => id !== res.id) } : ability;
+        });
+        const updatedKnowledges = knowledgeBase.map((knowledge) => {
+          return knowledge.discipline_id.includes(res.id) ? { ...knowledge, discipline_id: knowledge.discipline_id.filter((id) => id !== res.id) } : knowledge;
+        });
+        setDisciplines(updatedDisciplines);
+        setAbilityBase(updatedAbilities);
+        setKnowledgeBase(updatedKnowledges);
+        handleCloseDiscipline();
         closeDisciplinePopup();
       })
       .catch((err) => {
@@ -164,20 +170,32 @@ function Discipline({ currentProgram, isEditRights }) {
       });
   }
 
-  function handleConnectKnowledge(item, knowledgeId) {
+  function handleConnectAbility(abilityId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.connectKnowledge({ token, disciplineId: item.id, knowledgeId: knowledgeId })
+    disciplineApi.connectAbility({ token: token, disciplineId: openDiscipline.id, abilityId: abilityId })
       .then((res) => {
-        const index = discipline.disciplines.indexOf(discipline.disciplines.find((elem) => (elem.id === res.data.id)));
-        const newDisciplines = [...discipline.disciplines.slice(0, index), res.data, ...discipline.disciplines.slice(index + 1)];
-        setDiscipline({
-          ...discipline, 
-          disciplines: newDisciplines,
+        const updatedDisciplines = disciplines.map((discipline) => {
+          if (discipline.id === openDiscipline.id) {
+            const updateAbilities = [...discipline.abilities, res];
+            const uniqKnowledges = res.knowledges.filter((knowledge) => !discipline.knowledges.some((disciplineKnowledge) => disciplineKnowledge.id === knowledge.id));
+            const updateKnowledges = [...discipline.knowledges, ...uniqKnowledges];
+            const updatedDiscipline = {...discipline, abilities: updateAbilities, knowledges: updateKnowledges};
+            setOpenDiscipline(updatedDiscipline);
+            return updatedDiscipline;
+          }
+          return discipline;
         });
-        setDiscipline({...discipline, disciplines: newDisciplines});
-        setFilteredDisciplines(newDisciplines);
-        setCurrentDiscipline(res.data);
+        const updatedAbilities = abilityBase.map((ability) => {
+          return ability.id === res.id ? { ...ability, discipline_id: res.discipline_id, } : ability;
+        });
+        const updatedKnowledges = knowledgeBase.map((knowledge) => {
+          const findKnowledge = res.knowledges.find((elem) => elem.id === knowledge.id);
+          return findKnowledge ? { ...knowledge, discipline_id: findKnowledge.discipline_id } : knowledge;
+        });
+        setAbilityBase(updatedAbilities);
+        setKnowledgeBase(updatedKnowledges);
+        setDisciplines(updatedDisciplines);
         closeDisciplinePopup();
       })
       .catch((err) => {
@@ -189,20 +207,25 @@ function Discipline({ currentProgram, isEditRights }) {
       });
   }
 
-  function handleDisconnectKnowledge(item, knowledgeId) {
+  function handleDisconnectAbility(abilityId) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.disconnectKnowledge({ token, disciplineId: item.id, knowledgeId: knowledgeId })
+    disciplineApi.disconnectAbility({ token: token, disciplineId: openDiscipline.id,abilityId: abilityId })
       .then((res) => {
-        const index = discipline.disciplines.indexOf(discipline.disciplines.find((elem) => (elem.id === res.data.id)));
-        const newDisciplines = [...discipline.disciplines.slice(0, index), res.data, ...discipline.disciplines.slice(index + 1)];
-        setDiscipline({
-          ...discipline, 
-          disciplines: newDisciplines,
+        const updatedDisciplines = disciplines.map((discipline) => {
+          if (discipline.id === openDiscipline.id) {
+            const updateAbilities = discipline.abilities.filter((ability) => ability.id !== res.id);
+            const updatedDiscipline = {...discipline, abilities: updateAbilities};
+            setOpenDiscipline(updatedDiscipline);
+            return updatedDiscipline;
+          }
+          return discipline;
         });
-        setDiscipline({...discipline, disciplines: newDisciplines});
-        setFilteredDisciplines(newDisciplines);
-        setCurrentDiscipline(res.data);
+        const updatedAbilities = abilityBase.map((ability) => {
+          return ability.id === res.id ? { ...ability, discipline_id: res.discipline_id, } : ability;
+        });
+        setAbilityBase(updatedAbilities);
+        setDisciplines(updatedDisciplines);
         closeDisciplinePopup();
       })
       .catch((err) => {
@@ -212,160 +235,211 @@ function Discipline({ currentProgram, isEditRights }) {
       .finally(() => {
         setIsLoadingRequest(false);
       });
+  }
+
+  function handleConnectKnowledge(knowledgeId) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    disciplineApi.connectKnowledge({ token: token, disciplineId: openDiscipline.id, knowledgeId: knowledgeId })
+      .then((res) => {
+        const updatedDisciplines = disciplines.map((discipline) => {
+          if (discipline.id === openDiscipline.id) {
+            const updateKnowledges = [...discipline.knowledges, res];
+            const updatedDiscipline = {...discipline, knowledges: updateKnowledges};
+            setOpenDiscipline(updatedDiscipline);
+            return updatedDiscipline;
+          }
+          return discipline;
+        });
+        const updatedKnowledges = knowledgeBase.map((knowledge) => {
+          return knowledge.id === res.id ? { ...knowledge, discipline_id: res.discipline_id, } : knowledge;
+        });
+        setKnowledgeBase(updatedKnowledges);
+        setCurrentDiscipline(updatedDisciplines);
+        closeDisciplinePopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleDisconnectKnowledge(knowledgeId) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    disciplineApi.disconnectKnowledge({ token: token, disciplineId: openDiscipline.id, knowledgeId: knowledgeId })
+      .then((res) => {
+        const updatedDisciplines = disciplines.map((discipline) => {
+          if (discipline.id === openDiscipline.id) {
+            const updateKnowledges = discipline.knowledges.filter((knowledge) => knowledge.id !== res.id);
+            const updatedDiscipline = {...discipline, knowledges: updateKnowledges};
+            setOpenDiscipline(updatedDiscipline);
+            return updatedDiscipline;
+          }
+          return discipline;
+        })
+        const updatedKnowledges = knowledgeBase.map((knowledge) => {
+          return knowledge.id === res.id ? { ...knowledge, discipline_id: res.discipline_id, } : knowledge;
+        });
+        setKnowledgeBase(updatedKnowledges);
+        setDisciplines(updatedDisciplines);
+        closeDisciplinePopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleOpenDiscipline(item) {
+    setOpenDiscipline(item);
+    setIsOpenDiscipline(true);
+  }
+
+  function handleCloseDiscipline() {
+    setOpenDiscipline({});
+    setIsOpenDiscipline(false);
   }
 
   React.useEffect(() => {
     getDiscipline();
     return(() => {
-      setDiscipline({});
-      setFilteredDisciplines({});
+      setDisciplines({});
+      setAbilityBase([]);
+      setKnowledgeBase([]);
+      setOpenDiscipline({});
       setCurrentDiscipline({});
       setCurrentKnowledge({})
-      setIsShowKnowledge(false);
     })
     // eslint-disable-next-line
   }, []);
 
-
   return (
-    <div className='discipline'>
-      {
-        isLoadingPage 
-        ?
-        <Preloader />
-        :
-        <Section title={'Проектирование дисциплин'} heightType={'page'} headerType={'large'}>
-          <div className='section__header'>
-            <Search type='medium' id='discipline' data={discipline.disciplines} onSearch={handleSearch} />
-            <div className='section__header-btn-container'>
-              <button className='section__header-btn' type='button' onClick={openAddDisciplinePopup}>Создать дисциплину</button>
-              <button
-                className={`btn btn_type_gear ${isShowKnowledge ? 'btn_type_gear_status_active' : ''} section__header-btn_margin_left`}
-                onClick={openEditDisciplinePopup}
-              >
-              </button>
-              <button
-                className={`btn btn_type_cancel ${isShowKnowledge ? 'btn_type_cancel_status_active' : ''} section__header-btn_margin_left`}
-                onClick={openRemoveDisciplinePopup}
-              >
-              </button>
-            </div>
-          </div>
-          <div className='competence-container'>
-            <div ref={containerHeightRef} className='competence-container_type_left'>
-              <h3 className='competence-header__caption'>Список дисциплин:</h3>
-              <div className='competence-container_type_scroll scroll'>
-                <ul className='competence__list'>
-                  {
-                    filteredDisciplines.length > 0 &&
-                    filteredDisciplines.map((discipline, disciplineIndex) => (
-                      <li className='competence-list__item' key={disciplineIndex}>
-                        <p 
-                        className={`competence-list__name competence-list__name_type_active ${isShowKnowledge && discipline.id === currentDiscipline.id ? 'competence-list__name_weight_bold competence-list__name_type_discipline' : ''}`} 
-                        onClick={() => chooseItem(discipline, disciplineIndex)}
-                        >
-                          <span className='competence-list__name_weight_bold competence-list__name_type_discipline'>Дисциплина {disciplineIndex + 1}: </span> 
-                          {discipline.name}
-                        </p>
-                        <ul className='competence__list competence__list_padding_left'>
-                          {
-                            discipline.knowledges.length > 0 &&
-                            discipline.knowledges.map((knowledge, knowledgeIndex) => (
-                              <li className='competence-list__item' key={knowledgeIndex}>
-                                <p className='competence-list__name'>
-                                  <span className='competence-list__name_weight_bold competence-list__name_type_knowledge'>Знание {disciplineIndex + 1}.{knowledgeIndex + 1}: </span>
-                                  {knowledge.name}
-                                </p> 
-                              </li>
-                            ))
-                          }
-                        </ul>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-            </div>
+    <>
+    {
+      isLoadingPage 
+      ?
+      <Preloader />
+      :
+      <Section title={'Проектирование дисциплин'} heightType={'page'} headerType={'large'}>
+        <Levels>
+          <DisciplineList
+            data={disciplines} 
+            openDiscipline={openDiscipline} 
+            onOpen={handleOpenDiscipline} 
+            onClose={handleCloseDiscipline}
+            onAdd={openAddDisciplinePopup}
+            onEdit={openEditDisciplinePopup}
+            onRemove={openRemoveDisciplinePopup}
+          />
 
-            <div className='competence-container_type_right'>
-              <h3 className='competence-header__caption'>Проектирование дисциплин:</h3>
-              {
-                isShowKnowledge
-                ?
-                <>
-                <p className='competence-list__name'><span className='competence-list__name_weight_bold competence-list__name_type_discipline'>Дисциплина {currentDiscipline.disciplineIndex + 1}:</span> {currentDiscipline.name}</p>
-                <div className='section__header section__header_margin_top'>
-                  <button className='section__header-btn' type='button' onClick={openConnectKnowledgePopup}>Добавить знание</button>
-                </div>
-                <DisciplineKnowledgeTable 
-                  currentItem={currentDiscipline}
-                  onDisconnectKnowledge={openDisconnectKnowledgePopup}
-                />
-                </>
-                :
-                <p className='competence-list__name_type_empty'>Выберите умение..</p>
-              }
-            </div>
-          </div>
-          {
-            isOpenAddDisciplinePopup &&
-            <AddDisciplinePopup
-              isOpen={isOpenAddDisciplinePopup} 
-              onClose={closeDisciplinePopup}
-              onAdd={handleAddDiscipline}
-              isShowRequestError={isShowRequestError}
-              isLoadingRequest={isLoadingRequest}
-            />
-          }
-          {
-            isOpenEditDisciplinePopup &&
-            <EditDisciplinePopup
-              isOpen={isOpenEditDisciplinePopup} 
-              onClose={closeDisciplinePopup}
-              onEdit={handleEditDiscipline}
-              currentDiscipline={currentDiscipline}
-              isShowRequestError={isShowRequestError}
-              isLoadingRequest={isLoadingRequest}
-            />
-          }
-          {
-            isOpenRemoveDisciplinePopup &&
-            <ConfirmRemovePopup
-              isOpen={isOpenRemoveDisciplinePopup}
-              onClose={closeDisciplinePopup}
-              onConfirm={handleRemoveDiscipline}
-              item={currentDiscipline}
-              isShowRequestError={isShowRequestError}
-              isLoadingRequest={isLoadingRequest}
-            />
-          }
-          {
-            isConnectKnowledgePopupOpen &&
-            <ConnectKnowledgePopup
-              isOpen={isConnectKnowledgePopupOpen}
-              onClose={closeDisciplinePopup}
-              currentItem={currentDiscipline}
-              onConnect={handleConnectKnowledge}
-              knowledges={discipline.knowledges}
-              isShowRequestError={isShowRequestError}
-              isLoadingRequest={isLoadingRequest}
-            />
-          }
-          {
-            isDisconnectKnowledgePopupOpen &&
-            <DisconnectKnowledgePopup
-              isOpen={isDisconnectKnowledgePopupOpen}
-              onClose={closeDisciplinePopup}
-              onConfirm={handleDisconnectKnowledge}
-              currentItem={currentDiscipline}
-              currentKnowledge={currentKnowledge}
-              isShowRequestError={isShowRequestError}
-              isLoadingRequest={isLoadingRequest}
-            />
-          }
-        </Section>
-      }
-    </div>
+          <DisciplineAbilityList
+            data={openDiscipline.abilities}
+            disciplineList={disciplines}
+            abilityBase={abilityBase}
+            isOpenDiscipline={isOpenDiscipline}
+            onAdd={openConnectAbilityPopup}
+            onDisconnect={openDisconnectAbilityPopup}
+          />
+
+          <DisciplineKnowledgeList
+            data={openDiscipline.knowledges}
+            disciplineList={disciplines}
+            knowledgeBase={knowledgeBase}
+            isOpenDiscipline={isOpenDiscipline}
+            onAdd={openConnectKnowledgePopup}
+            onDisconnect={openDisconnectKnowledgePopup}
+          />
+        </Levels>
+      </Section>
+    }
+    {
+      isOpenAddDisciplinePopup &&
+      <AddDisciplinePopup
+        isOpen={isOpenAddDisciplinePopup} 
+        onClose={closeDisciplinePopup}
+        onAdd={handleAddDiscipline}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isOpenEditDisciplinePopup &&
+      <EditDisciplinePopup
+        isOpen={isOpenEditDisciplinePopup} 
+        onClose={closeDisciplinePopup}
+        onEdit={handleEditDiscipline}
+        currentDiscipline={currentDiscipline}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isOpenRemoveDisciplinePopup &&
+      <ConfirmRemovePopup
+        isOpen={isOpenRemoveDisciplinePopup}
+        onClose={closeDisciplinePopup}
+        onConfirm={handleRemoveDiscipline}
+        item={currentDiscipline}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isConnectAbilityPopupOpen &&
+      <ConnectAbilityPopup
+        isOpen={isConnectAbilityPopupOpen}
+        onClose={closeDisciplinePopup}
+        programId={currentProgram.id}
+        currentItem={openDiscipline}
+        onConnect={handleConnectAbility}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isDisconnectAbilityPopupOpen &&
+      <DisconnectAbilityPopup
+        isOpen={isDisconnectAbilityPopupOpen}
+        onClose={closeDisciplinePopup}
+        onConfirm={handleDisconnectAbility}
+        currentItem={openDiscipline}
+        currentAbility={currentAbility}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isConnectKnowledgePopupOpen &&
+      <ConnectKnowledgePopup
+        isOpen={isConnectKnowledgePopupOpen}
+        onClose={closeDisciplinePopup}
+        programId={currentProgram.id}
+        currentItem={openDiscipline}
+        onConnect={handleConnectKnowledge}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isDisconnectKnowledgePopupOpen &&
+      <DisconnectKnowledgePopup
+        isOpen={isDisconnectKnowledgePopupOpen}
+        onClose={closeDisciplinePopup}
+        onConfirm={handleDisconnectKnowledge}
+        currentItem={openDiscipline}
+        currentKnowledge={currentKnowledge}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
+      />
+    }
+    </>
   )
 }
 

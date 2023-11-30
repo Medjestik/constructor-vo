@@ -1,13 +1,19 @@
 import React from 'react';
-import './Search.css';
+import './LevelSearch.css';
 
-function Search({ type, id, data, onSearch }) {
+function LevelSearch({ name, data, onSearch, isClearSearch, onClear }) {
 
   const [searchText, setSearchText] = React.useState('');
 
   function handleSearchText(e) {
     setSearchText(e.target.value);
   }
+
+  React.useEffect(() => {
+    isClearSearch && onClear();
+    setSearchText('');
+    // eslint-disable-next-line
+  }, [isClearSearch]);
 
   React.useEffect(() => {
     if (data.length > 0) {
@@ -20,22 +26,20 @@ function Search({ type, id, data, onSearch }) {
   }, [searchText]);
 
   return (
-
-    <div className={`search search_type_${type}`}> 
+    <div className={`level__search`}> 
       <input
-      className='search__input'
-      placeholder='Поиск'
+      className='level__search-input'
+      placeholder='Поиск..'
       type='text'
-      id={`search-filter-${id}`}
-      name={`search-filter-${id}`}
+      id={name}
+      name={name}
       autoComplete='disabled'
       value={searchText}
       onChange={handleSearchText}
       >
       </input>
     </div>
-
   );
 }
 
-export default Search; 
+export default LevelSearch; 

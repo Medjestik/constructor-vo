@@ -1,6 +1,6 @@
-export const API_URL = 'https://vpo-api.emiit.ru/api/v1'; 
+export const API_URL = 'http://10.242.224.106:8000/api/v1';
 
-export const LOCAL_URL = 'http://10.242.224.106:8000/api/v1';
+export const LOCAL_URL = 'https://vpo-api.emiit.ru/api/v1';
 
 export const PROGRAM_TABS = [
   {

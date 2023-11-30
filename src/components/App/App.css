@@ -14,6 +14,14 @@
   --border-color: #F2F2F2;
   --border-radius: 12px;
 
+  --product-color: #D249DE;
+  --stage-color: #4F93E2;
+  --process-color: #DC654B;
+  --ability-color:  #837AEA;
+  --knowledge-color: #E1B648;
+  --discipline-color: #3ECB6E;
+  --warning-color: #DE5050;
+
   color: var(--black-color);
   background-color: var(--background-color);
   min-height: 100vh;
@@ -158,6 +166,21 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+.icon_type_open-grey {
+  background-image: url('../../images/icons/accent-grey/open.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.badge__list {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
 .badge {
   margin: 0px;
   width: fit-content;
@@ -187,6 +210,9 @@
 .badge_margin_left_12 {
   margin-left: 12px;
 }
+.badge_margin_right_8 {
+  margin-right: 8px;
+}
 .badge_type_blue {
 	background-color: var(--accent-blue-color);
   color: var(--main-white-color);
@@ -197,9 +223,42 @@
   color: var(--main-black-color);
   box-shadow: 0px 8px 12px -8px rgba(149, 244, 164, 0.9);
 }
+.badge_type_orange {
+	background-color: var(--accent-orange-color);
+  color: var(--main-white-color);
+  box-shadow: 0px 8px 12px -8px rgba(255, 123, 2, 0.9);
+}
 .badge_type_white {
 	background-color: var(--main-white-color);
   color: var(--main-black-color);
+}
+.badge_type_product {
+	background-color: var(--product-color);
+  color: var(--main-white-color);
+}
+.badge_type_stage {
+	background-color: var(--stage-color);
+  color: var(--main-white-color);
+}
+.badge_type_process {
+	background-color: var(--process-color);
+  color: var(--main-white-color);
+}
+.badge_type_ability {
+	background-color: var(--ability-color);
+  color: var(--main-white-color);
+}
+.badge_type_knowledge {
+	background-color: var(--knowledge-color);
+  color: var(--main-white-color);
+}
+.badge_type_discipline {
+	background-color: var(--discipline-color);
+  color: var(--main-white-color);
+}
+.badge_type_warning {
+	background-color: var(--warning-color);
+  color: var(--main-white-color);
 }
 .badge-btn {
   text-align: left;

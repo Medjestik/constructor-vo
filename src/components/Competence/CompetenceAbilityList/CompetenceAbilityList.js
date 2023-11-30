@@ -53,8 +53,8 @@ function CompetenceAbilityList({ openProcess, openAbility, onAdd, onOpen, onEdit
             openProcess.abilities.map((item, i) => (
               <li className={`levels__item ${openAbility.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_green'>Умение {openProcess.code}.{i + 1}</span>
-                  <span className='badge badge_size_small badge_type_blue badge_margin_left_12'>Знания: {item.knowledges.length}</span>
+                  <span className='badge badge_size_small badge_type_ability'>Умение {openProcess.code}.{i + 1}</span>
+                  <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Знаний: {item.knowledges.length}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_link-grey' type='button' onClick={(e) => handleDisconnect(e, item)}></button>
@@ -65,7 +65,7 @@ function CompetenceAbilityList({ openProcess, openAbility, onAdd, onOpen, onEdit
                 <ul className='levels__children-list'>
                   {
                     item.knowledges.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item'></li>
+                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
                     ))
                   }
                 </ul>

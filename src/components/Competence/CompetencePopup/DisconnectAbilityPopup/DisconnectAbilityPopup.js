@@ -1,11 +1,11 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function DisconnectAbilityPopup({ isOpen, onClose, onConfirm, currentItem, currentAbility, isShowRequestError, isLoadingRequest }) {
+function DisconnectAbilityPopup({ isOpen, onClose, onConfirm, currentAbility, isShowRequestError, isLoadingRequest }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    onConfirm(currentAbility);
+    onConfirm(currentAbility.id);
   }
 
   return (

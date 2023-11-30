@@ -46,7 +46,7 @@ function ProcessList({ data, openProduct, openStage, onAdd, onEdit, onRemove, on
             data.map((item, i) => (
               <li className='levels__item' key={item.id}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_green'>Процесс {openProduct.code}.{openStage.code}.{i + 1}</span>
+                  <span className='badge badge_size_small badge_type_process'>Процесс {openProduct.code}.{openStage.code}.{i + 1}</span>
                   <div className='levels__item-header-btn-container'>
                     {/*<button className='icon icon_size_16 icon_type_unlock-grey' type='button'></button>*/}
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditProcess(e, item)}></button>

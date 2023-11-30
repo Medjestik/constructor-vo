@@ -1,10 +1,15 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import SelectSearch from '../../../SelectSearch/SelectSearch.js';
+import * as competenceApi from '../../../../utils/competence.js';
+import PreloaderPopup from '../../../Preloader/PreloaderPopup/PreloaderPopup.js';
 
-function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledgeBase, onConnect, isShowRequestError, isLoadingRequest }) {
+function ConnectKnowledgePopup({ isOpen, onClose, programId, currentItem, onConnect, isShowRequestError, isLoadingRequest }) {
 
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
+  const [knowledgeBase, setKnowledgeBase] = React.useState([]);
+
+  const [isLoadingData, setIsLoadingData] = React.useState(true);
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
@@ -23,11 +28,26 @@ function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledgeBase, on
 
   function handleSubmit(e) {
     e.preventDefault();
-    onConnect(currentItem, currentKnowledge.id);
+    onConnect(currentKnowledge.id);
   }
 
   function handleChangeKnowledge(option) {
     setCurrentKnowledge(option);
+  }
+
+  function getKnowledgeBase() {
+    setIsLoadingData(true);
+    const token = localStorage.getItem('token');
+    competenceApi.getKnowledgeBase({ token: token, programId: programId })
+    .then((res) => {
+      setKnowledgeBase(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setIsLoadingData(false);
+    });
   }
 
   React.useEffect(() => {
@@ -41,6 +61,10 @@ function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledgeBase, on
 
   React.useEffect(() => {
     setCurrentKnowledge(knowledgeOptions[0]);
+    getKnowledgeBase();
+    return(() => {
+      setKnowledgeBase([]);
+    })
   // eslint-disable-next-line
   }, [isOpen]);
 
@@ -53,25 +77,34 @@ function ConnectKnowledgePopup({ isOpen, onClose, currentItem, knowledgeBase, on
     >
       <h2 className='popup__title'>Присоединение знания</h2>
 
-      <label className='popup__field'>
-        <h4 className='popup__input-caption'>Знания:</h4>
-        <SelectSearch 
-          options={knowledgeOptions} 
-          currentOption={currentKnowledge} 
-          onChooseOption={handleChangeKnowledge} 
-          />
-      </label>
+      {
+        isLoadingData 
+        ?
+        <PreloaderPopup />
+        :
+        <>
+        <label className='popup__field'>
+          <h4 className='popup__input-caption'>Знания:</h4>
+          <SelectSearch 
+            options={knowledgeOptions} 
+            currentOption={currentKnowledge} 
+            onChooseOption={handleChangeKnowledge} 
+            />
+        </label>
 
-      <div className='popup__btn-container'>
-        <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
-        {
-          isLoadingRequest ? 
-          <button className='popup__btn-save popup__btn-save_type_loading' disabled type='button'>Сохранение..</button>
-          :
-          <button className={`popup__btn-save ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Сохранить</button>
-        }
-      </div>
-      <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
+        <div className='popup__btn-container'>
+          <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
+          {
+            isLoadingRequest ? 
+            <button className='popup__btn-save popup__btn-save_type_loading' disabled type='button'>Сохранение..</button>
+            :
+            <button className={`popup__btn-save ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Сохранить</button>
+          }
+        </div>
+        <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
+
+        </>
+      }
     </Popup>
   )
 }

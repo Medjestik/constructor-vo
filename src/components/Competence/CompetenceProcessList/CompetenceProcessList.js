@@ -32,8 +32,8 @@ function CompetenceProcessList({ data, openProcess, onOpen }) {
             data.map((item, i) => (
               <li className={`levels__item ${openProcess.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_green'>Процесс {i + 1}</span>
-                  <span className='badge badge_size_small badge_type_blue badge_margin_left_12'>Умения: {item.abilities.length}</span>
+                  <span className='badge badge_size_small badge_type_process'>Процесс {i + 1}</span>
+                  <span className='badge badge_size_small badge_type_ability badge_margin_left_12'>Умений: {item.abilities.length}</span>
                   <div className='levels__item-header-btn-container'>
                     {/*<button className='icon icon_size_16 icon_type_unlock-grey' type='button'></button>*/}
                   </div>
@@ -43,7 +43,7 @@ function CompetenceProcessList({ data, openProcess, onOpen }) {
                 <ul className='levels__children-list'>
                   {
                     item.abilities.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item'></li>
+                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_ability'></li>
                     ))
                   }
                 </ul>

@@ -46,8 +46,8 @@ function StageList({ data, openProduct, openStage, onAdd, onOpen, onEdit, onRemo
             data.map((item, i) => (
               <li className={`levels__item ${openStage.id === item.id && 'levels__item_type_active'}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_green'>Этап {openProduct.code}.{i + 1}</span>
-                  <span className='badge badge_size_small badge_type_blue badge_margin_left_12'>Процессы: {item.processes.length}</span>
+                  <span className='badge badge_size_small badge_type_stage'>Этап {openProduct.code}.{i + 1}</span>
+                  <span className='badge badge_size_small badge_type_process badge_margin_left_12'>Процессы: {item.processes.length}</span>
                   <div className='levels__item-header-btn-container'>
                     {/*<button className='icon icon_size_16 icon_type_unlock-grey' type='button'></button>*/}
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditStage(e, item)}></button>
@@ -58,7 +58,7 @@ function StageList({ data, openProduct, openStage, onAdd, onOpen, onEdit, onRemo
                 <ul className='levels__children-list'>
                   {
                     item.processes.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item'></li>
+                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_process'></li>
                     ))
                   }
                 </ul>

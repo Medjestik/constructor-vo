@@ -1,11 +1,11 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function DisconnectKnowledgePopup({ isOpen, onClose, onConfirm, currentItem, currentKnowledge, isShowRequestError, isLoadingRequest }) {
+function DisconnectKnowledgePopup({ isOpen, onClose, onConfirm, currentKnowledge, isShowRequestError, isLoadingRequest }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    onConfirm(currentItem, currentKnowledge.id);
+    onConfirm(currentKnowledge.id);
   }
 
   return (

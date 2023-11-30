@@ -47,6 +47,7 @@
 }
 .levels__header {
   width: 100%;
+  min-height: 40px;
   margin: 0px;
   padding-bottom: 8px;
   box-sizing: border-box;
@@ -126,7 +127,7 @@
 }
 .levels__children-list {
   width: 100%;
-  margin: 12px 0px 0px 0px;
+  margin: 0px;
   padding: 0px;
   list-style-type: none;
   display: flex;
@@ -136,10 +137,44 @@
 .levels__children-item {
   width: 14px;
   height: 14px;
-  margin: 0px 4px 0px 0px;
-  background: var(--gradient-blue-color);
+  margin: 8px 4px 0px 0px;
+  background: var(--slider-color);
   border-radius: 50%;
 }
 .levels__children-item:last-of-type {
-  margin: 0px;
+  margin: 8px 0px 0px 0px;
+}
+.levels__children-item_type_product {
+	background-color: var(--product-color);
+}
+.levels__children-item_type_stage {
+	background-color: var(--stage-color);
+}
+.levels__children-item_type_process {
+	background-color: var(--process-color);
+}
+.levels__children-item_type_ability {
+	background-color: var(--ability-color);
+}
+.levels__children-item_type_knowledge {
+	background-color: var(--knowledge-color);
+}
+.levels__children-item_type_discipline {
+	background-color: var(--discipline-color);
+}
+.levels__children-item-count {
+  margin: 8px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--accent-grey-color);
+}
+.levels__item-empty {
+  margin: 8px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--accent-grey-color);
 }

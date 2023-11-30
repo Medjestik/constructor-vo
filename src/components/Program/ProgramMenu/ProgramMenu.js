@@ -63,7 +63,7 @@ function ProgramMenu({ currentProgram }) {
 					<div className='program-menu__icon program-menu__icon_type_plan'></div>
 				</div>
 				<div className='program-menu__card'>
-					<h3 className='program-menu__title'>Создание учебного&nbsp;плана</h3>
+					<h3 className='program-menu__title'>Создание прототипа учебного&nbsp;плана</h3>
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>

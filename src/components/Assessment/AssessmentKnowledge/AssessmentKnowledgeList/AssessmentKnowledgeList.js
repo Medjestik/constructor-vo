@@ -6,6 +6,20 @@ function AssessmentKnowledgeList({ knowledge, onOpen }) {
 
   const basisCount = [1, 2, 3, 4, 5];
 
+  const containerHeightRef = React.createRef();
+  const [listHeight, setListHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    if (containerHeightRef.current) {
+      setListHeight(containerHeightRef.current.clientHeight);  
+    }
+  // eslint-disable-next-line
+  }, [knowledge]);
+
+  const listStyle = {
+    height: listHeight,
+  };
+
   return (
     <Table>
       <div className='table__header'>
@@ -24,7 +38,7 @@ function AssessmentKnowledgeList({ knowledge, onOpen }) {
           </div>
         </div>
       </div>
-      <ul className='table__main scroll'>
+      <ul ref={containerHeightRef} style={Object.assign({}, listStyle)} className='table__main scroll'>
         {
           knowledge.map((item, i) => (
             <li className='table__row' key={i}>

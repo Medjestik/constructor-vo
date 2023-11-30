@@ -91,22 +91,22 @@
   background-image: url('../../../images/program-menu/program-export-grey.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_info {
-  background-image: url('../../../images/program-menu/program-info-black.svg');
+  background-image: url('../../../images/program-menu/program-info-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_product {
-  background-image: url('../../../images/program-menu/program-product-black.svg');
+  background-image: url('../../../images/program-menu/program-product-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_profile {
-  background-image: url('../../../images/program-menu/program-profile-black.svg');
+  background-image: url('../../../images/program-menu/program-profile-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_assessment {
-  background-image: url('../../../images/program-menu/program-assessment-black.svg');
+  background-image: url('../../../images/program-menu/program-assessment-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_discipline {
-  background-image: url('../../../images/program-menu/program-discipline-black.svg');
+  background-image: url('../../../images/program-menu/program-discipline-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_plan {
-  background-image: url('../../../images/program-menu/program-plan-black.svg');
+  background-image: url('../../../images/program-menu/program-plan-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_export {
   background-image: url('../../../images/program-menu/program-export-black.svg');
@@ -118,7 +118,7 @@
   display: none;
 }
 .program-menu__item_type_active .program-menu__icon-container {
-  background: var(--accent-green-color);
+  background: var(--accent-blue-color);
 }
 .program-menu__card {
   margin: 0px;
@@ -130,7 +130,7 @@
   border-radius: var(--border-radius);
 }
 .program-menu__item_type_active .program-menu__card {
-  background: var(--accent-green-color);
+  background: var(--accent-blue-color);
 }
 .program-menu__item_type_block .program-menu__card {
   background: var(--slider-color);
@@ -144,7 +144,7 @@
   color: var(--main-black-color);
 }
 .program-menu__item_type_active .program-menu__title {
-  color: var(--main-black-color);
+  color: var(--main-white-color);
 }
 .program-menu__item_type_block .program-menu__title {
   color: var(--accent-grey-color);
@@ -158,7 +158,7 @@
   color: var(--main-black-color);
 }
 .program-menu__item_type_active .program-menu__subtitle {
-  color: var(--main-black-color);
+  color: var(--main-white-color);
 }
 .program-menu__item_type_block .program-menu__subtitle {
   color: var(--accent-grey-color);

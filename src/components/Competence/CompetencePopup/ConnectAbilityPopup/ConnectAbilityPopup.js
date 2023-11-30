@@ -1,10 +1,15 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import SelectSearch from '../../../SelectSearch/SelectSearch.js';
+import * as competenceApi from '../../../../utils/competence.js';
+import PreloaderPopup from '../../../Preloader/PreloaderPopup/PreloaderPopup.js';
 
-function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilityBase, onConnect, isShowRequestError, isLoadingRequest }) {
+function ConnectAbilityPopup({ isOpen, onClose, programId, currentItem, onConnect, isShowRequestError, isLoadingRequest }) {
 
   const [currentAbility, setCurrentAbility] = React.useState({});
+  const [abilityBase, setAbilityBase] = React.useState([]);
+
+  const [isLoadingData, setIsLoadingData] = React.useState(true);
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
@@ -30,6 +35,21 @@ function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilityBase, onConn
     setCurrentAbility(option);
   }
 
+  function getAbilityBase() {
+    setIsLoadingData(true);
+    const token = localStorage.getItem('token');
+    competenceApi.getAbilityBase({ token: token, programId: programId })
+    .then((res) => {
+      setAbilityBase(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setIsLoadingData(false);
+    });
+  }
+
   React.useEffect(() => {
     if (currentAbility.id === 'placeholder') {
       setIsBlockSubmitButton(true);
@@ -41,6 +61,10 @@ function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilityBase, onConn
 
   React.useEffect(() => {
     setCurrentAbility(abilityOptions[0]);
+    getAbilityBase();
+    return(() => {
+      setAbilityBase([]);
+    })
   // eslint-disable-next-line
   }, [isOpen]);
 
@@ -53,25 +77,35 @@ function ConnectAbilityPopup({ isOpen, onClose, currentItem, abilityBase, onConn
     >
       <h2 className='popup__title'>Присоединение умения</h2>
 
-      <label className='popup__field'>
-        <h4 className='popup__input-caption'>Умение:</h4>
-        <SelectSearch
-          options={abilityOptions} 
-          currentOption={currentAbility} 
-          onChooseOption={handleChangeAbility} 
-        />
-      </label>
+      {
+        isLoadingData 
+        ?
+        <PreloaderPopup />
+        :
+        <>
+        <label className='popup__field'>
+          <h4 className='popup__input-caption'>Умение:</h4>
+          <SelectSearch
+            options={abilityOptions} 
+            currentOption={currentAbility} 
+            onChooseOption={handleChangeAbility} 
+          />
+        </label>
 
-      <div className='popup__btn-container'>
-        <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
-        {
-          isLoadingRequest ? 
-          <button className='popup__btn-save popup__btn-save_type_loading' disabled type='button'>Сохранение..</button>
-          :
-          <button className={`popup__btn-save ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Сохранить</button>
-        }
-      </div>
-      <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
+        <div className='popup__btn-container'>
+          <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
+          {
+            isLoadingRequest ? 
+            <button className='popup__btn-save popup__btn-save_type_loading' disabled type='button'>Сохранение..</button>
+            :
+            <button className={`popup__btn-save ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Сохранить</button>
+          }
+        </div>
+        <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
+        </>
+      }
+
+
     </Popup>
   )
 }

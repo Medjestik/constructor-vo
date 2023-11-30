@@ -52,7 +52,7 @@ function CompetenceKnowledgeList({ openProcess, openAbility, onAdd, onEdit, onRe
             openAbility.knowledges.map((item, i) => (
               <li className={`levels__item`} key={item.id}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_green'>Знание {openProcess.code}.{openAbility.code}.{i + 1}</span>
+                  <span className='badge badge_size_small badge_type_knowledge'>Знание {openProcess.code}.{openAbility.code}.{i + 1}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_link-grey' type='button' onClick={(e) => handleDisconnect(e, item)}></button>
