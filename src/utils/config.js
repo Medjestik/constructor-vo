@@ -1,6 +1,12 @@
 export const API_URL = process.env.REACT_APP_API_URL;
 
-//export const LOCAL_URL = 'http://10.242.224.106:8000/api/v1';
+//export const API_URL = 'https://vpo-api.emiit.ru/api/v1';
+
+export const DISCIPLINE_SECTION_OPTIONS = [
+  { id: 'level', status: 'active', icon: 'level', link: '/level'},
+  { id: 'list', status: 'inactive', icon: 'list', link: '/list'},
+  { id: 'chart', status: 'inactive', icon: 'chart', link: '/chart'},
+];
 
 export const PROGRAM_TABS = [
   {

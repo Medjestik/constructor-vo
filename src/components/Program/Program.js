@@ -11,6 +11,7 @@ import Product from '../Product/Product.js';
 import Competence from '../Competence/Competence.js';
 import Assessment from '../Assessment/Assessment.js';
 import Discipline from '../Discipline/Discipline.js';
+import Semester from '../Semester/Semester.js';
 
 function Program({ windowWidth, onLogout }) {
 
@@ -67,31 +68,36 @@ function Program({ windowWidth, onLogout }) {
 
         <Routes>
 
-          <Route exact path='/program-info/*' element={
+          <Route exact path='/info/*' element={
             <ProgramInfo currentProgram={currentProgram} isEditRights={isEditRights} />
           }
           />
 
-          <Route exact path='/program-product/*' element={
+          <Route exact path='/product/*' element={
               <Product currentProgram={currentProgram} isEditRights={isEditRights} />
             }
           />
 
-          <Route exact path='/program-profile/*' element={
+          <Route exact path='/competence/*' element={
               <Competence currentProgram={currentProgram} isEditRights={isEditRights} />
             }
           />
 
-          <Route exact path='/program-assessment/*' element={
+          <Route exact path='/assessment/*' element={
               <Assessment currentProgram={currentProgram} isEditRights={isEditRights} />
             }
           />
 
-          <Route exact path='/program-discipline/*' element={
+          <Route exact path='/discipline/*' element={
               <Discipline currentProgram={currentProgram} isEditRights={isEditRights} />
             }
           />
 
+          <Route exact path='/semester/*' element={
+              <Semester currentProgram={currentProgram} isEditRights={isEditRights}  />
+            }
+          />
+          
         </Routes>
       </div>
       </>

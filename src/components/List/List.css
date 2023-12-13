@@ -1,0 +1,52 @@
+.list {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.list_type_initial {
+  flex-grow: 2;
+  overflow-y: scroll;
+}
+.list_type_nested {
+  padding: 0px 0px 0px 32px;
+}
+.list__item {
+  width: 100%;
+  margin: 0px;
+  padding: 16px 0px 0px 0px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.list_type_nested .list__item::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: -20px;
+  width: 16px;
+  height: 16px;
+  background: url('../../images/arrow-nested.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+}
+.list__item-info {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+}
+.list__item-name {
+  margin: 0px 0px 0px 8px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
+}

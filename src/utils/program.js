@@ -1,11 +1,11 @@
 import { API_URL } from './config.js';
 
 function handleResponse (res) {
-    if (res.ok) {
-      return res.json()
-    } else {
-      return Promise.reject(res)
-    }
+  if (res.ok) {
+    return res.json()
+  } else {
+    return Promise.reject(res)
+  }
 }
 
 export const getProgramList = ({ token }) => {

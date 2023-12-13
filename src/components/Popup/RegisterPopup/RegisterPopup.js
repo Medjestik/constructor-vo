@@ -116,27 +116,6 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
       <h2 className='popup__title'>Регистрация нового пользователя</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Имя:</h4>
-        <div className='popup__input-field'>
-          <input 
-          className='popup__input'
-          type='text'
-          id='register-firstName'
-          value={firstName}
-          onChange={handleChangeFirstName}
-          name='register-firstName' 
-          placeholder='Введите ваше имя...'
-          autoComplete='off'
-          minLength={1}
-          required 
-          />
-        </div>
-        <span className={`popup__input-error ${firstNameError.isShow ? 'popup__input-error_status_show' : ''}`}>
-          {firstNameError.text}
-        </span>
-      </label>
-
-      <label className='popup__field'>
         <h4 className='popup__input-caption'>Фамилия:</h4>
         <div className='popup__input-field'>
           <input 
@@ -154,6 +133,27 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
         </div>
         <span className={`popup__input-error ${lastNameError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {lastNameError.text}
+        </span>
+      </label>
+
+      <label className='popup__field'>
+        <h4 className='popup__input-caption'>Имя:</h4>
+        <div className='popup__input-field'>
+          <input 
+          className='popup__input'
+          type='text'
+          id='register-firstName'
+          value={firstName}
+          onChange={handleChangeFirstName}
+          name='register-firstName' 
+          placeholder='Введите ваше имя...'
+          autoComplete='off'
+          minLength={1}
+          required 
+          />
+        </div>
+        <span className={`popup__input-error ${firstNameError.isShow ? 'popup__input-error_status_show' : ''}`}>
+          {firstNameError.text}
         </span>
       </label>
 
@@ -210,7 +210,7 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
           name='register-password'
           placeholder='Введите ваш пароль'
           minLength='6'
-          autoComplete='off'
+          autoComplete='new-password'
           required 
           />
           <div 

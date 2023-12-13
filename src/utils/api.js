@@ -45,7 +45,7 @@ export const getUser = ({ token }) => {
 };
 
 export const register = ({ user }) => {
-  return fetch(`${API_URL}/register`, {
+  return fetch(`${API_URL}/auth/registration/`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',

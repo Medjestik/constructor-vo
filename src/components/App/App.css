@@ -172,6 +172,12 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+.icon_type_time-grey {
+  background-image: url('../../images/icons/accent-grey/time.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 .badge__list {
   width: 100%;
   margin: 0px;

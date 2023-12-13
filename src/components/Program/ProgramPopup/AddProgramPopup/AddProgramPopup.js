@@ -1,23 +1,25 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
+import SelectSearch from '../../../SelectSearch/SelectSearch.js';
 import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
 
-function AddProgramPopup({ isOpen, onClose, levels, directions, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestError, isLoadingRequest }) {
 
-  const [currentLevel, setCurrentLevel] = React.useState({});
+  const [currentDirection, setCurrentDirection] = React.useState({});
+  const [currentForm, setCurrentForm] = React.useState({});
 
   const [profile, setProfile] = React.useState('');
   const [profileError, setProfileError] = React.useState({ isShow: false, text: '' });
-
-  const [currentDirection, setCurrentDirection] = React.useState({});
 
   const [annotation, setAnnotation] = React.useState('');
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  const levelOptions = [
+  const formOptions = [
     { name: 'Выберите уровень образования...', id: 'placeholder', },
-    ...levels,
+    { name: 'Очная', id: 'form-o', },
+    { name: 'Очно-заочная', id: 'form-oz', },
+    { name: 'Заочная', id: 'form-z', },
   ]
 
   const directionOptions = [
@@ -30,13 +32,13 @@ function AddProgramPopup({ isOpen, onClose, levels, directions, onAdd, isShowReq
     onAdd({ 
       direction: currentDirection,
       profile: profile,
-      level: currentLevel,
+      form: currentForm.name,
       annotation: annotation,
     })
   }
 
-  function handleChangeLevel(option) {
-    setCurrentLevel(option);
+  function handleChangeForm(option) {
+    setCurrentForm(option);
   }
 
   function handleChangeProfile(e) {
@@ -60,17 +62,17 @@ function AddProgramPopup({ isOpen, onClose, levels, directions, onAdd, isShowReq
     if (
       currentDirection.id === 'placeholder'  || 
       profile.length < 1 || profileError.isShow || 
-      currentLevel.id === 'placeholder' 
+      currentForm.id === 'placeholder' 
       ) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
   // eslint-disable-next-line
-  }, [currentDirection, profile, currentLevel]);
+  }, [currentDirection, profile, currentForm]);
 
   React.useEffect(() => {
-    setCurrentLevel(levelOptions[0]);
+    setCurrentForm(formOptions[0]);
     setProfile('');
     setProfileError({ isShow: false, text: '' });
     setCurrentDirection(directionOptions[0]);
@@ -88,8 +90,13 @@ function AddProgramPopup({ isOpen, onClose, levels, directions, onAdd, isShowReq
       <h2 className='popup__title'>Создание новой программы</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Уровень образования:</h4>
-        <PopupSelect options={levelOptions} currentOption={currentLevel} onChooseOption={handleChangeLevel} />
+        <h4 className='popup__input-caption'>Направление:</h4>
+        <SelectSearch options={directionOptions} currentOption={currentDirection} onChooseOption={handleChangeDirection} />
+      </label>
+
+      <label className='popup__field'>
+        <h4 className='popup__input-caption'>Форма обучения:</h4>
+        <PopupSelect options={formOptions} currentOption={currentForm} onChooseOption={handleChangeForm} />
       </label>
 
       <label className='popup__field'>
@@ -111,11 +118,6 @@ function AddProgramPopup({ isOpen, onClose, levels, directions, onAdd, isShowReq
         <span className={`popup__input-error ${profileError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {profileError.text}
         </span>
-      </label>
-
-      <label className='popup__field'>
-        <h4 className='popup__input-caption'>Направление:</h4>
-        <PopupSelect options={directionOptions} currentOption={currentDirection} onChooseOption={handleChangeDirection} />
       </label>
 
       <label className='popup__field'>

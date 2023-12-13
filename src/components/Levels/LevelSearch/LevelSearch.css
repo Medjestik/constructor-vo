@@ -12,7 +12,7 @@
   outline: none;
   border: none;
   border-radius: var(--border-radius);
-  border: 2px solid var(--accent-grey-color);
+  border: 2px solid var(--slider-color);
   padding: 4px 12px 4px 12px;
   box-sizing: border-box;
   background: var(--main-grey-color);
@@ -24,7 +24,7 @@
   transition: all .3s ease-in-out;
 }
 .level__search-input:hover {
-  border: 2px solid var(--main-black-color);
+  border: 2px solid var(--accent-grey-color);
 }
 .level__search-input:active {
   border: 2px solid var(--accent-blue-color);

@@ -5,7 +5,7 @@ import Section from '../Section/Section.js';
 function Main() {
 
   return(
-    <Section title='Главная' heightType='page' headerType='large'>
+    <Section title='Главная' options={[]} heightType='page' headerType='large'>
       <div className='main'>
         <h1 className='main__title'>Конструктор образовательных программ для высшего образования</h1>
         <p className='main__subtitle'>Подходы к разработке программ ВО:</p>

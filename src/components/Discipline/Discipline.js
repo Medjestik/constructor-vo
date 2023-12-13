@@ -2,12 +2,16 @@ import React from 'react';
 import './Discipline.css';
 import * as disciplineApi from '../../utils/discipline.js';
 import * as competenceApi from '../../utils/competence.js';
+import { DISCIPLINE_SECTION_OPTIONS } from '../../utils/config.js';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
 import Levels from '../Levels/Levels.js';
+import List from '../List/List.js';
+import DisciplineLevel from './DisciplineLevel/DisciplineLevel.js';
+import DisciplineAbilityLevel from './DisciplineAbilityLevel/DisciplineAbilityLevel.js';
+import DisciplineKnowledgeLevel from './DisciplineKnowledgeLevel/DisciplineKnowledgeLevel.js';
 import DisciplineList from './DisciplineList/DisciplineList.js';
-import DisciplineAbilityList from './DisciplineAbilityList/DisciplineAbilityList.js';
-import DisciplineKnowledgeList from './DisciplineKnowledgeList/DisciplineKnowledgeList.js';
 import AddDisciplinePopup from './DisciplinePopup/AddDisciplinePopup/AddDisciplinePopup.js';
 import EditDisciplinePopup from './DisciplinePopup/EditDisciplinePopup/EditDisciplinePopup.js';
 import ConnectAbilityPopup from '../Competence/CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
@@ -18,7 +22,12 @@ import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.j
 
 function Discipline({ currentProgram, isEditRights }) {
 
-  const [disciplines, setDisciplines] = React.useState({});
+  const [sectionOptions, setSectionOptions] = React.useState(DISCIPLINE_SECTION_OPTIONS);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const [disciplines, setDisciplines] = React.useState([]);
   const [abilityBase, setAbilityBase] = React.useState([]);
   const [knowledgeBase, setKnowledgeBase] = React.useState([]);
 
@@ -41,6 +50,10 @@ function Discipline({ currentProgram, isEditRights }) {
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' }); 
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
+
+  function handleChooseOption(option) {
+    navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+  }
 
   function openAddDisciplinePopup() {
     setIsOpenAddDisciplinePopup(true);
@@ -300,6 +313,7 @@ function Discipline({ currentProgram, isEditRights }) {
   function handleOpenDiscipline(item) {
     setOpenDiscipline(item);
     setIsOpenDiscipline(true);
+     
   }
 
   function handleCloseDiscipline() {
@@ -308,9 +322,25 @@ function Discipline({ currentProgram, isEditRights }) {
   }
 
   React.useEffect(() => {
+    if (location.pathname.includes('level')) {
+      const newOptions = sectionOptions.map((elem) => elem.id === 'level' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
+      setSectionOptions(newOptions);
+    }
+    if (location.pathname.includes('list')) {
+      const newOptions = sectionOptions.map((elem) => elem.id === 'list' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
+      setSectionOptions(newOptions);
+    }
+    if (location.pathname.includes('chart')) {
+      const newOptions = sectionOptions.map((elem) => elem.id === 'chart' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
+      setSectionOptions(newOptions);
+    }
+    // eslint-disable-next-line
+  }, [location]);
+
+  React.useEffect(() => {
     getDiscipline();
     return(() => {
-      setDisciplines({});
+      setDisciplines([]);
       setAbilityBase([]);
       setKnowledgeBase([]);
       setOpenDiscipline({});
@@ -327,36 +357,53 @@ function Discipline({ currentProgram, isEditRights }) {
       ?
       <Preloader />
       :
-      <Section title={'Проектирование дисциплин'} heightType={'page'} headerType={'large'}>
-        <Levels>
-          <DisciplineList
-            data={disciplines} 
-            openDiscipline={openDiscipline} 
-            onOpen={handleOpenDiscipline} 
-            onClose={handleCloseDiscipline}
-            onAdd={openAddDisciplinePopup}
-            onEdit={openEditDisciplinePopup}
-            onRemove={openRemoveDisciplinePopup}
-          />
+      <Section 
+        title={'Проектирование дисциплин'} 
+        options={sectionOptions} 
+        onChooseOption={handleChooseOption} 
+        heightType={'page'} 
+        headerType={'large'}
+      >
+        <Routes>
+          <Route exact path='level' element={
+            <Levels>
+              <DisciplineLevel
+                data={disciplines} 
+                openDiscipline={openDiscipline} 
+                onOpen={handleOpenDiscipline} 
+                onClose={handleCloseDiscipline}
+                onAdd={openAddDisciplinePopup}
+                onEdit={openEditDisciplinePopup}
+                onRemove={openRemoveDisciplinePopup}
+              />
 
-          <DisciplineAbilityList
-            data={openDiscipline.abilities}
-            disciplineList={disciplines}
-            abilityBase={abilityBase}
-            isOpenDiscipline={isOpenDiscipline}
-            onAdd={openConnectAbilityPopup}
-            onDisconnect={openDisconnectAbilityPopup}
-          />
+              <DisciplineAbilityLevel
+                data={openDiscipline.abilities}
+                disciplineList={disciplines}
+                abilityBase={abilityBase}
+                isOpenDiscipline={isOpenDiscipline}
+                onAdd={openConnectAbilityPopup}
+                onDisconnect={openDisconnectAbilityPopup}
+              />
 
-          <DisciplineKnowledgeList
-            data={openDiscipline.knowledges}
-            disciplineList={disciplines}
-            knowledgeBase={knowledgeBase}
-            isOpenDiscipline={isOpenDiscipline}
-            onAdd={openConnectKnowledgePopup}
-            onDisconnect={openDisconnectKnowledgePopup}
-          />
-        </Levels>
+              <DisciplineKnowledgeLevel
+                data={openDiscipline.knowledges}
+                disciplineList={disciplines}
+                knowledgeBase={knowledgeBase}
+                isOpenDiscipline={isOpenDiscipline}
+                onAdd={openConnectKnowledgePopup}
+                onDisconnect={openDisconnectKnowledgePopup}
+              />
+            </Levels>
+          }>
+          </Route>
+          <Route exact path='list' element={ 
+            <List>
+              <DisciplineList disciplines={disciplines} />
+            </List>
+          }>
+          </Route>
+        </Routes>
       </Section>
     }
     {
@@ -398,6 +445,7 @@ function Discipline({ currentProgram, isEditRights }) {
         onClose={closeDisciplinePopup}
         programId={currentProgram.id}
         currentItem={openDiscipline}
+        itemType={'discipline'}
         onConnect={handleConnectAbility}
         isShowRequestError={isShowRequestError}
         isLoadingRequest={isLoadingRequest}
@@ -422,6 +470,7 @@ function Discipline({ currentProgram, isEditRights }) {
         onClose={closeDisciplinePopup}
         programId={currentProgram.id}
         currentItem={openDiscipline}
+        itemType={'discipline'}
         onConnect={handleConnectKnowledge}
         isShowRequestError={isShowRequestError}
         isLoadingRequest={isLoadingRequest}

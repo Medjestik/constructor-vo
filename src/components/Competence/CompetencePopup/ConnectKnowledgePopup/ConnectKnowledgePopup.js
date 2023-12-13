@@ -1,13 +1,16 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
-import SelectSearch from '../../../SelectSearch/SelectSearch.js';
 import * as competenceApi from '../../../../utils/competence.js';
 import PreloaderPopup from '../../../Preloader/PreloaderPopup/PreloaderPopup.js';
+import SelectSearch from '../../../SelectSearch/SelectSearch.js';
+import Alert from '../../../Alert/Alert.js';
 
-function ConnectKnowledgePopup({ isOpen, onClose, programId, currentItem, onConnect, isShowRequestError, isLoadingRequest }) {
+function ConnectKnowledgePopup({ isOpen, onClose, programId, currentItem, itemType, onConnect, isShowRequestError, isLoadingRequest }) {
 
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
   const [knowledgeBase, setKnowledgeBase] = React.useState([]);
+
+  const [isShowWarning, setIsShowWarning] = React.useState({isShow: false, text: ''});
 
   const [isLoadingData, setIsLoadingData] = React.useState(true);
 
@@ -33,6 +36,15 @@ function ConnectKnowledgePopup({ isOpen, onClose, programId, currentItem, onConn
 
   function handleChangeKnowledge(option) {
     setCurrentKnowledge(option);
+    if (itemType === 'process') {
+      //setIsShowWarning(option.parent_id.length > 0 ? {isShow: true, text: 'Данное умение уже присоединено к другому процессу.'} : {isShow: false, text: ''});
+    } else {
+      setIsShowWarning(option.discipline_id.length > 0 ? {isShow: true, text: 'Данное знание уже присоединено к другой дисциплине.'} : {isShow: false, text: ''});
+    }
+  }
+
+  function handleCloseWarning() {
+    setIsShowWarning({isShow: false, text: ''});
   }
 
   function getKnowledgeBase() {
@@ -91,6 +103,11 @@ function ConnectKnowledgePopup({ isOpen, onClose, programId, currentItem, onConn
             onChooseOption={handleChangeKnowledge} 
             />
         </label>
+
+        {
+          isShowWarning.isShow &&
+          <Alert type='warning' text={isShowWarning.text} onClose={handleCloseWarning} />
+        }
 
         <div className='popup__btn-container'>
           <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>

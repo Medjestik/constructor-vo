@@ -13,7 +13,7 @@ function ProgramMenu({ currentProgram }) {
 
 	return(
 		<ul className='program-menu scroll'>
-			<li id='program-info' className={`program-menu__item ${path.pathname.includes('program-info') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('program-info')}>
+			<li id='program-info' className={`program-menu__item ${path.pathname.includes('info') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('info')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_info'></div>
 				</div>
@@ -22,7 +22,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>
-			<li id='program-product' className={`program-menu__item ${path.pathname.includes('program-product') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('program-product')}>
+			<li id='program-product' className={`program-menu__item ${path.pathname.includes('product') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('product')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_product'></div>
 				</div>
@@ -31,16 +31,16 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>
-			<li id='program-profile' className={`program-menu__item ${path.pathname.includes('program-profile') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('program-profile')}>
+			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('competence')}>
 				<div className='program-menu__icon-container'>
-					<div className='program-menu__icon program-menu__icon_type_profile'></div>
+					<div className='program-menu__icon program-menu__icon_type_competence'></div>
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Компетентностный профиль</h3>
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>
-			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('program-assessment') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('program-assessment/knowledge/list')}>
+			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('assessment/knowledge/list')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_assessment'></div>
 				</div>
@@ -49,7 +49,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Создание тестовых и практических заданий для оценки знаний и умений</p>
 				</div>
 			</li>
-			<li id='program-discipline' className={`program-menu__item ${path.pathname.includes('program-discipline') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('program-discipline')}>
+			<li id='program-discipline' className={`program-menu__item ${path.pathname.includes('discipline') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('discipline/level')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_discipline'></div>
 				</div>
@@ -58,12 +58,12 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>
-			<li id='program-plan' className='program-menu__item program-menu__item_type_block'>
+			<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('semester/level')}>
 				<div className='program-menu__icon-container'>
-					<div className='program-menu__icon program-menu__icon_type_plan'></div>
+					<div className='program-menu__icon program-menu__icon_type_semester'></div>
 				</div>
 				<div className='program-menu__card'>
-					<h3 className='program-menu__title'>Создание прототипа учебного&nbsp;плана</h3>
+					<h3 className='program-menu__title'>Распределение по&nbsp;семестрам</h3>
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>
@@ -72,7 +72,7 @@ function ProgramMenu({ currentProgram }) {
 					<div className='program-menu__icon program-menu__icon_type_export'></div>
 				</div>
 				<div className='program-menu__card'>
-					<h3 className='program-menu__title'>Формирование рабочей&nbsp;программы</h3>
+					<h3 className='program-menu__title'>Экспорт результатов</h3>
 					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
 				</div>
 			</li>

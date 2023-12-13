@@ -1,0 +1,65 @@
+.alert {
+  width: 100%;
+  margin: 20px 0px 0px 0px;
+  padding: 16px 12px;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+} 
+.alert_type_warning {
+  background-color: var(--warning-color);
+}
+.alert__icon {
+  width: 32px;
+  height: 32px;
+  margin: 0px 12px 0px 0px;
+  flex-shrink: 0;
+  background-image: url('../../images/icons/main-white/attention.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.alert__information {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+.alert__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--main-white-color);
+}
+.alert__text {
+  margin: 8px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-white-color);
+}
+.alert__btn-close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  outline: none;
+  transform: rotate(45deg);
+  background-color: inherit;
+  background-image: url('../../images/icons/main-white/plus.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  transition: all .3s ease-in-out;
+}
+.alert__btn-close:hover {
+  cursor: pointer;
+  opacity: .7;
+}

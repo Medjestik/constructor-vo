@@ -1,24 +1,26 @@
 import React from 'react';
 import './Competence.css';
 import * as competenceApi from '../../utils/competence.js';
+import { DISCIPLINE_SECTION_OPTIONS } from '../../utils/config.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
 import Levels from '../Levels/Levels.js';
-import CompetenceProcessList from './CompetenceProcessList/CompetenceProcessList.js';
-import CompetenceAbilityList from './CompetenceAbilityList/CompetenceAbilityList.js';
-import CompetenceKnowledgeList from './CompetenceKnowledgeList/CompetenceKnowledgeList.js';
+import CompetenceProcessLevel from './CompetenceProcessLevel/CompetenceProcessLevel.js';
+import CompetenceAbilityLevel from './CompetenceAbilityLevel/CompetenceAbilityLevel.js';
+import CompetenceKnowledgeLevel from './CompetenceKnowledgeLevel/CompetenceKnowledgeLevel.js';
 import AddAbilityPopup from './CompetencePopup/AddAbilityPopup/AddAbilityPopup.js';
 import ConnectAbilityPopup from './CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
 import DisconnectAbilityPopup from './CompetencePopup/DisconnectAbilityPopup/DisconnectAbilityPopup.js';
 import EditAbilityPopup from './CompetencePopup/EditAbilityPopup/EditAbilityPopup.js';
-import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
-import WarningRemovePopup from '../Popup/WarningRemovePopup/WarningRemovePopup.js';
 import AddKnowledgePopup from './CompetencePopup/AddKnowledgePopup/AddKnowledgePopup.js';
 import ConnectKnowledgePopup from './CompetencePopup/ConnectKnowledgePopup/ConnectKnowledgePopup.js';
 import DisconnectKnowledgePopup from './CompetencePopup/DisconnectKnowledgePopup/DisconnectKnowledgePopup.js';
 import EditKnowledgePopup from './CompetencePopup/EditKnowledgePopup/EditKnowledgePopup.js'
+import WarningRemovePopup from '../Popup/WarningRemovePopup/WarningRemovePopup.js';
 
 function Competence({ currentProgram, isEditRights }) {
+
+  const [sectionOptions, setSectionOptions] = React.useState(DISCIPLINE_SECTION_OPTIONS);
 
   const [processes, setProcesses] = React.useState([]);
 
@@ -28,7 +30,6 @@ function Competence({ currentProgram, isEditRights }) {
   const [openProcess, setOpenProcess] = React.useState({});
   const [openAbility, setOpenAbility] = React.useState({});
 
-  const [currentProcess, setCurrentProcess] = React.useState({});
   const [currentAbility, setCurrentAbility] = React.useState({});
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
 
@@ -490,7 +491,6 @@ function Competence({ currentProgram, isEditRights }) {
       setProcesses([]);
       setOpenProcess({});
       setOpenAbility({});
-      setCurrentProcess({});
       setCurrentAbility({});
       setCurrentKnowledge({});
       setIsShowRequestError({ isShow: false, text: '' });
@@ -505,9 +505,9 @@ function Competence({ currentProgram, isEditRights }) {
         ?
         <Preloader />
         :
-        <Section title={'Компетентностный профиль'} heightType={'page'} headerType={'large'}>
+        <Section title={'Компетентностный профиль'} options={sectionOptions} heightType={'page'} headerType={'large'} >
           <Levels>
-            <CompetenceProcessList 
+            <CompetenceProcessLevel
               data={processes} 
               openProcess={openProcess} 
               onOpen={handleOpenProcess} 
@@ -515,7 +515,7 @@ function Competence({ currentProgram, isEditRights }) {
             {
               isShowAbilities 
               ?
-              <CompetenceAbilityList
+              <CompetenceAbilityLevel
                 openProcess={openProcess}
                 openAbility={openAbility}
                 onAdd={openAddAbilityPopup} 
@@ -533,7 +533,7 @@ function Competence({ currentProgram, isEditRights }) {
             {
               isShowKnowledge
               ?
-              <CompetenceKnowledgeList
+              <CompetenceKnowledgeLevel
                 openProcess={openProcess}
                 openAbility={openAbility}
                 onAdd={openAddKnowledgePopup} 
@@ -567,6 +567,7 @@ function Competence({ currentProgram, isEditRights }) {
           onClose={closeCompetencePopup}
           programId={currentProgram.id}
           currentItem={openProcess}
+          itemType={'process'}
           onConnect={handleConnectAbilities}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -629,6 +630,7 @@ function Competence({ currentProgram, isEditRights }) {
           onClose={closeCompetencePopup}
           programId={currentProgram.id}
           currentItem={openAbility}
+          itemType={'process'}
           onConnect={handleConnectKnowledge}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}

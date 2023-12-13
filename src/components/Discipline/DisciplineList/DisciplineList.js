@@ -1,105 +1,66 @@
 import React from 'react';
 
-function DisciplineList({ data, openDiscipline, onOpen, onClose, onAdd, onEdit, onRemove }) {
-
-  function handleEdit(event, item) {
-    event.stopPropagation();
-    onEdit(item);
-  }
-
-  function handleRemove(event, item) {
-    event.stopPropagation();
-    onRemove(item);
-  }
+function DisciplineList({ disciplines }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
-  const [isShowList, setIsShowList] = React.useState(false);
 
   React.useEffect(() => {
     if (containerHeightRef.current) {
       setListHeight(containerHeightRef.current.clientHeight);
-      setIsShowList(true);
     }
   // eslint-disable-next-line
-  }, [data]);
+  }, [disciplines]);
 
   const listStyle = {
     height: listHeight,
   };
 
   return (
-    <div  className='levels__container'>
-      <div className='levels__header'>
-        <h3 className='levels__header-title'>Дисциплины</h3>
-        <div className='levels__header-btn-container'>
-          <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
-          <button className='icon icon_margin_left-8 icon_size_20 icon_type_open-grey' type='button' onClick={onClose}></button>
-        </div>
-      </div>
+    <ul ref={containerHeightRef} style={Object.assign({}, listStyle)} className='list list_type_initial scroll-inside'>
       {
-        data.length > 0
-        ?
-        <ul ref={containerHeightRef} style={Object.assign({}, listStyle)} className='levels__list scroll-inside'>
-          { 
-            isShowList &&
-            data.map((item, i) => (
-              <li className={`levels__item ${openDiscipline.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item))}>
-                <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_discipline'>Дисциплина</span>
-                  <span className='badge badge_size_small badge_type_ability badge_margin_left_12'>Умений: {item.abilities.length}</span>
-                  <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Знаний: {item.knowledges.length}</span>
-                  <div className='levels__item-header-btn-container'>
-                    <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
-                    <button className='icon icon_size_16 icon_type_remove-grey icon_margin_left-8' type='button' onClick={(e) => handleRemove(e, item)}></button>
-                  </div>
-                </div>
-                <p className='levels__item-title'>{item.name}</p>
-                <ul className='levels__children-list'>
-                  {
-                    item.abilities.length > 15 
-                    ?
-                    <>
-                    {
-                      item.abilities.slice(0, 15).map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_ability'></li>
-                      ))
-                    }
-                    <li className='levels__children-item-count'>... и еще {item.abilities.length.length - 15}</li>
-                    </>
-                    :
-                    item.abilities.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_ability'></li>
-                    ))
-                  }
-                </ul>
-                <ul className='levels__children-list'>
-                  {
-                    item.knowledges.length > 15 
-                    ?
-                    <>
-                    {
-                      item.knowledges.slice(0, 15).map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                      ))
-                    }
-                    <li className='levels__children-item-count'>... и еще {item.knowledges.length - 15}</li>
-                    </>
-                    :
-                    item.knowledges.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                    ))
-                  }
-                </ul>
-              </li>
-            ))
-          }
-        </ul>
-        :
-        <button className='badge badge_margin_top_20 badge_type_white badge-btn badge-btn_type_add' type='button' onClick={onAdd}>Добавить</button>
+        disciplines.length > 0 &&
+        disciplines.map((discipline, disciplineIndex) => (
+          <li key={discipline.id} className={`list__item`}>
+            <div className='list__item-info'>
+              <span className='badge badge_size_small badge_type_discipline'>Дисциплина {disciplineIndex + 1}</span>
+              <h4 className='list__item-name'>{discipline.name}</h4>
+            </div>
+            {
+              discipline.abilities.length > 0 &&
+              <ul className='list list_type_nested'>
+                {
+                  discipline.abilities.map((ability, abilityIndex) => (
+                    <li key={ability.id} className={`list__item list__item_type_nested`}>
+                      <div className='list__item-info'>
+                        <span className='badge badge_size_small badge_type_ability'>Умение {disciplineIndex + 1}.{abilityIndex + 1}</span>
+                        <h4 className='list__item-name'>{ability.name}</h4>
+                      </div>
+                      {
+                        ability.knowledges.length > 0 &&
+                        <ul className='list list_type_nested'>
+                          {
+                            ability.knowledges.map((knowledge, knowledgeIndex) => (
+                              <li key={knowledge.id} className={`list__item`}>
+                                <div className='list__item-info'>
+                                <span className='badge badge_size_small badge_type_knowledge'>Знание {disciplineIndex + 1}.{abilityIndex + 1}.{knowledgeIndex + 1}</span>
+                                  <h4 className='list__item-name'>{knowledge.name}</h4>
+                                </div>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      }
+                    </li>
+                  ))
+                }
+              </ul>
+            }
+          </li>
+        ))
       }
-    </div>
-  )
+    </ul>
+  );
 }
 
-export default DisciplineList; 
+export default DisciplineList;  

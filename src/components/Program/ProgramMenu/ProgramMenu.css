@@ -75,7 +75,7 @@
 .program-menu__icon_type_product {
   background-image: url('../../../images/program-menu/program-product-grey.svg');
 }
-.program-menu__icon_type_profile {
+.program-menu__icon_type_competence {
   background-image: url('../../../images/program-menu/program-profile-grey.svg');
 }
 .program-menu__icon_type_assessment {
@@ -84,7 +84,7 @@
 .program-menu__icon_type_discipline {
   background-image: url('../../../images/program-menu/program-discipline-grey.svg');
 }
-.program-menu__icon_type_plan {
+.program-menu__icon_type_semester {
   background-image: url('../../../images/program-menu/program-plan-grey.svg');
 }
 .program-menu__icon_type_export {
@@ -96,7 +96,7 @@
 .program-menu__item_type_active .program-menu__icon_type_product {
   background-image: url('../../../images/program-menu/program-product-white.svg');
 }
-.program-menu__item_type_active .program-menu__icon_type_profile {
+.program-menu__item_type_active .program-menu__icon_type_competence {
   background-image: url('../../../images/program-menu/program-profile-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_assessment {
@@ -105,7 +105,7 @@
 .program-menu__item_type_active .program-menu__icon_type_discipline {
   background-image: url('../../../images/program-menu/program-discipline-white.svg');
 }
-.program-menu__item_type_active .program-menu__icon_type_plan {
+.program-menu__item_type_active .program-menu__icon_type_semester {
   background-image: url('../../../images/program-menu/program-plan-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_export {

@@ -9,8 +9,6 @@ import AddParticipantPopup from '../ProgramPopup/AddParticipantPopup/AddParticip
 import EditParticipantPopup from '../ProgramPopup/EditParticipantPopup/EditParticipantPopup.js';
 import ConfirmRemovePopup from '../../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
 
-import SelectSearch from '../../SelectSearch/SelectSearch';
-
 function ProgramInfo({ currentProgram, isEditRights }) {
 
   const [participants, setParticipants] = React.useState([]);
@@ -150,7 +148,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
       ?
       <Preloader />
       :
-      <Section title={'Характеристика программы'} heightType={'page'} headerType={'large'}>
+      <Section title={'Характеристика программы'} options={[]} heightType={'page'} headerType={'large'}>
         <div className='program-info'>
 
           <h3 className='program-info__title'>Информация о программе</h3>

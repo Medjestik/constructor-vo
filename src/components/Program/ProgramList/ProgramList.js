@@ -13,7 +13,6 @@ function ProgramList() {
   const navigate = useNavigate();
 
   const [programs, setPrograms] = React.useState([]);
-  const [levels, setLevels] = React.useState([]);
   const [directions, setDirections] = React.useState([]);
 
   const [currentProgram, setCurrentProgram] = React.useState({});
@@ -35,10 +34,8 @@ function ProgramList() {
     ])
       .then(([program, level, direction]) => {
         console.log('Programs:', program);
-        console.log('Levels:', level);
         console.log('Direction:', direction);
         setPrograms(program);
-        setLevels(level);
         setDirections(direction);
       })
       .catch((err) => {
@@ -124,14 +121,13 @@ function ProgramList() {
   }
 
   function openProgram(program) {
-    navigate('/program/' + program.id + '/program-info');
+    navigate('/program/' + program.id + '/info');
   }
 
   React.useEffect(() => {
     getPrograms();
     return(() => {
       setPrograms([]);
-      setLevels([]);
       setDirections([]);
       setCurrentProgram({});
     })
@@ -146,7 +142,7 @@ function ProgramList() {
         <Preloader />
         :
         <>
-        <Section title='Программы' heightType='page' headerType='small'>
+        <Section title='Программы' options={[]} heightType='page' headerType='small'>
           <ul className='program__list'>
             <li className='program__item program__item_type_add'>
             <div className='program__item-header'></div>
@@ -180,7 +176,6 @@ function ProgramList() {
         <AddProgramPopup
           isOpen={isOpenAddProgramPopup} 
           onClose={closeProgramPopup}
-          levels={levels}
           directions={directions}
           onAdd={handleAddProgram}
           isShowRequestError={isShowRequestError}
@@ -192,7 +187,6 @@ function ProgramList() {
         <EditProgramPopup
           isOpen={isOpenEditProgramPopup} 
           onClose={closeProgramPopup}
-          levels={levels}
           directions={directions}
           currentProgram={currentProgram}
           onEdit={handleEditProgram}

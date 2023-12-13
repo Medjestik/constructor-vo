@@ -4,9 +4,9 @@ import * as productApi from '../../utils/product.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
 import Levels from '../Levels/Levels.js';
-import ProductList from './ProductList/ProductList.js';
-import StageList from './StageList/StageList.js';
-import ProcessList from './ProcessList/ProcessList.js';
+import ProductLevel from './ProductLevel/ProductLevel.js';
+import ProductStageLevel from './ProductStageLevel/ProductStageLevel.js';
+import ProductProcessLevel from './ProductProcessLevel/ProductProcessLevel.js';
 import AddProductPopup from './ProductPopup/AddProductPopup/AddProductPopup.js';
 import EditProductPopup from './ProductPopup/EditProductPopup/EditProductPopup.js';
 import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
@@ -387,9 +387,9 @@ function Product({ currentProgram, isEditRights }) {
         ?
         <Preloader />
         :
-        <Section title={'Реконструкция деятельности'} heightType={'page'} headerType={'large'}>
+        <Section title={'Реконструкция деятельности'} options={[]} heightType={'page'} headerType={'large'}>
           <Levels> 
-            <ProductList 
+            <ProductLevel 
               data={products} 
               openProduct={openProduct} 
               onAdd={openAddProductPopup} 
@@ -400,7 +400,7 @@ function Product({ currentProgram, isEditRights }) {
             {
               isShowStages 
               ?
-              <StageList 
+              <ProductStageLevel 
                 data={stages} 
                 openProduct={openProduct}
                 openStage={openStage}
@@ -416,7 +416,7 @@ function Product({ currentProgram, isEditRights }) {
             }
             {
               isShowProcesses ?
-              <ProcessList 
+              <ProductProcessLevel 
                 data={processes} 
                 openProduct={openProduct}
                 openStage={openStage}
