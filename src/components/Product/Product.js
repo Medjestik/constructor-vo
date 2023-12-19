@@ -1,6 +1,7 @@
 import React from 'react';
 import './Product.css';
 import * as productApi from '../../utils/product.js';
+import { PRODUCT_SECTION_OPTIONS } from '../../utils/config.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
 import Levels from '../Levels/Levels.js';
@@ -17,6 +18,8 @@ import EditProcessPopup from './ProductPopup/EditProcessPopup/EditProcessPopup.j
 import ChangeOrderPopup from '../Popup/ChangeOrderPopup/ChangeOrderPopup.js';
 
 function Product({ currentProgram, isEditRights }) {
+
+  const [sectionOptions, setSectionOptions] = React.useState(PRODUCT_SECTION_OPTIONS);
 
   const [products, setProducts] = React.useState([]);
   const [stages, setStages] = React.useState([]);
@@ -48,6 +51,11 @@ function Product({ currentProgram, isEditRights }) {
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' });
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
+
+  function handleChooseOption(option) {
+    console.log(option);
+    //navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+  }
  
   function getProducts() {
     const token = localStorage.getItem('token');
@@ -387,7 +395,13 @@ function Product({ currentProgram, isEditRights }) {
         ?
         <Preloader />
         :
-        <Section title={'Реконструкция деятельности'} options={[]} heightType={'page'} headerType={'large'}>
+        <Section 
+        title={'Реконструкция деятельности'} 
+        options={sectionOptions} 
+        onChooseOption={handleChooseOption} 
+        heightType={'page'} 
+        headerType={'large'}
+        >
           <Levels> 
             <ProductLevel 
               data={products} 

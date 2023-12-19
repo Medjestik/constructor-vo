@@ -1,0 +1,6 @@
+.person__container {
+    width: 50%;
+    margin: 20px 0px 0px 0px;
+    display: flex;
+    flex-direction: column;
+}

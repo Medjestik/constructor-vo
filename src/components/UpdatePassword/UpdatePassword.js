@@ -1,41 +1,43 @@
 import React from 'react';
-import './Login.css';
+import '../Login/Login.css';
 import '../Popup/Popup.css';
+import { useLocation } from 'react-router-dom';
 
-function Login({ onLogin, requestError, onHideRequestError, onOpenResetPasswordPopup, isLoadingRequest }) {
+function UpdatePassword({ onUpdate, isShowRequestError, isLoadingRequest }) {
+
+  const { pathname } = useLocation();
 
   const [login, setLogin] = React.useState('');
   const [loginError, setLoginError] = React.useState({ isShow: false, text: '' });
   const [password, setPassword] = React.useState('');
-  const [isShowPassword, setIsShowPassword] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState({ isShow: false, text: '' });
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleChangeLogin(e) {
     setLogin(e.target.value);
-    onHideRequestError();
     if (e.target.checkValidity()) {
       setLoginError({ text: '', isShow: false });
     } else {
-      setLoginError({ text: 'Неправильный формат почты', isShow: true });
+      setLoginError({ text: 'Пароль должен содержать более 6 символов', isShow: true });
     }
   }
 
   function handleChangePassword(e) {
     setPassword(e.target.value);
-    onHideRequestError();
-    if (e.target.checkValidity()) {
+    if (e.target.value === login) {
       setPasswordError({ text: '', isShow: false });
     } else {
-      setPasswordError({ text: 'Пароль должен содержать более 6 символов', isShow: true });
+      setPasswordError({ text: 'Пароли не совпадают', isShow: true });
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    onHideRequestError();
-    onLogin(login, password);
+    const parts = pathname.split('/');
+    const token = parts[parts.length - 1];
+    const uid = parts[parts.length - 2];
+    onUpdate(login, password, uid, token);
   }
 
   React.useEffect(() => {
@@ -51,26 +53,25 @@ function Login({ onLogin, requestError, onHideRequestError, onOpenResetPasswordP
     setLogin('');
     setLoginError({ text: '', isShow: false });
     setPassword('');
-    setIsShowPassword(false);
     setPasswordError({ text: '', isShow: false });
   }, []);
 
   return (
     <div className='login'>
       <form className='login__form' name='login-form' action='#' noValidate onSubmit={handleSubmit}>
-        <h1 className='login__title'>Вход в конструктор ВО</h1>
+        <h1 className='login__title'>Восстановление пароля</h1>
         <label className='popup__field'>
-          <h4 className='popup__input-caption'>Электронная почта:</h4>
+          <h4 className='popup__input-caption'>Введите новый пароль:</h4>
 
           <div className='popup__input-field'>
             <input 
-            className='popup__input popup__input_with_icon'
-            type='email'
-            id='login'
+            className='popup__input'
+            type='text'
+            id='reset-password-new'
             value={login}
             onChange={handleChangeLogin}
-            name='login' 
-            placeholder='Введите электронную почту...' 
+            name='reset-password-new' 
+            placeholder='Введите новый пароль...' 
             minLength='6'
             required 
             />
@@ -81,45 +82,37 @@ function Login({ onLogin, requestError, onHideRequestError, onOpenResetPasswordP
         </label>
 
         <label className='popup__field'>
-          <h4 className='popup__input-caption'>Пароль:</h4>
+          <h4 className='popup__input-caption'>Повторите пароль:</h4>
           <div className='popup__input-field'>
             <input 
-            className='popup__input popup__input_with_icon'
-            type={isShowPassword ? 'text' : 'password'} 
-            id='password'
+            className='popup__input'
+            type='text'
+            id='reset-password-repeat'
             value={password}
             onChange={handleChangePassword}
-            name='password' 
-            placeholder='Введите пароль...' 
+            name='reset-password-repeat' 
+            placeholder='Повторите пароль...' 
             minLength='6'
             required 
             />
-            <div 
-            className={`popup__input-icon 
-            ${isShowPassword ? 'popup__input-icon-password_type_hide' : 'popup__input-icon-password_type_show' } 
-            `} 
-            onClick={() => setIsShowPassword(!isShowPassword)}>
-            </div>
           </div>
           <span className={`popup__input-error ${passwordError.isShow ? 'popup__input-error_status_show' : ''}`}>
             {passwordError.text}
           </span>
         </label>
 
-        <div className='login__btn-container'>
-          <button className='login__btn-forgot' type='button' onClick={onOpenResetPasswordPopup}>Забыли пароль?</button>
-          {
-            isLoadingRequest ? 
-            <button className='popup__btn-save popup__btn-save_type_loading' disabled type='button'>Вход..</button>
-            :
-            <button className={`popup__btn-save ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Войти</button>
-          }
-        </div>
-        <span className={`popup__input-error ${requestError && 'popup__input-error_status_show'}`}>К сожалению, произошла ошибка!</span>
+        {
+          isLoadingRequest ? 
+          <button className='popup__btn-save popup__btn-save_margin-top popup__btn-save_type_loading' disabled type='button'>Обновление..</button>
+          :
+          <button className={`popup__btn-save popup__btn-save_margin-top ${isBlockSubmitButton ? 'popup__btn-save_type_block' : ''}`} type='submit'>Обновить</button>
+        }
+
+        <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
 
       </form>
     </div>
   );
 }
 
-export default Login;
+export default UpdatePassword;

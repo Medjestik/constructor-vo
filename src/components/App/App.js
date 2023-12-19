@@ -7,7 +7,9 @@ import Preloader from '../Preloader/Preloader.js';
 import HomePage from '../Homepage/HomePage.js';
 import Pages from '../Pages/Pages.js';
 import Program from '../Program/Program.js';
+import UpdatePassword from '../UpdatePassword/UpdatePassword.js';
 import RegisterPopup from '../Popup/RegisterPopup/RegisterPopup.js';
+import ResetPasswordPopup from '../Popup/ResetPasswordPopup/ResetPasswordPopup.js';
 
 function App() {
 
@@ -19,6 +21,7 @@ function App() {
   const [windowWidth, setWindowWidth] = React.useState(0);
 
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = React.useState(false);
+  const [isResetPasswordPopupOpen, setIsResetPasswordPopupOpen] = React.useState(false);
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' });
 
   const [loginError, setLoginError] = React.useState(false);
@@ -47,7 +50,7 @@ function App() {
     api.register({ user })
       .then((res) => {
         console.log(res);
-        closeRegisterPopup();
+        closePopup();
       })
       .catch((err) => {
         console.log(err);
@@ -56,6 +59,55 @@ function App() {
       .finally(() => {
         setIsLoadingRequest(false);
       });
+  }
+
+  function handleResetPassword(mail) {
+    setIsLoadingRequest(true);
+    api.resetPassword({ email: mail })
+      .then((res) => {
+        setIsShowRequestError({ isShow: true, text: 'Письмо направлено на почту!' });
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleUpdatePassword(newPassword, repeatPassword, uid, token) {
+    setIsLoadingRequest(true);
+    api.updatePassword({ new_password1: newPassword, new_password2: repeatPassword, uid: uid, token: token, })
+      .then(() => {
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleEditPerson(firstName, lastName, fatherName, mail) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoadingRequest(true);
+      api.editPerson({ token:token, first_name: firstName, last_name: lastName, middle_name: fatherName, email: mail })
+        .then((res) => {
+          setCurrentUser({...currentUser, ...res});
+          setIsShowRequestError({ isShow: true, text: 'Данные успешно сохранены!' });
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+    }
   }
 
   function handleHideLoginError() {
@@ -67,8 +119,14 @@ function App() {
     setIsShowRequestError({ isShow: false, text: '' });
   }
 
-  function closeRegisterPopup() {
+  function openResetPasswordPopup() {
+    setIsResetPasswordPopupOpen(true);
+    setIsShowRequestError({ isShow: false, text: '' });
+  }
+
+  function closePopup() {
     setIsRegisterPopupOpen(false);
+    setIsResetPasswordPopupOpen(false);
     setIsShowRequestError({ isShow: false, text: '' });
   }
 
@@ -82,7 +140,7 @@ function App() {
           setCurrentUser(res);
           setLoggedIn(true);
           if (pathname === '/') {
-            navigate('page/main');
+            navigate('page/person');
             setIsLoadingPage(false);
           } else {
             navigate(pathname);
@@ -97,10 +155,16 @@ function App() {
           setCurrentUser({});
         })
     } else {
-      setIsLoadingPage(false);
-      navigate('/');
-      setLoggedIn(false);
-      setCurrentUser({});
+      if (!pathname.includes('reset_password')) {
+        setIsLoadingPage(false);
+        navigate('/');
+        setLoggedIn(false);
+        setCurrentUser({});
+      } else {
+        setIsLoadingPage(false);
+        setLoggedIn(true);
+        setCurrentUser({});
+      }
     }
   }
 
@@ -126,7 +190,7 @@ function App() {
     }
     window.addEventListener('resize', resizeWindow);
     return () => {
-      window.removeEventListener('resize', resizeWindow);
+      window.removeEventListener('resize', resizeWindow); 
     }
   }, []);
 
@@ -156,6 +220,7 @@ function App() {
                 requestError={loginError}
                 onHideRequestError={handleHideLoginError}
                 onOpenRegisterPopup={openRegisterPopup}
+                onOpenResetPasswordPopup={openResetPasswordPopup}
                 isLoadingRequest={isLoadingRequest}
               />
             }/>
@@ -166,25 +231,35 @@ function App() {
               <div className='wrapper'>
                 <div className='container'>
                   <Routes>
-
                     <Route exact path='page/*' element={
-                        <Pages
-                          windowWidth={windowWidth}
-                          pathname={pathname}
-                          onLogout={handleLogout}
-                        />
-                      }/>
+                      <Pages
+                        windowWidth={windowWidth}
+                        pathname={pathname}
+                        onLogout={handleLogout}
+                        onEditPerson={handleEditPerson}
+                        isLoadingRequest={isLoadingRequest}
+                        isShowRequestError={isShowRequestError}
+                      />
+                    }/>
 
-                      <Route exact path='program/:programId/*' element={
-                        <Program
-                          windowWidth={windowWidth}
-                          onLogout={handleLogout}
-                        />
-                      }/>
+                    <Route exact path='program/:programId/*' element={
+                      <Program
+                        windowWidth={windowWidth}
+                        onLogout={handleLogout}
+                      />
+                    }/>
 
-                    </Routes>
-                  </div>
+                    <Route exact path='reset_password/*' element={
+                      <UpdatePassword
+                      onUpdate={handleUpdatePassword}
+                      isLoadingRequest={isLoadingRequest}
+                      isShowRequestError={isShowRequestError}
+                      />
+                    }/>
+
+                  </Routes>
                 </div>
+              </div>
               :
               <Navigate to='/homepage' />
             }/>
@@ -194,12 +269,23 @@ function App() {
           isRegisterPopupOpen &&
           <RegisterPopup
             isOpen={isRegisterPopupOpen} 
-            onClose={closeRegisterPopup}
+            onClose={closePopup}
             onRegister={handleRegister}
             isShowRequestError={isShowRequestError}
             isLoadingRequest={isLoadingRequest}
           />
         }
+        {
+          isResetPasswordPopupOpen &&
+          <ResetPasswordPopup
+            isOpen={isResetPasswordPopupOpen} 
+            onClose={closePopup}
+            onResetPassword={handleResetPassword}
+            isShowRequestError={isShowRequestError}
+            isLoadingRequest={isLoadingRequest}
+          />
+        }
+
       </div>
     </CurrentUserContext.Provider>
   );

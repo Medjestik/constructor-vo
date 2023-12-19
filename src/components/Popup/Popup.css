@@ -206,6 +206,9 @@
 .popup__btn-save_margin_auto {
   margin: auto 0px 0px 0px;
 }
+.popup__btn-save_margin-top {
+  margin-top: 20px;
+}
 .popup__upload-section {
   display: flex;
   align-items: center;

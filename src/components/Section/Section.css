@@ -105,6 +105,9 @@
 .section__option_status_active .section__option_icon_chart {
   background-image: url('../../images/icons/slider/chart.svg');
 }
+.section__option_icon_export {
+  background-image: url('../../images/icons/main-white/file-export.svg');
+}
 .section__page-container {
   display: flex;
   flex-direction: column;

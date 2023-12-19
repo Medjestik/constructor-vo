@@ -12,6 +12,8 @@ function SemesterLevel({ currentProgram }) {
 
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
+  console.log(columns);
+
   function getDisciplines() {
     const token = localStorage.getItem('token');
     Promise.all([
@@ -120,7 +122,6 @@ function SemesterLevel({ currentProgram }) {
                 index !== 0 &&
                 <div className='semester__header-btn-container'>
                   <button className='icon icon_size_20 icon_type_add-grey' type='button'></button>
-                  <button className='icon icon_margin_left-8 icon_size_20 icon_type_open-grey' type='button'></button>
                 </div>
               }
             </div>

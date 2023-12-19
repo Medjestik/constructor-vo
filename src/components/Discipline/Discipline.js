@@ -52,7 +52,9 @@ function Discipline({ currentProgram, isEditRights }) {
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
   function handleChooseOption(option) {
-    navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+    if (option.id !== 'export') {
+      navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+    }
   }
 
   function openAddDisciplinePopup() {

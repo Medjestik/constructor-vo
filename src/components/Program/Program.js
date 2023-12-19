@@ -7,6 +7,7 @@ import Preloader from '../Preloader/Preloader.js';
 import Navigation from '../Navigation/Navigation.js';
 import ProgramMenu from './ProgramMenu/ProgramMenu.js';
 import ProgramInfo from './ProgramInfo/ProgramInfo.js';
+import ProgramExport from './ProgramExport/ProgramExport.js';
 import Product from '../Product/Product.js';
 import Competence from '../Competence/Competence.js';
 import Assessment from '../Assessment/Assessment.js';
@@ -94,7 +95,12 @@ function Program({ windowWidth, onLogout }) {
           />
 
           <Route exact path='/semester/*' element={
-              <Semester currentProgram={currentProgram} isEditRights={isEditRights}  />
+              <Semester currentProgram={currentProgram} isEditRights={isEditRights} /> 
+            }
+          />
+
+          <Route exact path='/export/*' element={
+              <ProgramExport /> 
             }
           />
           

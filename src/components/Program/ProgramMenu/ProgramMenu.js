@@ -19,7 +19,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Характеристика программы</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Общая информация о&nbsp;программе, участники и&nbsp;их&nbsp;роли</p>
 				</div>
 			</li>
 			<li id='program-product' className={`program-menu__item ${path.pathname.includes('product') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('product')}>
@@ -28,7 +28,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Реконструкция деятельности</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Создание продуктов, этапов жизненного цикла и&nbsp;процессов</p>
 				</div>
 			</li>
 			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('competence')}>
@@ -37,7 +37,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Компетентностный профиль</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Создание умений и знаний связанных с процессами</p>
 				</div>
 			</li>
 			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('assessment/knowledge/list')}>
@@ -46,7 +46,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Оценочные материалы</h3>
-					<p className='program-menu__subtitle'>Создание тестовых и практических заданий для оценки знаний и умений</p>
+					<p className='program-menu__subtitle'>Создание тестовых и&nbsp;практических заданий</p>
 				</div>
 			</li>
 			<li id='program-discipline' className={`program-menu__item ${path.pathname.includes('discipline') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('discipline/level')}>
@@ -55,7 +55,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Проектирование дисциплин</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Формирование дисциплин из&nbsp;набора умений и&nbsp;знаний</p>
 				</div>
 			</li>
 			<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('semester/level')}>
@@ -64,16 +64,16 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Распределение по&nbsp;семестрам</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Структурирование и&nbsp;организация дисциплин</p>
 				</div>
 			</li>
-			<li id='program-export' className='program-menu__item program-menu__item_type_block'>
+			<li id='program-export' className={`program-menu__item ${path.pathname.includes('export') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('export')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_export'></div>
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Экспорт результатов</h3>
-					<p className='program-menu__subtitle'>Описание этапа где много разных слов желательно на 2 строки</p>
+					<p className='program-menu__subtitle'>Экспорт шаблона рабочей программы дисциплины</p>
 				</div>
 			</li>
 		</ul>

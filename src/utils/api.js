@@ -56,3 +56,39 @@ export const register = ({ user }) => {
   .then(res => handleResponse(res));
 };
 
+export const editPerson = ({ token, first_name, last_name, middle_name, email }) => {
+  return fetch(`${API_URL}/auth/user/`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ first_name, last_name, middle_name, email })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const resetPassword = ({ email }) => {
+  return fetch(`${API_URL}/auth/password/reset/`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const updatePassword = ({ new_password1, new_password2, uid, token, }) => {
+  return fetch(`${API_URL}/rest-auth/password/reset/confirm/`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ new_password1, new_password2, uid, token, })
+  })
+  .then(res => handleResponse(res));
+};

@@ -53,13 +53,13 @@ function Header({ windowWidth, pathname, onLogout }) {
           <h3 className='header__name'>{currentUser.name || ''}</h3>
           <nav className='scroll header__nav'>
 
-            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/page/main'>
+            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/page/person'>
               <div className='header__nav-link-icon'>
                 <div className='header__nav-link-icon-container'>
                   <div className='header__nav-link-icon_type_person'></div>
                 </div>
               </div>
-              <p className='header__nav-link-text'>Главная</p>
+              <p className='header__nav-link-text'>Личный кабинет</p>
             </NavLink>
 
             <NavLink onClick={hideMobileMenu} className={`header__nav-link + ${isProgramOpen ? 'header__nav-link_type_active' : ''}`} 
@@ -71,6 +71,15 @@ function Header({ windowWidth, pathname, onLogout }) {
                 </div>
               </div>
               <p className='header__nav-link-text'>Программы</p>
+            </NavLink>
+
+            <NavLink onClick={hideMobileMenu} className={({ isActive }) => 'header__nav-link ' + (isActive ? 'header__nav-link_type_active' : '')} to='/page/method'>
+              <div className='header__nav-link-icon'>
+                <div className='header__nav-link-icon-container'>
+                  <div className='header__nav-link-icon_type_person'></div>
+                </div>
+              </div>
+              <p className='header__nav-link-text'>Методология</p>
             </NavLink>
         
           </nav>

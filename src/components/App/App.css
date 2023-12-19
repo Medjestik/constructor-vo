@@ -560,6 +560,27 @@ input[type=number] {
   user-select: none;
   pointer-events: none;
 }
+.btn-primary {
+  margin: 0px;
+  position: relative;
+  width: max-content;
+  padding: 11px;
+  background: var(--gradient-blue-color);
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--main-white-color);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all .3s ease-in-out;
+}
+.btn-primary:hover {
+  cursor: pointer;
+  opacity: .7;
+}
 .btn-more {
   position: relative;
   background: none;

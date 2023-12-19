@@ -2,6 +2,7 @@ import React from 'react';
 import './ProgramInfo.css';
 import * as usersApi from '../../../utils/api.js';
 import * as programApi from '../../../utils/program.js';
+import { PROGRAM_INFO_SECTION_OPTIONS } from '../../../utils/config.js';
 import Preloader from '../../Preloader/Preloader.js';
 import Section from '../../Section/Section.js';
 import ProgramParticipant from '../ProgramParticipant/ProgramParticipant.js';
@@ -10,6 +11,8 @@ import EditParticipantPopup from '../ProgramPopup/EditParticipantPopup/EditParti
 import ConfirmRemovePopup from '../../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
 
 function ProgramInfo({ currentProgram, isEditRights }) {
+
+  const [sectionOptions, setSectionOptions] = React.useState(PROGRAM_INFO_SECTION_OPTIONS);
 
   const [participants, setParticipants] = React.useState([]);
   const [currentParticipant, setCurrentParticipant] = React.useState({});
@@ -27,6 +30,11 @@ function ProgramInfo({ currentProgram, isEditRights }) {
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
 
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
+
+  function handleChooseOption(option) {
+    console.log(option);
+    //navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+  }
 
   function openAddParticipantPopup() {
     setIsOpenAddParticipantPopup(true);
@@ -148,7 +156,13 @@ function ProgramInfo({ currentProgram, isEditRights }) {
       ?
       <Preloader />
       :
-      <Section title={'Характеристика программы'} options={[]} heightType={'page'} headerType={'large'}>
+      <Section 
+      title={'Характеристика программы'} 
+      options={sectionOptions} 
+      onChooseOption={handleChooseOption} 
+      heightType={'page'} 
+      headerType={'large'}
+      >
         <div className='program-info'>
 
           <h3 className='program-info__title'>Информация о программе</h3>

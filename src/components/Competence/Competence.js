@@ -1,7 +1,7 @@
 import React from 'react';
 import './Competence.css';
 import * as competenceApi from '../../utils/competence.js';
-import { DISCIPLINE_SECTION_OPTIONS } from '../../utils/config.js';
+import { COMPETENCE_SECTION_OPTIONS } from '../../utils/config.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
 import Levels from '../Levels/Levels.js';
@@ -20,7 +20,7 @@ import WarningRemovePopup from '../Popup/WarningRemovePopup/WarningRemovePopup.j
 
 function Competence({ currentProgram, isEditRights }) {
 
-  const [sectionOptions, setSectionOptions] = React.useState(DISCIPLINE_SECTION_OPTIONS);
+  const [sectionOptions, setSectionOptions] = React.useState(COMPETENCE_SECTION_OPTIONS);
 
   const [processes, setProcesses] = React.useState([]);
 
@@ -48,6 +48,11 @@ function Competence({ currentProgram, isEditRights }) {
   const [isDisconnectKnowledgePopupOpen, setIsDisconnectKnowledgePopupOpen] = React.useState(false);
   const [isEditKnowledgePopupOpen, setIsEditKnowledgePopupOpen] = React.useState(false);
   const [isRemoveKnowledgePopupOpen, setIsRemoveKnowledgePopupOpen] = React.useState(false);
+
+  function handleChooseOption(option) {
+    console.log(option);
+    //navigate('/program/' + currentProgram.id + '/discipline' + option.link);
+  }
 
   function openAddAbilityPopup() {
     setIsAddAbilitiesPopupOpen(true);
@@ -505,7 +510,13 @@ function Competence({ currentProgram, isEditRights }) {
         ?
         <Preloader />
         :
-        <Section title={'Компетентностный профиль'} options={sectionOptions} heightType={'page'} headerType={'large'} >
+        <Section 
+        title={'Компетентностный профиль'} 
+        options={sectionOptions} 
+        onChooseOption={handleChooseOption} 
+        heightType={'page'} 
+        headerType={'large'} 
+        >
           <Levels>
             <CompetenceProcessLevel
               data={processes} 

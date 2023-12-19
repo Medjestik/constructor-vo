@@ -2,7 +2,7 @@ import React from 'react';
 import './HomePage.css';
 import Login from '../Login/Login.js';
 
-function HomePage({ onLogin, requestError, onHideRequestError, onOpenRegisterPopup, isLoadingRequest }) {
+function HomePage({ onLogin, requestError, onHideRequestError, onOpenRegisterPopup, onOpenResetPasswordPopup, isLoadingRequest }) {
 
   return (
     <div className='home-page'>
@@ -13,6 +13,7 @@ function HomePage({ onLogin, requestError, onHideRequestError, onOpenRegisterPop
         onLogin={onLogin} 
         requestError={requestError} 
         onHideRequestError={onHideRequestError} 
+        onOpenResetPasswordPopup={onOpenResetPasswordPopup}
         isLoadingRequest={isLoadingRequest} 
       />
 

@@ -27,20 +27,17 @@ const SemesterLevelColumn = ({ droppableId, column, columnIndex }) => {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`semester__column-main ${columnIndex === 0 ? 'semester__column-main_type_initial' : ''}`}
+            className={`semester__column-main ${columnIndex === 0 ? 'semester__column-main_type_initial' : ''} scroll-inside`}
             style={{
               background: snapshot.isDraggingOver ? '#D9D9D9' : '',
               height: '320px',
             }}
           >
-            <ul className='semester__column-list scroll-inside'
-            style={{
-              minHeight: '288px',
-            }}>
+
               {column?.disciplines?.map((item, index) => {
                 return <SemesterLevelItem key={item.id} columnIndex={columnIndex} item={item} index={index} />;
               })}
-            </ul>
+
             {provided.placeholder}
           </div>
         );
