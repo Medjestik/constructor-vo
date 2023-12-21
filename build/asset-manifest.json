@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b97120ea.css",
-    "main.js": "/static/js/main.ea83656f.js",
+    "main.css": "/static/css/main.96f8b6ff.css",
+    "main.js": "/static/js/main.2d277572.js",
     "static/js/787.d402ae33.chunk.js": "/static/js/787.d402ae33.chunk.js",
     "static/media/homepage-background.jpg": "/static/media/homepage-background.e56996dde9e3e5395b35.jpg",
     "static/media/Robotomediumitalic.ttf": "/static/media/Robotomediumitalic.35abcf5eb54b0c398e52.ttf",
@@ -84,10 +84,12 @@
     "static/media/program-plan-grey.svg": "/static/media/program-plan-grey.0d90a9323232f2ea751b.svg",
     "static/media/program-plan-white.svg": "/static/media/program-plan-white.1f27e75bae6f4fc8b3b6.svg",
     "static/media/plus.svg": "/static/media/plus.c8e25b81c5221dffcf05.svg",
+    "static/media/program-dashboard-grey.svg": "/static/media/program-dashboard-grey.4b6c3226c23deaa6599b.svg",
+    "static/media/program-dashboard-white.svg": "/static/media/program-dashboard-white.8b4905d1d3a4de0ce1bf.svg",
     "static/media/home-color.svg": "/static/media/home-color.231e0b379fd631b1234f.svg",
-    "static/media/program-export-black.svg": "/static/media/program-export-black.ca5317859208e0a9a062.svg",
     "static/media/program-export-grey.svg": "/static/media/program-export-grey.5e99bd298d200dc96b7f.svg",
     "static/media/home.svg": "/static/media/home.a8f6698c0310de5a5189.svg",
+    "static/media/program-export-white.svg": "/static/media/program-export-white.0bb673544b4e65e4fce7.svg",
     "static/media/education.svg": "/static/media/education.9eef265272ff4dc7cc0193275da029d0.svg",
     "static/media/password-hide-color.svg": "/static/media/password-hide-color.fc56a60e78838c6b83c5.svg",
     "static/media/password-hide.svg": "/static/media/password-hide.21a4b041235074a467ae.svg",
@@ -115,12 +117,12 @@
     "static/media/arrow-nested.svg": "/static/media/arrow-nested.0aa455ba54eb423c0d58.svg",
     "static/media/arrow.svg": "/static/media/arrow.55a4ec4915bbcdabc744.svg",
     "static/media/arrow-blue.svg": "/static/media/arrow-blue.d97550c6523356d4c133.svg",
-    "main.b97120ea.css.map": "/static/css/main.b97120ea.css.map",
-    "main.ea83656f.js.map": "/static/js/main.ea83656f.js.map",
+    "main.96f8b6ff.css.map": "/static/css/main.96f8b6ff.css.map",
+    "main.2d277572.js.map": "/static/js/main.2d277572.js.map",
     "787.d402ae33.chunk.js.map": "/static/js/787.d402ae33.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b97120ea.css",
-    "static/js/main.ea83656f.js"
+    "static/css/main.96f8b6ff.css",
+    "static/js/main.2d277572.js"
   ]
 }

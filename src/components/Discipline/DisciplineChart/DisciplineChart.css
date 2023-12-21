@@ -1,0 +1,11 @@
+.discipline-chart {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  position: relative;
+}

@@ -8,6 +8,7 @@ import Navigation from '../Navigation/Navigation.js';
 import ProgramMenu from './ProgramMenu/ProgramMenu.js';
 import ProgramInfo from './ProgramInfo/ProgramInfo.js';
 import ProgramExport from './ProgramExport/ProgramExport.js';
+import ProgramDashboard from './ProgramDashboard/ProgramDashboard.js';
 import Product from '../Product/Product.js';
 import Competence from '../Competence/Competence.js';
 import Assessment from '../Assessment/Assessment.js';
@@ -101,6 +102,11 @@ function Program({ windowWidth, onLogout }) {
 
           <Route exact path='/export/*' element={
               <ProgramExport /> 
+            }
+          />
+
+          <Route exact path='/dashboard/*' element={
+              <ProgramDashboard /> 
             }
           />
           

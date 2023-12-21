@@ -12,6 +12,7 @@ import DisciplineLevel from './DisciplineLevel/DisciplineLevel.js';
 import DisciplineAbilityLevel from './DisciplineAbilityLevel/DisciplineAbilityLevel.js';
 import DisciplineKnowledgeLevel from './DisciplineKnowledgeLevel/DisciplineKnowledgeLevel.js';
 import DisciplineList from './DisciplineList/DisciplineList.js';
+import DisciplineChart from './DisciplineChart/DisciplineChart.js';
 import AddDisciplinePopup from './DisciplinePopup/AddDisciplinePopup/AddDisciplinePopup.js';
 import EditDisciplinePopup from './DisciplinePopup/EditDisciplinePopup/EditDisciplinePopup.js';
 import ConnectAbilityPopup from '../Competence/CompetencePopup/ConnectAbilityPopup/ConnectAbilityPopup.js';
@@ -403,6 +404,10 @@ function Discipline({ currentProgram, isEditRights }) {
             <List>
               <DisciplineList disciplines={disciplines} />
             </List>
+          }>
+          </Route>
+          <Route exact path='chart' element={ 
+            <DisciplineChart />
           }>
           </Route>
         </Routes>

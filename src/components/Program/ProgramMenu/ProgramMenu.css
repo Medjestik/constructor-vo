@@ -90,6 +90,9 @@
 .program-menu__icon_type_export {
   background-image: url('../../../images/program-menu/program-export-grey.svg');
 }
+.program-menu__icon_type_dashboard {
+  background-image: url('../../../images/program-menu/program-dashboard-grey.svg');
+}
 .program-menu__item_type_active .program-menu__icon_type_info {
   background-image: url('../../../images/program-menu/program-info-white.svg');
 }
@@ -109,7 +112,10 @@
   background-image: url('../../../images/program-menu/program-plan-white.svg');
 }
 .program-menu__item_type_active .program-menu__icon_type_export {
-  background-image: url('../../../images/program-menu/program-export-black.svg');
+  background-image: url('../../../images/program-menu/program-export-white.svg');
+}
+.program-menu__item_type_active .program-menu__icon_type_dashboard {
+  background-image: url('../../../images/program-menu/program-dashboard-white.svg');
 }
 .program-menu__item:first-of-type .program-menu__icon-container:before {
   display: none;
