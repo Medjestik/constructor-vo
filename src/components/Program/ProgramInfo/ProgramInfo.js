@@ -169,16 +169,16 @@ function ProgramInfo({ currentProgram, isEditRights }) {
           <div className='program-info-description'>
             <ul className='program-info-description__list'>
               <li className='program-info-description__item'>
-                <p className='program-info-description__caption'>Уровень образования:</p>
-                <div className='program-info-description__name'>{programInfo.level.name || ''}</div>
+                <p className='program-info-description__caption'>Направление:</p>
+                <div className='program-info-description__name'>{programInfo.direction.name || ''}</div>
               </li>
               <li className='program-info-description__item'>
-                <p className='program-info-description__caption'>Направление:</p>
-                <div className='program-info-description__name'>{programInfo.profile || ''}</div>
+                <p className='program-info-description__caption'>Форма обучения:</p>
+                <div className='program-info-description__name'>{programInfo.form || ''}</div>
               </li>
               <li className='program-info-description__item'>
                 <p className='program-info-description__caption'>Профиль:</p>
-                <div className='program-info-description__name'>{programInfo.direction.name || ''}</div>
+                <div className='program-info-description__name'>{programInfo.profile || ''}</div>
               </li>
             </ul>
             <div className='program-info-description__text'>

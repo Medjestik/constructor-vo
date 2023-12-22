@@ -40,13 +40,13 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Создание умений и знаний связанных с процессами</p>
 				</div>
 			</li>
-			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('assessment/knowledge/list')}>
+			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_assessment'></div>
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Оценочные материалы</h3>
-					<p className='program-menu__subtitle'>Создание тестовых и&nbsp;практических заданий</p>
+					<p className='program-menu__subtitle'>Создание материалов для&nbsp;оценки умений</p>
 				</div>
 			</li>
 			<li id='program-discipline' className={`program-menu__item ${path.pathname.includes('discipline') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('discipline/level')}>
@@ -67,7 +67,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Структурирование и&nbsp;организация дисциплин</p>
 				</div>
 			</li>
-			<li id='program-export' className={`program-menu__item ${path.pathname.includes('export') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('export')}>
+			<li id='program-export' className={`program-menu__item ${path.pathname.includes('export') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_export'></div>
 				</div>
