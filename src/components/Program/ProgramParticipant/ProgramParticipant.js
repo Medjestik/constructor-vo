@@ -3,9 +3,11 @@ import './ProgramParticipant.css';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext.js';
 import Table from '../../Table/Table.js';
 
-function ProgramParticipant({ participants, onEdit, onRemove, isEditRights }) {
+function ProgramParticipant({ programInfo, participants, onEdit, onRemove }) {
 
   const currentUser = React.useContext(CurrentUserContext);
+
+  const [isEditRights, setIsEditRights] = React.useState(programInfo.authorId === currentUser.id ? true : false);
 
   return (
     <Table>
@@ -49,13 +51,25 @@ function ProgramParticipant({ participants, onEdit, onRemove, isEditRights }) {
                   onClick={() => (onEdit(item))}
                 >
                 </button>
-                <button
-                  disabled={isEditRights && currentUser.id !== item.id ? '': 'disabled'}
-                  className={`btn-icon btn-icon_margin_left btn-icon_type_cancel ${isEditRights && currentUser.id !== item.id && 'btn-icon_color_accent-orange'}`}
-                  type='button'
-                  onClick={() => (onRemove(item))}
-                >
-                </button>
+                {
+                  programInfo.authorId === item.user.id
+                  ?
+                  <button
+                    disabled={'disabled'}
+                    className={`btn-icon btn-icon_margin_left btn-icon_type_cancel`}
+                    type='button'
+                    onClick={() => (onRemove(item))}
+                  >
+                  </button>
+                  :
+                  <button
+                    disabled={isEditRights && currentUser.id !== item.id ? '': 'disabled'}
+                    className={`btn-icon btn-icon_margin_left btn-icon_type_cancel ${isEditRights && currentUser.id !== item.id && 'btn-icon_color_accent-orange'}`}
+                    type='button'
+                    onClick={() => (onRemove(item))}
+                  >
+                  </button>
+                }
               </div>
             </li>
           ))

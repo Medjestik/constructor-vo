@@ -45,9 +45,9 @@ function App() {
       });
   }
 
-  function handleRegister(user) {
+  function handleRegister(email, first_name, last_name, middle_name, password1, password2) {
     setIsLoadingRequest(true);
-    api.register({ user })
+    api.register({ email: email, first_name: first_name, last_name: last_name, middle_name: middle_name, password1: password1, password2: password2 })
       .then((res) => {
         console.log(res);
         closePopup();

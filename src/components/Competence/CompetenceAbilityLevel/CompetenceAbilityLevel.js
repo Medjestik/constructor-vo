@@ -41,7 +41,6 @@ function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdi
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           <button className='icon icon_margin_left-8 icon_size_20 icon_type_link-grey' type='button'onClick={onConnect}></button>
-          <button className='icon icon_margin_left-8 icon_size_20 icon_type_shuffle-grey' type='button'></button>
         </div>
       </div>
       {
@@ -54,7 +53,6 @@ function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdi
               <li className={`levels__item levels__item_type_open ${openAbility.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
                   <span className='badge badge_size_small badge_type_ability'>Умение {openProcess.code}.{i + 1}</span>
-                  <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Знаний: {item.knowledges.length}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_link-grey' type='button' onClick={(e) => handleDisconnect(e, item)}></button>
@@ -62,12 +60,8 @@ function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdi
                   </div>
                 </div>
                 <p className='levels__item-title'>{item.name}</p>
-                <ul className='levels__children-list'>
-                  {
-                    item.knowledges.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                    ))
-                  }
+                <ul className='badge__list'>
+                  <span className='badge badge_size_small badge_type_knowledge badge_margin_top_12 badge_margin_right_8'>Зн. {item.knowledges.length}</span>
                 </ul>
               </li>
             ))

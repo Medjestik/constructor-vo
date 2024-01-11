@@ -23,13 +23,7 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
 
   function handleSubmit(e) {
     e.preventDefault();
-    onRegister({ 
-      lastname: lastName,
-      firstname: firstName,
-      fathername: fatherName,
-      email: mail,
-      password: newPassword,
-    })
+    onRegister(mail, firstName, lastName, fatherName, newPassword,newPassword,);
   }
 
   function handleChangeFirstName(e) {
@@ -68,13 +62,35 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
     }
   }
 
-  function changeNewPassword(e) {
-    setNewPassword(e.target.value);
-    if (e.target.checkValidity()) {
+  const checkPassword = (value) => {
+    // Проверка длины пароля
+    const isLengthValid = value.length >= 8;
+
+    // Проверка наличия строчных букв
+    const hasLowerCase = /[a-z]/.test(value);
+
+    // Проверка наличия прописных букв
+    const hasUpperCase = /[A-Z]/.test(value);
+
+    // Проверка наличия цифр
+    const hasDigit = /\d/.test(value);
+
+    // Проверка наличия знаков препинания
+    //const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value);
+
+    // Общая валидация пароля
+    const isValidPassword = isLengthValid && hasLowerCase && hasUpperCase && hasDigit;
+
+    if (isValidPassword) {
       setNewPasswordError({ text: '', isShow: false });
     } else {
-      setNewPasswordError({ text: 'Пароль должен содержать более 6 символов', isShow: true });
+      setNewPasswordError({ text: 'Пароль не соответствует правилам безопасности', isShow: true });
     }
+  };
+
+  function changeNewPassword(e) {
+    setNewPassword(e.target.value);
+    checkPassword(e.target.value);
   }
 
   React.useEffect(() => {
@@ -209,7 +225,7 @@ function RegisterPopup({ isOpen, onClose, onRegister, isShowRequestError, isLoad
           onChange={changeNewPassword}
           name='register-password'
           placeholder='Введите ваш пароль'
-          minLength='6'
+          minLength='8'
           autoComplete='new-password'
           required 
           />

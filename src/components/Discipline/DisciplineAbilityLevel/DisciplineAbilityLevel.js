@@ -63,19 +63,11 @@ function DisciplineAbilityLevel({ data, disciplineList, abilityBase, isOpenDisci
                 <li className={`levels__item`} key={item.id}>
                   <div className='levels__item-header'>
                     <span className='badge badge_size_small badge_type_ability'>Умение</span>
-                    <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Зн. {item.knowledges.length}</span>
                     <div className='levels__item-header-btn-container'>
                       <button className='icon icon_size_16 icon_type_link-grey' type='button' onClick={(() => onDisconnect(item))}></button>
                     </div>
                   </div>
                   <p className='levels__item-title'>{item.name}</p>
-                  <ul className='levels__children-list'>
-                    {
-                      item.knowledges.map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                      ))
-                    }
-                  </ul>
                 </li>
               ))
             }
@@ -100,7 +92,6 @@ function DisciplineAbilityLevel({ data, disciplineList, abilityBase, isOpenDisci
                 <li className={`levels__item`} key={item.id}>
                   <div className='levels__item-header'>
                     <span className='badge badge_size_small badge_type_ability'>Умение</span>
-                    <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Зн. {item.knowledges.length}</span>
                     <div className='levels__item-header-btn-container'>
                       {/*<button className='icon icon_size_16 icon_type_unlock-grey' type='button'></button>*/}
                     </div>

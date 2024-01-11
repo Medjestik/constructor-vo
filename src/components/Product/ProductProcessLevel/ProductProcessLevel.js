@@ -32,7 +32,6 @@ function ProductProcessLevel({ data, openProduct, openStage, onAdd, onEdit, onRe
         <h3 className='levels__header-title'>Процессы</h3>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
-          <button className='icon icon_margin_left-8 icon_size_20 icon_type_shuffle-grey' type='button' onClick={onChangeOrder}></button>
         </div>
       </div>
       {

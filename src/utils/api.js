@@ -44,14 +44,14 @@ export const getUser = ({ token }) => {
   .then(res => handleResponse(res))
 };
 
-export const register = ({ user }) => {
+export const register = ({ email, first_name, last_name, middle_name, password1, password2 }) => {
   return fetch(`${API_URL}/auth/registration/`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ user })
+    body: JSON.stringify({ email, first_name, last_name, middle_name, password1, password2 })
   })
   .then(res => handleResponse(res));
 };

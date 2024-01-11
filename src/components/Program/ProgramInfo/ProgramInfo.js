@@ -193,6 +193,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
             <button className='section__header-btn' type='button' onClick={openAddParticipantPopup}>Добавить участника</button>
           </div>
           <ProgramParticipant
+            programInfo={programInfo}
             participants={participants}
             onEdit={openEditParticipantPopup}
             onRemove={openRemoveParticipantPopup}

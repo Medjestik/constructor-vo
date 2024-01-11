@@ -32,7 +32,7 @@ function ProductStageLevel({ data, openProduct, openStage, onAdd, onOpen, onEdit
         <h3 className='levels__header-title'>Этапы ЖЦ</h3>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
-          <button className='icon icon_margin_left-8 icon_size_20 icon_type_shuffle-grey' type='button'></button>
+
         </div>
       </div>
       {
@@ -44,7 +44,6 @@ function ProductStageLevel({ data, openProduct, openStage, onAdd, onOpen, onEdit
               <li className={`levels__item levels__item_type_open ${openStage.id === item.id && 'levels__item_type_active'}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
                   <span className='badge badge_size_small badge_type_stage'>Этап {openProduct.code}.{i + 1}</span>
-                  <span className='badge badge_size_small badge_type_process badge_margin_left_12'>Процессы: {item.processes.length}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditStage(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_remove-grey' type='button' onClick={(e) => handleRemoveStage(e, item)}></button>

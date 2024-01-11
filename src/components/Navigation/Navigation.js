@@ -25,7 +25,7 @@ function Navigation({ title, isPerformFunction, onBack, onLogout }) {
       
       <ul className='navigation__list'>
         <li className='navigation__item'>
-          <NavLink className={({ isActive }) => 'navigation__item-container ' + (isActive ? 'navigation__item-container_type_active' : '')} to='/person'>
+          <NavLink className={({ isActive }) => 'navigation__item-container ' + (isActive ? 'navigation__item-container_type_active' : '')} to='/page/person'>
             <div className='navigation__btn navigation__btn_type_home'></div>
           </NavLink>
         </li>

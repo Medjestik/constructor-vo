@@ -47,49 +47,15 @@ function DisciplineLevel({ data, openDiscipline, onOpen, onClose, onAdd, onEdit,
               <li className={`levels__item levels__item_type_open ${openDiscipline.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item))}>
                 <div className='levels__item-header'>
                   <span className='badge badge_size_small badge_type_discipline'>Дисциплина</span>
-                  <span className='badge badge_size_small badge_type_ability badge_margin_left_12'>Ум. {item.abilities.length}</span>
-                  <span className='badge badge_size_small badge_type_knowledge badge_margin_left_12'>Зн. {item.knowledges.length}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_size_16 icon_type_remove-grey icon_margin_left-8' type='button' onClick={(e) => handleRemove(e, item)}></button>
                   </div>
                 </div>
                 <p className='levels__item-title'>{item.name}</p>
-                <ul className='levels__children-list'>
-                  {
-                    item.abilities.length > 15 
-                    ?
-                    <>
-                    {
-                      item.abilities.slice(0, 15).map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_ability'></li>
-                      ))
-                    }
-                    <li className='levels__children-item-count'>... и еще {item.abilities.length.length - 15}</li>
-                    </>
-                    :
-                    item.abilities.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_ability'></li>
-                    ))
-                  }
-                </ul>
-                <ul className='levels__children-list'>
-                  {
-                    item.knowledges.length > 15 
-                    ?
-                    <>
-                    {
-                      item.knowledges.slice(0, 15).map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                      ))
-                    }
-                    <li className='levels__children-item-count'>... и еще {item.knowledges.length - 15}</li>
-                    </>
-                    :
-                    item.knowledges.map((elem) => (
-                      <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                    ))
-                  }
+                <ul className='badge__list'>
+                  <span className='badge badge_size_small badge_type_ability badge_margin_top_12 badge_margin_right_8'>Ум. {item.abilities.length}</span>
+                  <span className='badge badge_size_small badge_type_knowledge badge_margin_top_12 badge_margin_right_8'>Зн. {item.knowledges.length}</span>
                 </ul>
               </li>
             ))
