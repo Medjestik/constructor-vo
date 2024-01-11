@@ -130,7 +130,7 @@ function ProgramInfo({ currentProgram, isEditRights }) {
   }
 
   React.useEffect(() => {
-    let participantsId = participants.map((item) => item.id);
+    let participantsId = participants.map((item) => item.user.id);
     setUniqueUser(users.filter((item) => participantsId.indexOf(item.id) === -1));
   // eslint-disable-next-line
   }, [participants]);
