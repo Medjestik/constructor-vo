@@ -1,16 +1,16 @@
 import React from 'react';
 
-function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, openProcess, onAdd, onOpen, onEdit, onRemove, onChangeOrder }) {
+function ProductResultLevel({ data, isOpenResults, onAdd, onEdit, onRemove }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
 
-  function handleEditProcess(event, item) {
+  function handleEdit(event, item) {
     event.stopPropagation();
     onEdit(item);
   }
 
-  function handleRemoveStage(event, item) {
+  function handleRemove(event, item) {
     event.stopPropagation();
     onRemove(item);
   }
@@ -29,11 +29,11 @@ function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, op
   return (
     <>
     {
-      isOpenProcesses 
+      isOpenResults
       ?
       <div className='levels__container'>
         <div className='levels__header'>
-          <h3 className='levels__header-title'>Процессы</h3>
+          <h3 className='levels__header-title'>Результаты</h3>
           <div className='levels__header-btn-container'>
             <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           </div>
@@ -44,27 +44,15 @@ function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, op
           <ul ref={containerHeightRef} style={Object.assign({}, listStyle)} className='levels__list scroll-inside'>
             {
               data.map((item, i) => (
-                <li 
-                className={`levels__item levels__item_type_open ${openProcess.id === item.id && 'levels__item_type_active'}`}
-                key={item.id}
-                onClick={(() => onOpen(item, i + 1))}
-                >
+                <li className='levels__item' key={item.id}>
                   <div className='levels__item-header'>
-                    <span className='badge badge_size_small badge_type_process'>Процесс {openProduct.code}.{openStage.code}.{i + 1}</span>
+                    <span className='badge badge_size_small badge_type_knowledge'>Результат {i + 1}</span>
                     <div className='levels__item-header-btn-container'>
-                      <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditProcess(e, item)}></button>
-                      <button className='icon icon_margin_left-8 icon_size_16 icon_type_remove-grey' type='button' onClick={(e) => handleRemoveStage(e, item)}></button>
+                      <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
+                      <button className='icon icon_margin_left-8 icon_size_16 icon_type_remove-grey' type='button' onClick={(e) => handleRemove(e, item)}></button>
                     </div>
                   </div>
                   <p className='levels__item-title'>{item.name}</p>
-                  <div className='levels__item-row '></div>
-                  <ul className='levels__children-list'>
-                    {
-                      item.results.map((elem) => (
-                        <li key={`children-${elem.id}`} className='levels__children-item levels__children-item_type_knowledge'></li>
-                      ))
-                    }
-                  </ul>
                 </li>
               ))
             }
@@ -72,19 +60,17 @@ function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, op
           :
           <button className='badge badge_margin_top_20 badge_type_white badge-btn badge-btn_type_add' type='button' onClick={onAdd}>Добавить</button>
         }
-
       </div>
       :
       <div className='levels__container'>
         <div className='levels__header'>
-          <h3 className='levels__header-title'>Процессы</h3>
+          <h3 className='levels__header-title'>Результаты</h3>
         </div>
-        <p className='levels__item-empty'>Выберите этап..</p>
+        <p className='levels__item-empty'>Выберите процесс..</p>
       </div>
     }
     </>
-
   )
 }
 
-export default ProductProcessLevel;
+export default ProductResultLevel;

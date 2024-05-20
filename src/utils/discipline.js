@@ -8,8 +8,8 @@ function handleResponse (res) {
     }
 }
 
-export const getDiscipline = ({ token, programId }) => {
-  return fetch(`${API_URL}/programs/${programId}/disciplines/`, {
+export const getSemesters = ({ token, programId }) => { 
+  return fetch(`${API_URL}/programs/${programId}/semesters?short=true/`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -20,7 +20,31 @@ export const getDiscipline = ({ token, programId }) => {
   .then(res => handleResponse(res))
 };
 
-export const addDiscipline = ({ token, programId, discipline }) => {
+export const getDisciplines = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/disciplines?short=true`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getStages = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/stages`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createDiscipline = ({ token, programId, discipline }) => {
   return fetch(`${API_URL}/programs/${programId}/disciplines/`, {
     method: 'POST',
     headers: {
@@ -42,6 +66,56 @@ export const editDiscipline = ({ token, programId, discipline }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ discipline })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const constructDiscipline = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/unassociated_processes/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
+  })
+  .then(res => handleResponse(res))
+};
+
+export const attachDiscipline = ({ token, programId, source_id, destination_id }) => {
+  return fetch(`${API_URL}/programs/${programId}/combine_disciplines/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ source_id, destination_id })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addSemester = ({ token, semesterId, disciplineId }) => {
+  return fetch(`${API_URL}/semesters/${semesterId}/attach_discipline/${disciplineId}/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeSemester = ({ token, semesterId, disciplineId }) => {
+  return fetch(`${API_URL}/semesters/${semesterId}/detach_discipline/${disciplineId}/`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
   })
   .then(res => handleResponse(res))
 };

@@ -4,6 +4,7 @@
   padding: 0px;
   list-style-type: none;
   display: flex;
+  flex-direction: column;
   flex-grow: 2;
 }
 .level__tab {
@@ -130,11 +131,13 @@
 }
 .levels__item-header-btn-container {
   margin: 0px 0px 0px auto;
-  display: none;
+  display: flex;
   align-items: center;
 }
-.levels__item:hover .levels__item-header-btn-container {
+.levels__item-row {
+  margin: 8px 0px 0px 0px;
   display: flex;
+  align-items: center;
 }
 .levels__children-list {
   width: 100%;
@@ -188,4 +191,80 @@
   font-size: 14px;
   line-height: 18px;
   color: var(--accent-grey-color);
+}
+
+.levels-carousel__container {
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+}
+.levels-carousel {
+  margin: 0px;
+  display: flex;
+  flex-grow: 2;
+  padding: 0px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.levels-carousel__item {
+  margin: 0px;
+  width: calc(100% / 2 - 16px);
+  padding: 0px 8px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  align-items: center;
+  justify-content: center;
+}
+.levels-carousel__control {
+  margin: 0px 0px 12px 0px;
+  width: 100%;
+  padding: 0px 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.levels-carousel__button {
+  margin: 0px 12px 0px 0px;
+  padding: 6px 14px;
+  box-sizing: border-box;
+  cursor: pointer;
+  background-color: var(--accent-blue-color);
+  color: var(--main-white-color);
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  border-radius: var(--border-radius);
+  transition: all .3s ease-in-out;
+}
+.levels-carousel__button:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+.levels-carousel__button_type_active {
+  background-color: var(--main-grey-color);
+  color: var(--main-black-color);
+  pointer-events: none;
+  user-select: none;
+}
+.levels-carousel__button_type_active:hover {
+  cursor: default;
+  opacity: 1;
+}
+.levels__breadcrumb {
+  margin: 4px 0px 8px 0px;
+  padding: 0px 8px;
+  width: 100%;
+  min-height: 18px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
 }

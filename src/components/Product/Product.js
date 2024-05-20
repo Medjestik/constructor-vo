@@ -8,6 +8,7 @@ import Levels from '../Levels/Levels.js';
 import ProductLevel from './ProductLevel/ProductLevel.js';
 import ProductStageLevel from './ProductStageLevel/ProductStageLevel.js';
 import ProductProcessLevel from './ProductProcessLevel/ProductProcessLevel.js';
+import ProductResultLevel from './ProductResultLevel .js';
 import AddProductPopup from './ProductPopup/AddProductPopup/AddProductPopup.js';
 import EditProductPopup from './ProductPopup/EditProductPopup/EditProductPopup.js';
 import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
@@ -16,6 +17,8 @@ import EditStagePopup from './ProductPopup/EditStagePopup/EditStagePopup.js'
 import AddProcessPopup from './ProductPopup/AddProcessPopup/AddProcessPopup.js';
 import EditProcessPopup from './ProductPopup/EditProcessPopup/EditProcessPopup.js';
 import ChangeOrderPopup from '../Popup/ChangeOrderPopup/ChangeOrderPopup.js';
+import AddResultPopup from './ProductPopup/AddResultPopup/AddResultPopup.js';
+import EditResultPopup from './ProductPopup/EditResultPopup/EditResultPopup.js';
 
 function Product({ currentProgram, isEditRights }) {
 
@@ -24,16 +27,26 @@ function Product({ currentProgram, isEditRights }) {
   const [products, setProducts] = React.useState([]);
   const [stages, setStages] = React.useState([]);
   const [processes, setProcesses] = React.useState([]);
+  const [results, setResults] = React.useState([]);
 
-  const [isShowStages, setIsShowStages] = React.useState(false);
+  const [isOpenStages, setIsOpenStages] = React.useState(false);
+  const [isOpenProcesses, setIsOpenProcesses] = React.useState(false);
+  const [isOpenResults, setIsOpenResults] = React.useState(false);
+
+  const [isShowStages, setIsShowStages] = React.useState(true);
   const [isShowProcesses, setIsShowProcesses] = React.useState(false);
+  const [isShowResults, setIsShowResults] = React.useState(false);
   
   const [currentProduct, setCurrentProduct] = React.useState({});
   const [currentStage, setCurrentStage] = React.useState({});
   const [currentProcess, setCurrentProcess] = React.useState({});
+  const [currentResult, setCurrentResult] = React.useState({});
 
   const [openProduct, setOpenProduct] = React.useState({});
   const [openStage, setOpenStage] = React.useState({});
+  const [openProcess, setOpenProcess] = React.useState({});
+
+  const [breadcrumb, setBreadcrumb] = React.useState('');
 
   const [isOpenAddProductPopup, setIsOpenAddProductPopup] = React.useState(false);
   const [isOpenEditProductPopup, setIsOpenEditProductPopup] = React.useState(false);
@@ -48,15 +61,47 @@ function Product({ currentProgram, isEditRights }) {
   const [isOpenRemoveProcessPopup, setIsOpenRemoveProcessPopup] = React.useState(false);
   const [isOpenChangeOrderProcessPopup, setIsOpenChangeOrderProcessPopup] = React.useState(false);
 
+  const [isOpenAddResultPopup, setIsOpenAddResultPopup] = React.useState(false);
+  const [isOpenEditResultPopup, setIsOpenEditResultPopup] = React.useState(false);
+  const [isOpenRemoveResultPopup, setIsOpenRemoveResultPopup] = React.useState(false);
+
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' });
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
+
+  const containerRef = React.useRef(null);
 
   function handleChooseOption(option) {
     console.log(option);
     //navigate('/program/' + currentProgram.id + '/discipline' + option.link);
   }
- 
+
+  function handleCarouselScroll(type, index) {
+    if (type === 'stages') {
+      setIsShowStages(true);
+      setIsShowProcesses(false);
+      setIsShowResults(false);
+    } else if (type === 'processes') {
+      setIsShowStages(false);
+      setIsShowProcesses(true);
+      setIsShowResults(false);
+    } else {
+      setIsShowStages(false);
+      setIsShowProcesses(false);
+      setIsShowResults(true);
+    }
+    
+    const container = containerRef.current;
+    const itemWidth = container.offsetWidth / 2;
+
+    if (container && itemWidth) {
+      container.scrollTo({
+        left: index * itemWidth,
+        behavior: 'smooth',
+      });
+    }
+  }
+
   function getProducts() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -281,22 +326,97 @@ function Product({ currentProgram, isEditRights }) {
   }
 
   function handleChangeOrderProcess(order) {
-    //setIsLoadingRequest(true);
-    //const token = localStorage.getItem('token');
-    /*
-    productApi.changeOrderProductProcess({ token, stageId: currentProductStage.id, processes: order })
-    .then((res) => {
-      //setProductProcess(res.data);
-      //setFilteredProductProcess(res.data);
-      //closeProductProcessPopup();
-    })
-    .catch((err) => {
-      console.log(err);
-      setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
-    })
-    .finally(() => {
-      setIsLoadingRequest(false);
-    });*/
+  }
+
+  function handleAddResult(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    productApi.addResult({ token: token, processId: openProcess.id, result: item })
+      .then((res) => {
+        console.log(res);
+        const findProduct = products.find((elem) => (elem.id === res.product));
+        const indexProduct = products.indexOf(products.find((elem) => (elem.id === res.product)));
+        const findStage = findProduct.stages.find((elem) => (elem.id === res.stage));
+        const indexStage = findProduct.stages.indexOf(findProduct.stages.find((elem) => (elem.id === res.stage)));
+        const findProcess = findStage.processes.find((elem) => (elem.id === res.process));
+        const indexProcess = findStage.processes.indexOf(findStage.processes.find((elem) => (elem.id === res.process)));
+        const newResults = [...findProcess.results, res];
+        const newProcesses = [...findStage.processes.slice(0, indexProcess), {...findProcess, results: newResults }, ...findStage.processes.slice(indexProcess + 1)];
+        const newStages = [...findProduct.stages.slice(0, indexStage), {...findStage, processes: newProcesses}, ...findProduct.stages.slice(indexStage + 1)];
+        setProducts([...products.slice(0, indexProduct), {...findProduct, stages: newStages}, ...products.slice(indexProduct + 1)]);
+        setStages(newStages);
+        setProcesses(newProcesses);
+        setResults(newResults);
+        closeProductPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleEditResult(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    productApi.editResult({ token: token, processId: openProcess.id, result: item })
+      .then((res) => {
+        console.log(res);
+        const findProduct = products.find((elem) => (elem.id === res.product));
+        const indexProduct = products.indexOf(products.find((elem) => (elem.id === res.product)));
+        const findStage = findProduct.stages.find((elem) => (elem.id === res.stage));
+        const indexStage = findProduct.stages.indexOf(findProduct.stages.find((elem) => (elem.id === res.stage)));
+        const findProcess = findStage.processes.find((elem) => (elem.id === res.process));
+        const indexProcess = findStage.processes.indexOf(findStage.processes.find((elem) => (elem.id === res.process)));
+        const indexResult = findProcess.results.indexOf(findProcess.results.find((elem) => (elem.id === res.id)));
+        const newResults = [...findProcess.results.slice(0, indexResult), res, ...findProcess.results.slice(indexResult + 1)];
+        const newProcesses = [...findStage.processes.slice(0, indexProcess), {...findProcess, results: newResults }, ...findStage.processes.slice(indexProcess + 1)];
+        const newStages = [...findProduct.stages.slice(0, indexStage), {...findStage, processes: newProcesses}, ...findProduct.stages.slice(indexStage + 1)];
+        setProducts([...products.slice(0, indexProduct), {...findProduct, stages: newStages}, ...products.slice(indexProduct + 1)]);
+        setStages(newStages);
+        setProcesses(newProcesses);
+        setResults(newResults);
+        closeProductPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleRemoveResult(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    productApi.removeResult({ token: token, processId: openProcess.id, result: item })
+      .then((res) => {
+        console.log(res);
+        const findProduct = products.find((elem) => (elem.id === item.product));
+        const indexProduct = products.indexOf(products.find((elem) => (elem.id === item.product)));
+        const findStage = findProduct.stages.find((elem) => (elem.id === item.stage));
+        const indexStage = findProduct.stages.indexOf(findProduct.stages.find((elem) => (elem.id === item.stage)));
+        const findProcess = findStage.processes.find((elem) => (elem.id === item.process));
+        const indexProcess = findStage.processes.indexOf(findStage.processes.find((elem) => (elem.id === item.process)));
+        const newResults = findProcess.results.filter((elem) => elem.id !== res.id);
+        const newProcesses = [...findStage.processes.slice(0, indexProcess), {...findProcess, results: newResults }, ...findStage.processes.slice(indexProcess + 1)];
+        const newStages = [...findProduct.stages.slice(0, indexStage), {...findStage, processes: newProcesses}, ...findProduct.stages.slice(indexStage + 1)];
+        setProducts([...products.slice(0, indexProduct), {...findProduct, stages: newStages}, ...products.slice(indexProduct + 1)]);
+        setStages(newStages);
+        setProcesses(newProcesses);
+        setResults(newResults);
+        closeProductPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
   }
 
   function openAddProductPopup() {
@@ -345,6 +465,20 @@ function Product({ currentProgram, isEditRights }) {
     //setIsOpenChangeOrderProcessPopup(true);
   }
 
+  function openAddResultPopup() {
+    setIsOpenAddResultPopup(true);
+  }
+
+  function openEditResultPopup(item) {
+    setCurrentResult(item);
+    setIsOpenEditResultPopup(true);
+  }
+
+  function openRemoveResultPopup(item) {
+    setCurrentResult(item);
+    setIsOpenRemoveResultPopup(true);
+  }
+
   function closeProductPopup() {
     setIsOpenAddProductPopup(false);
     setIsOpenEditProductPopup(false);
@@ -356,22 +490,46 @@ function Product({ currentProgram, isEditRights }) {
     setIsOpenEditProcessPopup(false);
     setIsOpenRemoveProcessPopup(false);
     setIsOpenChangeOrderProcessPopup(false);
+    setIsOpenAddResultPopup(false);
+    setIsOpenEditResultPopup(false);
+    setIsOpenRemoveResultPopup(false);
     setIsShowRequestError({ isShow: false, text: '' });
   }
 
   function handleOpenProduct(data, i) {
-    setIsShowStages(true);
-    setIsShowProcesses(false);
     setOpenProduct({...data, code: i});
     setStages(data.stages);
+    setIsOpenStages(true);
     setOpenStage({});
+    setOpenProcess({});
   }
 
   function handleOpenStage(data, i) {
-    setIsShowProcesses(true);
     setOpenStage({...data, code: i});
     setProcesses(data.processes);
+    handleCarouselScroll('processes', 1)
+    setIsOpenProcesses(true);
+    setOpenProcess({});
   }
+
+  function handleOpenProcess(data, i) {
+    setOpenProcess({...data, code: i});
+    setResults(data.results);
+    handleCarouselScroll('results', 2)
+    setIsOpenResults(true);
+  }
+
+  React.useEffect(() => {
+    if (openProduct.name && openStage.name && openProcess.name) {
+      setBreadcrumb(openProduct.name + ' / ' + openStage.name + ' / ' + openProcess.name);
+    } else if (openProduct.name && openStage.name) {
+      setBreadcrumb(openProduct.name + ' / ' + openStage.name);
+    } else if (openProduct.name) { 
+      setBreadcrumb(openProduct.name);
+    } else {
+      setBreadcrumb('');
+    }
+  }, [openProduct, openStage, openProcess]);
 
   React.useEffect(() => {
     getProducts();
@@ -379,14 +537,18 @@ function Product({ currentProgram, isEditRights }) {
       setProducts([]);
       setStages([]);
       setProcesses([]);
+      setResults([]);
       setCurrentProduct({});
       setCurrentStage({});
       setCurrentProcess({});
       setOpenProduct({});
       setOpenStage({});
+      setOpenProcess({});
     })
     // eslint-disable-next-line
   }, []);
+
+  console.log(openProduct);
 
   return (
     <>
@@ -398,52 +560,66 @@ function Product({ currentProgram, isEditRights }) {
         <Section 
         title={'Реконструкция деятельности'} 
         options={sectionOptions} 
-        onChooseOption={handleChooseOption} 
+        onChooseOption={handleChooseOption}
         heightType={'page'} 
         headerType={'large'}
         >
-          <Levels> 
-            <ProductLevel 
-              data={products} 
-              openProduct={openProduct} 
-              onAdd={openAddProductPopup} 
-              onOpen={handleOpenProduct} 
-              onEdit={openEditProductPopup} 
-              onRemove={openRemoveProductPopup} 
-            />
-            {
-              isShowStages 
-              ?
-              <ProductStageLevel 
-                data={stages} 
-                openProduct={openProduct}
-                openStage={openStage}
-                onAdd={openAddStagePopup} 
-                onOpen={handleOpenStage} 
-                onEdit={openEditStagePopup}
-                onRemove={openRemoveStagePopup}
-              />
-              :
-              <div className='level__tab'>
-                <h3 className='levels__tab-title'>Этапы</h3>
+          <Levels>
+            <div className='levels-carousel__control'>
+              <button className={`levels-carousel__button ${isShowStages ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('stages', 0)}>Этапы</button>
+              <button className={`levels-carousel__button ${isShowProcesses ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('processes', 1)}>Процессы</button>
+              <button className={`levels-carousel__button ${isShowResults ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('results', 2)}>Результаты</button>
+            </div>
+            <p className='levels__breadcrumb'>{breadcrumb}</p>
+            <div className='levels-carousel__container' >
+              <div className='levels-carousel' ref={containerRef}>
+                <div className='levels-carousel__item'>
+                  <ProductLevel 
+                    data={products} 
+                    openProduct={openProduct} 
+                    onAdd={openAddProductPopup} 
+                    onOpen={handleOpenProduct} 
+                    onEdit={openEditProductPopup} 
+                    onRemove={openRemoveProductPopup} 
+                  />
+                </div>
+                <div className='levels-carousel__item'> 
+                  <ProductStageLevel 
+                    data={stages} 
+                    isOpenStages={isOpenStages}
+                    openProduct={openProduct}
+                    openStage={openStage}
+                    onAdd={openAddStagePopup} 
+                    onOpen={handleOpenStage} 
+                    onEdit={openEditStagePopup}
+                    onRemove={openRemoveStagePopup}
+                  />
+                </div>
+                <div className='levels-carousel__item'>
+                  <ProductProcessLevel 
+                    data={processes} 
+                    isOpenProcesses={isOpenProcesses}
+                    openProduct={openProduct}
+                    openStage={openStage}
+                    openProcess={openProcess}
+                    onAdd={openAddProcessPopup} 
+                    onOpen={handleOpenProcess}
+                    onEdit={openEditProcessPopup}
+                    onRemove={openRemoveProcessPopup}
+                    onChangeOrder={openChangeOrderProcessPopup}
+                  />
+                </div>
+                <div className='levels-carousel__item'>
+                  <ProductResultLevel 
+                    data={results} 
+                    isOpenResults={isOpenResults}
+                    onAdd={openAddResultPopup} 
+                    onEdit={openEditResultPopup}
+                    onRemove={openRemoveResultPopup}
+                  />
+                </div>
               </div>
-            }
-            {
-              isShowProcesses ?
-              <ProductProcessLevel 
-                data={processes} 
-                openProduct={openProduct}
-                openStage={openStage}
-                onAdd={openAddProcessPopup} 
-                onEdit={openEditProcessPopup}
-                onRemove={openRemoveProcessPopup}
-                onChangeOrder={openChangeOrderProcessPopup}
-              />
-              :
-              <div className='level__tab'>
-                <h3 className='levels__tab-title'>Процессы</h3>
-              </div>
-            }
+            </div>
           </Levels>
         </Section>
       }
@@ -553,12 +729,41 @@ function Product({ currentProgram, isEditRights }) {
         isShowRequestError={isShowRequestError}
         isLoadingRequest={isLoadingRequest}
       />
-    }
+      }
+      {
+        isOpenAddResultPopup &&
+        <AddResultPopup
+          isOpen={isOpenAddResultPopup} 
+          onClose={closeProductPopup}
+          onAdd={handleAddResult}
+          isShowRequestError={isShowRequestError}
+          isLoadingRequest={isLoadingRequest}
+        />
+      }
+      {
+        isOpenEditResultPopup &&
+        <EditResultPopup
+          isOpen={isOpenEditResultPopup} 
+          onClose={closeProductPopup}
+          currentResult={currentResult}
+          onEdit={handleEditResult}
+          isShowRequestError={isShowRequestError}
+          isLoadingRequest={isLoadingRequest}
+        />
+      }
+      {
+        isOpenRemoveResultPopup &&
+        <ConfirmRemovePopup
+          isOpen={isOpenRemoveResultPopup}
+          onClose={closeProductPopup}
+          onConfirm={handleRemoveResult}
+          item={currentResult}
+          isShowRequestError={isShowRequestError}
+          isLoadingRequest={isLoadingRequest}
+        />
+      }
     </>
   )
 }
 
 export default Product; 
-
-
-

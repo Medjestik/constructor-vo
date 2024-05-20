@@ -95,11 +95,6 @@ function Program({ windowWidth, onLogout }) {
             }
           />
 
-          <Route exact path='/semester/*' element={
-              <Semester currentProgram={currentProgram} isEditRights={isEditRights} /> 
-            }
-          />
-
           <Route exact path='/export/*' element={
               <ProgramExport /> 
             }

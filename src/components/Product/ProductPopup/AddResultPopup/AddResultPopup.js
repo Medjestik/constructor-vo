@@ -1,16 +1,20 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function AddDisciplinePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequestError, isLoadingRequest }) {
+function AddResultPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
+
+  const [description, setDescription] = React.useState('');
+
+  const [base, setBase] = React.useState('');
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAdd({ name: name, process_id: currentProcess.id });
+    onAdd({ name: name, description: description, base: base });
   }
 
   function handleChangeName(e) {
@@ -20,6 +24,14 @@ function AddDisciplinePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequ
     } else {
       setNameError({ text: 'Поле не может быть пустым', isShow: true });
     }
+  }
+
+  function handleChangeDescription(e) {
+    setDescription(e.target.value);
+  }
+
+  function handleChangeBase(e) {
+    setBase(e.target.value);
   }
 
   React.useEffect(() => {
@@ -34,6 +46,8 @@ function AddDisciplinePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequ
   React.useEffect(() => {
     setName('');
     setNameError({ isShow: false, text: '' });
+    setDescription('');
+    setBase('');
   // eslint-disable-next-line
   }, [isOpen]);
 
@@ -42,28 +56,58 @@ function AddDisciplinePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequ
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'add-discipline-popup'}
+    formName={'add-result-popup'}
     >
-      <h2 className='popup__title'>Добавление дисциплины</h2>
+      <h2 className='popup__title'>Добавление результата</h2>
 
-      <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование дисциплины:</h4>
-        <textarea 
-          className='popup__textarea scroll'
-          name='add-discipline-name'
-          id='add-discipline-name'
-          placeholder='Введите наименование..'            
+      <div className='popup__field'>
+        <h4 className='popup__input-caption'>Наименование:</h4>
+        <div className='popup__input-field'>
+          <input 
+          className='popup__input'
+          type='text'
+          id='add-result-name'
           value={name}
           onChange={handleChangeName}
+          name='add-result-name' 
+          placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
           required 
-        >
-        </textarea>
+          />
+        </div>
         <span className={`popup__input-error ${nameError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {nameError.text}
         </span>
-      </label>
+      </div>
+
+      <div className='popup__field'>
+        <h4 className='popup__input-caption'>Описание:</h4>
+        <textarea 
+          className='popup__textarea scroll'
+          name='add-result-description'
+          id='add-result-description'
+          placeholder='Введите описание..'            
+          value={description}
+          onChange={handleChangeDescription}
+          required
+        >
+        </textarea>
+      </div>
+
+      <div className='popup__field'>
+        <h4 className='popup__input-caption'>Обоснование:</h4>
+        <textarea 
+          className='popup__textarea scroll'
+          name='add-result-base'
+          id='add-result-base'
+          placeholder='Введите обоснование..'            
+          value={base}
+          onChange={handleChangeBase}
+          required
+        >
+        </textarea>
+      </div>
 
       <div className='popup__btn-container'>
         <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
@@ -79,4 +123,4 @@ function AddDisciplinePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequ
   )
 }
 
-export default AddDisciplinePopup; 
+export default AddResultPopup; 

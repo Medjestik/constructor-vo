@@ -1,17 +1,20 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
-import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
 
-function EditDisciplinePopup({ isOpen, onClose, currentDiscipline, semesters, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditResultPopup({ isOpen, onClose, currentResult, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
+
+  const [description, setDescription] = React.useState('');
+
+  const [base, setBase] = React.useState('');
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onEdit({ ...currentDiscipline, name: name, });
+    onEdit({ ...currentResult, name: name, description: description, base: base });
   }
 
   function handleChangeName(e) {
@@ -21,6 +24,14 @@ function EditDisciplinePopup({ isOpen, onClose, currentDiscipline, semesters, on
     } else {
       setNameError({ text: 'Поле не может быть пустым', isShow: true });
     }
+  }
+
+  function handleChangeDescription(e) {
+    setDescription(e.target.value);
+  }
+
+  function handleChangeBase(e) {
+    setBase(e.target.value);
   }
 
   React.useEffect(() => {
@@ -33,8 +44,10 @@ function EditDisciplinePopup({ isOpen, onClose, currentDiscipline, semesters, on
   }, [name]);
 
   React.useEffect(() => {
-    setName(currentDiscipline.name);
+    setName(currentResult.name);
     setNameError({ isShow: false, text: '' });
+    setDescription(currentResult.description);
+    setBase(currentResult.base);
   // eslint-disable-next-line
   }, [isOpen]);
 
@@ -43,27 +56,57 @@ function EditDisciplinePopup({ isOpen, onClose, currentDiscipline, semesters, on
     isOpen={isOpen}
     onSubmit={handleSubmit}
     formWidth={'medium'}
-    formName={'edit-discipline-popup'}
+    formName={'edit-result-popup'}
     >
-      <h2 className='popup__title'>Редактирование дисциплины</h2>
+      <h2 className='popup__title'>Редактирование результата</h2>
 
       <div className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование дисциплины:</h4>
-        <textarea 
-          className='popup__textarea scroll'
-          name='edit-discipline-name'
-          id='edit-discipline-name'
-          placeholder='Введите наименование..'            
+        <h4 className='popup__input-caption'>Наименование:</h4>
+        <div className='popup__input-field'>
+          <input 
+          className='popup__input'
+          type='text'
+          id='edit-result-name'
           value={name}
           onChange={handleChangeName}
+          name='edit-result-name' 
+          placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
           required 
-        >
-        </textarea>
+          />
+        </div>
         <span className={`popup__input-error ${nameError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {nameError.text}
         </span>
+      </div>
+
+      <div className='popup__field'>
+        <h4 className='popup__input-caption'>Описание:</h4>
+        <textarea 
+          className='popup__textarea scroll'
+          name='edit-result-description'
+          id='edit-result-description'
+          placeholder='Введите описание..'            
+          value={description}
+          onChange={handleChangeDescription}
+          required
+        >
+        </textarea>
+      </div>
+
+      <div className='popup__field'>
+        <h4 className='popup__input-caption'>Обоснование:</h4>
+        <textarea 
+          className='popup__textarea scroll'
+          name='edit-result-base'
+          id='edit-result-base'
+          placeholder='Введите обоснование..'            
+          value={base}
+          onChange={handleChangeBase}
+          required
+        >
+        </textarea>
       </div>
 
       <div className='popup__btn-container'>
@@ -80,4 +123,4 @@ function EditDisciplinePopup({ isOpen, onClose, currentDiscipline, semesters, on
   )
 }
 
-export default EditDisciplinePopup; 
+export default EditResultPopup; 

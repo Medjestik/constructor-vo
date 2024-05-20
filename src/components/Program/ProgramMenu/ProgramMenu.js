@@ -31,7 +31,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Создание продуктов, этапов жизненного цикла и&nbsp;процессов</p>
 				</div>
 			</li>
-			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('competence')}>
+			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_competence'></div>
 				</div>
@@ -58,7 +58,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Формирование дисциплин из&nbsp;набора умений и&nbsp;знаний</p>
 				</div>
 			</li>
-			<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('semester/level')}>
+			<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_semester'></div>
 				</div>
@@ -76,7 +76,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Экспорт шаблона рабочей программы дисциплины</p>
 				</div>
 			</li>
-      <li id='program-dashboard' className={`program-menu__item ${path.pathname.includes('dashboard') && 'program-menu__item_type_active'} `} onClick={() => handleChangeSection('dashboard')}>
+      <li id='program-dashboard' className={`program-menu__item ${path.pathname.includes('dashboard') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_dashboard'></div>
 				</div>

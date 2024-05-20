@@ -198,4 +198,40 @@ export const changeOrderProductProcess = ({ token, stageId, processes }) => {
   .then(res => handleResponse(res))
 };
 
+export const addResult = ({ token, processId, result }) => {
+  return fetch(`${API_URL}/processes/${processId}/results/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ result })
+  })
+  .then(res => handleResponse(res))
+};
 
+export const editResult = ({ token, processId, result }) => {
+  return fetch(`${API_URL}/processes/${processId}/results/${result.id}/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ result })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeResult = ({ token, processId, result }) => {
+  return fetch(`${API_URL}/processes/${processId}/results/${result.id}/`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
