@@ -41,4 +41,3 @@ function ViewResultsPopup({ isOpen, onClose, currentProcess }) {
 }
 
 export default ViewResultsPopup;
- 

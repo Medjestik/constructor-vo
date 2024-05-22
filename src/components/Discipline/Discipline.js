@@ -129,7 +129,6 @@ function Discipline({ currentProgram, isEditRights }) {
       .finally(() => {
         setIsLoadingPage(false);
       });
-      setIsLoadingPage(false);
   }
 
   function handleChooseOption(option) {

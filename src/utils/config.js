@@ -1,6 +1,6 @@
-export const API_URL = process.env.REACT_APP_API_URL;
+//export const API_URL = process.env.REACT_APP_API_URL;
 
-//export const API_URL = 'https://vpo-api.emiit.ru/api/v1';
+export const API_URL = 'https://vpo-api.emiit.ru/api/v1';
 
 export const PROGRAM_INFO_SECTION_OPTIONS = [
 
