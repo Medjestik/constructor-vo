@@ -1,6 +1,7 @@
 import React from 'react';
 import './Product.css';
 import * as productApi from '../../utils/product.js';
+import * as programApi from '../../utils/program.js';
 import { PRODUCT_SECTION_OPTIONS } from '../../utils/config.js';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
@@ -19,8 +20,9 @@ import EditProcessPopup from './ProductPopup/EditProcessPopup/EditProcessPopup.j
 import ChangeOrderPopup from '../Popup/ChangeOrderPopup/ChangeOrderPopup.js';
 import AddResultPopup from './ProductPopup/AddResultPopup/AddResultPopup.js';
 import EditResultPopup from './ProductPopup/EditResultPopup/EditResultPopup.js';
+import NsiPopup from '../Popup/NsiPopup/NsiPopup.js';
 
-function Product({ currentProgram, isEditRights }) {
+function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
 
   const [sectionOptions, setSectionOptions] = React.useState(PRODUCT_SECTION_OPTIONS);
 
@@ -28,6 +30,8 @@ function Product({ currentProgram, isEditRights }) {
   const [stages, setStages] = React.useState([]);
   const [processes, setProcesses] = React.useState([]);
   const [results, setResults] = React.useState([]);
+
+  const [nsi, setNsi] = React.useState([]);
 
   const [isOpenStages, setIsOpenStages] = React.useState(false);
   const [isOpenProcesses, setIsOpenProcesses] = React.useState(false);
@@ -69,6 +73,8 @@ function Product({ currentProgram, isEditRights }) {
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
+  const [isOpenNsiPopup, setIsOpenNsiPopup] = React.useState(false);
+
   const containerRef = React.useRef(null);
 
   function handleChooseOption(option) {
@@ -108,10 +114,13 @@ function Product({ currentProgram, isEditRights }) {
       setIsLoadingPage(true);
       Promise.all([
         productApi.getProductsData({ token: token, programId: currentProgram.id }),
+        programApi.getNsi({ token: token, programId: currentProgram.id }),
       ])
-        .then(([product]) => {
+        .then(([product, nsi]) => {
           console.log('Products:', product);
+          console.log('Nsi:', nsi);
           setProducts(product);
+          setNsi(nsi);
         })
         .catch((err) => {
           console.log(err);
@@ -120,6 +129,23 @@ function Product({ currentProgram, isEditRights }) {
           setIsLoadingPage(false);
         });
     }
+  }
+
+  function handleAddNsi(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    programApi.addNsi({ token: token, programId: currentProgram.id, nsi: item })
+      .then((res) => {
+        setNsi([...nsi, res]);
+        closeNsiPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
   }
   
   function handleAddProduct(item) {
@@ -479,6 +505,14 @@ function Product({ currentProgram, isEditRights }) {
     setIsOpenRemoveResultPopup(true);
   }
 
+  function openNsiPopup() {
+    setIsOpenNsiPopup(true);
+  }
+
+  function closeNsiPopup() {
+    setIsOpenNsiPopup(false);
+  }
+
   function closeProductPopup() {
     setIsOpenAddProductPopup(false);
     setIsOpenEditProductPopup(false);
@@ -547,8 +581,6 @@ function Product({ currentProgram, isEditRights }) {
     })
     // eslint-disable-next-line
   }, []);
-
-  console.log(openProduct);
 
   return (
     <>
@@ -629,6 +661,8 @@ function Product({ currentProgram, isEditRights }) {
           isOpen={isOpenAddProductPopup} 
           onClose={closeProductPopup}
           onAdd={handleAddProduct}
+          nsi={nsi}
+          onOpenNsi={openNsiPopup}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -760,6 +794,17 @@ function Product({ currentProgram, isEditRights }) {
           item={currentResult}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
+        />
+      }
+      {
+        isOpenNsiPopup &&
+        <NsiPopup
+          isOpen={isOpenNsiPopup} 
+          onClose={closeNsiPopup} 
+          nsiTypes={nsiTypes}
+          ministries={ministries} 
+          onAdd={handleAddNsi} 
+          isLoading={false}
         />
       }
     </>

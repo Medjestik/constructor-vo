@@ -459,7 +459,8 @@
   min-height: 80px;
 }
 .popup__textarea_height_small {
-  max-height: 160px;
+  max-height: 80px;
+  min-height: 80px;
 }
 .popup__textarea_height_medium {
   max-height: 300px;

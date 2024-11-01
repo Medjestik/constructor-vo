@@ -13,7 +13,6 @@ import Product from '../Product/Product.js';
 import Competence from '../Competence/Competence.js';
 import Assessment from '../Assessment/Assessment.js';
 import Discipline from '../Discipline/Discipline.js';
-import Semester from '../Semester/Semester.js';
 
 function Program({ windowWidth, onLogout }) {
 
@@ -22,6 +21,8 @@ function Program({ windowWidth, onLogout }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [currentProgram, setCurrentProgram] = React.useState({});
+  const [nsiTypes, setNsiTypes] = React.useState([]);
+  const [ministries, setMinistries] = React.useState([]);
   const [isEditRights, setIsEditRights] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
@@ -32,11 +33,19 @@ function Program({ windowWidth, onLogout }) {
   function getProgram() {
     const token = localStorage.getItem('token');
     setIsLoadingPage(true);
-    programApi.getProgramItem({ token, id: params.programId })
-    .then((res) => {
-      console.log(res, 'Program');
-      setCurrentProgram(res);
-      setIsEditRights(currentUser.id === res.authorId ? true : false);
+    Promise.all([
+      programApi.getProgramItem({ token, id: params.programId }),
+      programApi.getNsiTypes({ token, }),
+      programApi.getMinistries({ token, }),
+    ])
+    .then(([programData, nsiTypes, ministries]) => {
+      console.log(programData, 'Program');
+      console.log(nsiTypes, 'nsi');
+      console.log(ministries, 'ministries');
+      setCurrentProgram(programData);
+      setNsiTypes(nsiTypes);
+      setMinistries(ministries);
+      setIsEditRights(currentUser.id === programData.authorId ? true : false);
     })
     .catch((err) => {
       console.log(err);
@@ -76,7 +85,7 @@ function Program({ windowWidth, onLogout }) {
           />
 
           <Route exact path='/product/*' element={
-              <Product currentProgram={currentProgram} isEditRights={isEditRights} />
+              <Product currentProgram={currentProgram} nsiTypes={nsiTypes} ministries={ministries} isEditRights={isEditRights} />
             }
           />
 

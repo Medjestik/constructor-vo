@@ -1,7 +1,8 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
+import Nsi from '../../../Nsi/Nsi.js';
 
-function AddProductPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddProductPopup({ isOpen, onClose, onAdd, nsi, onOpenNsi, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -41,31 +42,33 @@ function AddProductPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoading
     <Popup
     isOpen={isOpen}
     onSubmit={handleSubmit}
-    formWidth={'medium'}
+    formWidth={'large'}
     formName={'add-product-popup'}
     >
       <h2 className='popup__title'>Добавление нового продукта</h2>
 
-      <label className='popup__field'>
+      <div className='popup__field'>
         <h4 className='popup__input-caption'>Наименование продукта:</h4>
-        <div className='popup__input-field'>
-          <input 
-          className='popup__input'
-          type='text'
+        <textarea 
+          className='popup__textarea popup__textarea_height_small scroll'
+          name='add-program-product' 
           id='add-program-product'
+          placeholder='Введите наименование...'          
           value={name}
           onChange={handleChangeName}
-          name='add-program-product' 
-          placeholder='Введите наименование...'
           autoComplete='off'
           minLength={1}
           required 
-          />
-        </div>
+        >
+        </textarea>
         <span className={`popup__input-error ${nameError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {nameError.text}
         </span>
-      </label>
+      </div>
+
+      <div className='popup__field'>
+        <Nsi nsi={nsi} onOpenNsi={onOpenNsi} />
+      </div>
 
       <div className='popup__btn-container'>
         <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>
@@ -81,4 +84,4 @@ function AddProductPopup({ isOpen, onClose, onAdd, isShowRequestError, isLoading
   )
 }
 
-export default AddProductPopup; 
+export default AddProductPopup;

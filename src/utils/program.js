@@ -157,3 +157,52 @@ export const removeParticipant = ({ token, programId, participant }) => {
   })
   .then(res => handleResponse(res))
 };
+
+export const getNsiTypes = ({ token }) => {
+  return fetch(`${API_URL}/nsi_types`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getMinistries = ({ token }) => {
+  return fetch(`${API_URL}/ministries`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getNsi = ({ token, programId, }) => {
+  return fetch(`${API_URL}/programs/${programId}/nsis/`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addNsi = ({ token, programId, nsi }) => {
+  return fetch(`${API_URL}/programs/${programId}/nsis/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nsi })
+  })
+  .then(res => handleResponse(res))
+};
