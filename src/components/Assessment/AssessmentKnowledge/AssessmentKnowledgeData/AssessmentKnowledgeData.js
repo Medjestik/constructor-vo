@@ -4,6 +4,9 @@ import * as assessmentApi from '../../../../utils/assessmentApi.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import { useParams, useNavigate } from 'react-router-dom';
 import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
+import ButtonIcon from '../../../Button/ButtonIcon/ButtonIcon.js';
+import AssessmentKnowledgeNavigation from '../AssessmentKnowledgeNavigation/AssessmentKnowledgeNavigation.js';
+import CreateNewQuestionPopup from '../AssessmentKnowledgePopup/CreateNewQuestionPopup.js';
 
 function AssessmentKnowledgeData({ knowledge, currentProgram }) {
 
@@ -13,15 +16,18 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
 
   const [currentKnowledge, setCurrentKnowledge] = React.useState(knowledge.find((elem) => elem.id === knowledgeId));
 
-  const [questionTypes, setQuestionTypes] = React.useState([]);
   const [questions, setQuestions] = React.useState([]);
-  const [currentQuestion, setCurrentQuestion] = React.useState({ text: '', id: 'empty', });
+  const [currentQuestion, setCurrentQuestion] = React.useState(null);
   const [editQuestion, setEditQuestion] = React.useState({});
   const [isNewQuestion, setIsNewQuestion] = React.useState(false); 
 
+  const [questionTypes, setQuestionTypes] = React.useState([]);
+  
   const [isLoadingData, setIsLoadingData] = React.useState(true);
   const [isLoadingQuestions, setIsLoadingQuestions] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
+
+  const [isShowCreateQuestionPopup, setIsShowCreateQuestionPopup] = React.useState(false);
 
   const [requestMessage, setRequestMessage] = React.useState({ isShow: false, text: '', type: '', action: '' });
 
@@ -39,7 +45,7 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
         console.log(knowledgeQuestions, 'KnowledgeQuestions');
         setCurrentKnowledge(knowledgeData);
         setQuestions(knowledgeQuestions);
-        setCurrentQuestion(knowledgeQuestions.length > 0 ? knowledgeQuestions[0] : [] );
+        setCurrentQuestion(null);
         setQuestionTypes(questionsTypes);
       })
       .catch((err) => {
@@ -55,8 +61,25 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
     getData(option.id);
   }
 
-  function changeQuestion(item) {
+  function handleChangeQuestion(item) {
     setCurrentQuestion(item);
+  }
+
+  function handleCreateQuestion(question) {
+    setCurrentQuestion({
+      text: question.text,
+      question_type: question.type,
+      id: 'text',
+    });
+    closePopup();
+  }
+
+  function openCreateQuestionPopup() {
+    setIsShowCreateQuestionPopup(true);
+  }
+
+  function closePopup() {
+    setIsShowCreateQuestionPopup(false);
   }
 
   function handleChangeQuestionText(e) {
@@ -101,6 +124,8 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
   // eslint-disable-next-line
   }, []);
 
+  console.log(currentQuestion);
+
   return (
     <>
     {
@@ -116,56 +141,55 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
         </div>
         <div className='section__header-item section__header-item_type_content'>
           <span className='section__header-caption section__header-caption_margin_bottom'></span>
-          <button className='section__header-btn section__header-btn_type_fix' type='button' onClick={() => navigate('/program/' + currentProgram.id +'/program-assessment/knowledge/list')}>К списку знаний</button>
+          <button className='section__header-btn section__header-btn_type_fix' type='button' onClick={() => navigate('/program/' + currentProgram.id +'/assessment/knowledge/list')}>К списку знаний</button>
         </div>
       </div>
 
       <div className='test'>
         <div className='test__container'>
-          <div className='test__control'>
-            <div className='test__control-type'>
-              <p className='test__control-text'>
-                <span className='test__control-text_weight_bold'>Тип вопроса: </span>
-                Выбор одного правильного ответа
-              </p>
-            </div>
-            <button className='section__header-btn section__header-btn_type_fix' type='button' onClick={handleSaveQuestion}>Сохранить вопрос</button>
-          </div>
-          <textarea 
-            className='textarea textarea_height_small' 
-            value={currentQuestion.text} 
-            name={`assessment-question-text-${currentQuestion.id}`}
-            id={`assessment-question-text-${currentQuestion.id}`}
-            placeholder='Введите текст вопроса..'            
-            onChange={handleChangeQuestionText}
-            required
-          >
-          </textarea>
-          
+          {
+            currentQuestion ?
+            <>
+              <div className='test__control'>
+                <p className='test__control-text'><span className='test__control-text_weight_bold'>Тип вопроса: </span>{currentQuestion.question_type.name}</p>
+                <ButtonIcon icon='notification' />
+                <button className='section__header-btn section__header-btn_type_fix' type='button' onClick={handleSaveQuestion}>Сохранить вопрос</button>
+              </div>
+              <div className='test-question'>
+                <h4 className='test-question__title'>Вопрос:</h4>
+                <textarea 
+                  className='textarea textarea_height_small' 
+                  value={currentQuestion.text} 
+                  name={`assessment-question-text-${currentQuestion.id}`}
+                  id={`assessment-question-text-${currentQuestion.id}`}
+                  placeholder='Введите текст вопроса..'            
+                  onChange={handleChangeQuestionText}
+                  required
+                >
+                </textarea>
+              </div>
+            </>
+            :
+            <p className='test__caption-empty'>Выберите вопрос или создайте новый..</p>
+          }
         </div>
-        <nav className='test__navigation'>
-          <div className='test__navigation-header'>
-            <h3 className='test__navigation-title'>Вопросы</h3>
-            <span className='test__navigation-count'>{questions.length}</span>
-          </div>
-          <div className='test__navigation-btn'>
-            <div className='test__navigation-btn-icon'></div>
-            <p className='test__navigation-btn-text'>Создать новый вопрос..</p>
-          </div>
-          <ul className='test__navigation-list scroll'>
-            {
-              questions.map((elem) => (
-                <li className={`test__navigation-item ${elem.id === currentQuestion.id ? 'test__navigation-item_type_active' : ''}`} key={elem.id} onClick={() => changeQuestion(elem)}>
-                  <div className='test__navigation-icon'></div>
-                  <p className='test__navigation-text'>{elem.text}</p>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+        <AssessmentKnowledgeNavigation 
+          questions={questions} 
+          currentQuestion={currentQuestion}
+          onChangeQuestion={handleChangeQuestion}
+          onCreateQuestion={openCreateQuestionPopup}
+        />
       </div>
+      {
+        isShowCreateQuestionPopup &&
+        <CreateNewQuestionPopup 
+          isOpen={isShowCreateQuestionPopup}
+          onClose={closePopup}
+          questionTypes={questionTypes}
+          onCreate={handleCreateQuestion}
 
-
+        />
+      }
       </>
     }
     </>

@@ -2,7 +2,7 @@ import React from 'react';
 import './PopupSelect.css';
 import useOnClickOutside from '../../../hooks/useOnClickOutside.js';
 
-function PopupSelect({ filterType, options, currentOption, onChooseOption }) {
+function PopupSelect({ filterType, options, currentOption, onChooseOption, width = 'default', layout = 'default' }) {
 
   const [isOpenSelectOptions, setIsOpenSelectOptions] = React.useState(false);
 
@@ -29,7 +29,11 @@ function PopupSelect({ filterType, options, currentOption, onChooseOption }) {
   }, []);
 
   return (
-    <div ref={selectRef} className={`select-popup ${isOpenSelectOptions ? 'select-popup_status_open' : ''}`} onClick={openSelectOptions}>
+    <div 
+      ref={selectRef} 
+      className={`select-popup ${isOpenSelectOptions ? 'select-popup_status_open' : ''} select-popup_width_${width} select-popup_layout_${layout}`} 
+      onClick={openSelectOptions}
+    >
       <div className='select-popup__main'>
         <p className='select-popup__text'>{filterType === 'byElem' ? currentOption : currentOption.name}</p>
         <div className={`select-popup__arrow ${isOpenSelectOptions ? 'select-popup__arrow_status_open' : ''}`}></div>

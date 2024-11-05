@@ -1,9 +1,10 @@
 import React from 'react';
+
 import './Levels.css';
 
-function Levels({ children }) {
+function Levels({ direction, children }) {
   return (
-    <div className='levels'>
+    <div className={`levels levels_direction_${direction}`}>
       {children}
     </div>
   )

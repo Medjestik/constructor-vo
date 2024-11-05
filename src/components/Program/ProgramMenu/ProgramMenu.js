@@ -31,7 +31,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Создание продуктов, этапов жизненного цикла и&nbsp;процессов</p>
 				</div>
 			</li>
-			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
+			<li id='program-competence' className={`program-menu__item ${path.pathname.includes('competence') && 'program-menu__item_type_active'}`} onClick={() => handleChangeSection('competence')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_competence'></div>
 				</div>
@@ -40,7 +40,7 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Создание умений и знаний связанных с процессами</p>
 				</div>
 			</li>
-			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
+			<li id='program-assessment' className={`program-menu__item ${path.pathname.includes('assessment') && 'program-menu__item_type_active'}`} onClick={() => handleChangeSection('assessment/knowledge/list')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_assessment'></div>
 				</div>

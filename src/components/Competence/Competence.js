@@ -517,7 +517,7 @@ function Competence({ currentProgram, isEditRights }) {
         heightType={'page'} 
         headerType={'large'} 
         >
-          <Levels>
+          <Levels direction={'row'}>
             <CompetenceProcessLevel
               data={processes} 
               openProcess={openProcess} 

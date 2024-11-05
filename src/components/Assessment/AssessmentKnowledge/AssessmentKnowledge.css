@@ -53,6 +53,7 @@
   margin: 12px 2px 8px 0px;
   padding: 9px 8px;
   box-sizing: border-box;
+  border: none;
   display: flex;
   align-items: center;
   background: var(--gradient-green-color);
@@ -154,7 +155,9 @@
 .test__control {
   width: 100%;
   margin: 0px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 40px 216px;
+  gap: 16px;
   align-items: center;
   justify-content: space-between;
 }
@@ -184,7 +187,23 @@
 .test__control-text_weight_bold {
   font-weight: bold;
 }
-
-
-
-
+.test__caption-empty {
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--accent-grey-color);
+}
+.test-question {
+  margin: 20px 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+.test-question__title {
+  margin: 0;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+}

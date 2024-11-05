@@ -25,6 +25,12 @@
 .select-popup:hover {
   cursor: pointer;
 }
+.select-popup_width_full {
+  width: 100%;
+}
+.select-popup_layout_white {
+  background: var(--main-white-color);
+}
 .select-popup__main {
   margin: 0px;
   width: 100%;

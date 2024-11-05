@@ -596,7 +596,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
         heightType={'page'} 
         headerType={'large'}
         >
-          <Levels>
+          <Levels direction={'column'}>
             <div className='levels-carousel__control'>
               <button className={`levels-carousel__button ${isShowStages ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('stages', 0)}>Этапы</button>
               <button className={`levels-carousel__button ${isShowProcesses ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('processes', 1)}>Процессы</button>

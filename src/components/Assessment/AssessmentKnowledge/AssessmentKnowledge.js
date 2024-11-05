@@ -15,7 +15,7 @@ function AssessmentKnowledge({ currentProgram }) {
   const [isLoadingData, setIsLoadingData] = React.useState(true);
 
   function handleOpenKnowledge(knowledge) {
-    navigate('/program/' + currentProgram.id +'/program-assessment/knowledge/' + knowledge.id);
+    navigate('/program/' + currentProgram.id +'/assessment/knowledge/' + knowledge.id);
   }
 
   function getData() {

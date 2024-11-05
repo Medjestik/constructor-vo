@@ -9,7 +9,7 @@ import AssessmentParameters from './AssessmentParameters/AssessmentParameters.js
 
 function Assessment({ currentProgram }) {
   return (
-    <SectionTabs type='small' path={'/program/' + currentProgram.id + '/program-assessment'} tabs={ASSESSMENT_TABS} >
+    <SectionTabs type='small' path={'/program/' + currentProgram.id + '/assessment'} tabs={ASSESSMENT_TABS} >
 
       <Routes>
 

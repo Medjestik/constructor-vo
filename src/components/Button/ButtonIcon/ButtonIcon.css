@@ -1,0 +1,26 @@
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--main-white-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+}
+.btn-icon:hover {
+  background: var(--gradient-blue-color);
+  cursor: pointer;
+}
+.btn-icon__img {
+  width: 24px;
+  height: 24px;
+}
+.btn-icon__img_type_notification {
+  background-image: url('../../../images/menu/notification-color.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.btn-icon:hover .btn-icon__img_type_notification {
+  background-image: url('../../../images/menu/notification.svg');
+}
