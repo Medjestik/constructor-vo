@@ -2,6 +2,7 @@ import React from 'react';
 import './ProgramParticipant.css';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext.js';
 import Table from '../../Table/Table.js';
+import ButtonIcon from '../../Button/ButtonIcon/ButtonIcon.js';
 
 function ProgramParticipant({ programInfo, participants, onEdit, onRemove }) {
 
@@ -44,32 +45,8 @@ function ProgramParticipant({ programInfo, participants, onEdit, onRemove }) {
                 </div>
               </div>
               <div className='table__column table__column_type_btn'>
-                <button
-                  disabled={isEditRights ? '': 'disabled'}
-                  className={`btn-icon btn-icon_type_edit ${isEditRights && 'btn-icon_color_accent-blue'}`}
-                  type='button'
-                  onClick={() => (onEdit(item))}
-                >
-                </button>
-                {
-                  programInfo.authorId === item.user.id
-                  ?
-                  <button
-                    disabled={'disabled'}
-                    className={`btn-icon btn-icon_margin_left btn-icon_type_cancel`}
-                    type='button'
-                    onClick={() => (onRemove(item))}
-                  >
-                  </button>
-                  :
-                  <button
-                    disabled={isEditRights && currentUser.id !== item.id ? '': 'disabled'}
-                    className={`btn-icon btn-icon_margin_left btn-icon_type_cancel ${isEditRights && currentUser.id !== item.id && 'btn-icon_color_accent-orange'}`}
-                    type='button'
-                    onClick={() => (onRemove(item))}
-                  >
-                  </button>
-                }
+                <ButtonIcon icon='edit' color='blue' isBlock={!isEditRights} onClick={() => (onEdit(item))} />
+                <ButtonIcon icon='cancel' color='orange' isBlock={true} />
               </div>
             </li>
           ))

@@ -68,7 +68,7 @@ export const getKnowledgeQuestions = ({ token, knowledgeId }) => {
   .then(res => handleResponse(res))
 };
 
-export const saveQuestion = ({ token, knowledgeId, question }) => {
+export const createQuestion = ({ token, knowledgeId, question }) => {
   return fetch(`${API_URL}/knowledges/${knowledgeId}/questions/`, {
     method: 'POST',
     headers: {
@@ -77,6 +77,93 @@ export const saveQuestion = ({ token, knowledgeId, question }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ question })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveQuestion = ({ token, knowledgeId, question, questionId }) => {
+  return fetch(`${API_URL}/knowledges/${knowledgeId}/questions/${questionId}/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ question })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const deleteQuestion = ({ token, knowledgeId, questionId }) => {
+  return fetch(`${API_URL}/knowledges/${knowledgeId}/questions/${questionId}/`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getTasks = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/tasks`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getAbilities = ({ token, programId }) => {
+  return fetch(`${API_URL}/programs/${programId}/abilities`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createTask = ({ token, abilityId, task }) => {
+  return fetch(`${API_URL}/abilities/${abilityId}/tasks/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ task })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const updateTask = ({ token, abilityId, task, taskId }) => {
+  return fetch(`${API_URL}/abilities/${abilityId}/tasks/${taskId}/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ task })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeTask = ({ token, abilityId, taskId }) => {
+  return fetch(`${API_URL}/abilities/${abilityId}/tasks/${taskId}/`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
   })
   .then(res => handleResponse(res))
 };

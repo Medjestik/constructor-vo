@@ -6,9 +6,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
 import ButtonIcon from '../../../Button/ButtonIcon/ButtonIcon.js';
 import AssessmentKnowledgeNavigation from '../AssessmentKnowledgeNavigation/AssessmentKnowledgeNavigation.js';
+import AssessmentKnowledgeAnswer from '../AssessmentKnowledgeAnswer/AssessmentKnowledgeAnswer.js';
 import CreateNewQuestionPopup from '../AssessmentKnowledgePopup/CreateNewQuestionPopup.js';
 
-function AssessmentKnowledgeData({ knowledge, currentProgram }) {
+function AssessmentKnowledgeData({ knowledge, currentProgram, onChangeQuestionCount }) {
 
   const navigate = useNavigate();
 
@@ -18,7 +19,6 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
 
   const [questions, setQuestions] = React.useState([]);
   const [currentQuestion, setCurrentQuestion] = React.useState(null);
-  const [editQuestion, setEditQuestion] = React.useState({});
   const [isNewQuestion, setIsNewQuestion] = React.useState(false); 
 
   const [questionTypes, setQuestionTypes] = React.useState([]);
@@ -45,7 +45,6 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
         console.log(knowledgeQuestions, 'KnowledgeQuestions');
         setCurrentKnowledge(knowledgeData);
         setQuestions(knowledgeQuestions);
-        setCurrentQuestion(null);
         setQuestionTypes(questionsTypes);
       })
       .catch((err) => {
@@ -61,19 +60,6 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
     getData(option.id);
   }
 
-  function handleChangeQuestion(item) {
-    setCurrentQuestion(item);
-  }
-
-  function handleCreateQuestion(question) {
-    setCurrentQuestion({
-      text: question.text,
-      question_type: question.type,
-      id: 'text',
-    });
-    closePopup();
-  }
-
   function openCreateQuestionPopup() {
     setIsShowCreateQuestionPopup(true);
   }
@@ -82,8 +68,103 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
     setIsShowCreateQuestionPopup(false);
   }
 
+  function handleChangeQuestion(item) {
+    setCurrentQuestion(item);
+    setIsNewQuestion(false);
+  }
+
   function handleChangeQuestionText(e) {
     setCurrentQuestion({...currentQuestion, text: e.target.value});
+  }
+
+  function handleCreateQuestion(question) {
+    setCurrentQuestion({
+      text: question.text,
+      question_type: question.type,
+      knowledge_id: currentKnowledge.id,
+      id: parseInt(new Date().getTime()).toString(),
+      answers: [
+        { id: 'answer-1', is_correct: false, text: '', text2: '' },
+      ]
+    });
+    closePopup();
+    setIsNewQuestion(true);
+  }
+
+  function handleChangeAnswer(id) {
+    let newAnswers = [];
+    if (currentQuestion.question_type.type === "one-answer") {
+      currentQuestion.answers.forEach((elem) => {
+        if (elem.id === id) {
+          newAnswers.push({ ...elem, is_correct: 1 });
+        } else {
+          newAnswers.push({ ...elem, is_correct: 0 });
+        }
+      })
+    } else {
+      currentQuestion.answers.forEach((elem) => {
+        if (elem.id === id) {
+          newAnswers.push({ ...elem, is_correct: !elem.is_correct });
+        } else {
+          newAnswers.push(elem);
+        }
+      })
+    }
+    setCurrentQuestion({ ...currentQuestion, answers: newAnswers });
+  }
+
+  function handleAddAnswer() {
+    const newAnswers = [
+      ...currentQuestion.answers, 
+      { id: parseInt(new Date().getTime()).toString(), text: '', text2: '', isCorrect: false }
+    ];
+    setCurrentQuestion({ ...currentQuestion, answers: newAnswers });
+  }
+
+  function handleDeleteAnswer(id) {
+    const newAnswers = currentQuestion.answers.filter(item => item.id !== id);
+    setCurrentQuestion({ ...currentQuestion, answers: newAnswers });
+  }
+
+  function handleChangeFirstAnswerText(text, id) {
+    let newAnswers = [];
+    currentQuestion.answers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, text: text });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setCurrentQuestion({ ...currentQuestion, answers: newAnswers });
+  }
+
+  function handleChangeSecondAnswerText(text, id) {
+    let newAnswers = [];
+    currentQuestion.answers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, text2: text });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setCurrentQuestion({ ...currentQuestion, answers: newAnswers });
+  }
+
+  function handleDeleteQuestion() {
+    const token = localStorage.getItem('token');
+    assessmentApi.deleteQuestion({ token: token, knowledgeId: currentKnowledge.id, questionId: currentQuestion.id })
+    .then(() => {
+      const newQuestions = questions.filter(item => item.id !== currentQuestion.id);
+      setQuestions(newQuestions);
+      setCurrentQuestion(null);
+      onChangeQuestionCount(currentKnowledge.id, newQuestions.length);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setIsLoadingRequest(false);
+    });
   }
 
   function handleSaveQuestion() {
@@ -95,18 +176,39 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
         question_type_id: currentQuestion.question_type.id,
         answers: currentQuestion.answers,
       }
-      assessmentApi.saveQuestion({ token: token, knowledgeId: currentKnowledge.id, question: data })
-      .then((res) => {
-        const index = questions.indexOf(questions.find((elem) => (elem.id === res.id)));
-        setQuestions([...questions.slice(0, index), res, ...questions.slice(index + 1)]);
-        setCurrentQuestion(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoadingRequest(false);
-      });
+      if (isNewQuestion) {
+        assessmentApi.createQuestion({ token: token, knowledgeId: currentKnowledge.id, question: data })
+        .then((res) => {
+          const newQuestions = [...questions, res];
+          setQuestions(newQuestions);
+          setCurrentQuestion(res);
+          onChangeQuestionCount(currentKnowledge.id, newQuestions.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      } else {
+        assessmentApi.saveQuestion({ 
+          token: token, 
+          knowledgeId: currentKnowledge.id, 
+          question: data, 
+          questionId: currentQuestion.id 
+        })
+        .then((res) => {
+          const index = questions.indexOf(questions.find((elem) => (elem.id === res.id)));
+          setQuestions([...questions.slice(0, index), res, ...questions.slice(index + 1)]);
+          setCurrentQuestion(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
     }
   }
 
@@ -117,14 +219,11 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
       setCurrentKnowledge({});
       setQuestionTypes([]);
       setQuestions([]);
-      setCurrentQuestion({});
-      setEditQuestion({});
+      setCurrentQuestion(null);
       setRequestMessage({ isShow: false, text: '', type: '', action: '' });
     })
   // eslint-disable-next-line
   }, []);
-
-  console.log(currentQuestion);
 
   return (
     <>
@@ -152,13 +251,13 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
             <>
               <div className='test__control'>
                 <p className='test__control-text'><span className='test__control-text_weight_bold'>Тип вопроса: </span>{currentQuestion.question_type.name}</p>
-                <ButtonIcon icon='notification' />
+                <ButtonIcon icon='remove' color='orange' onClick={handleDeleteQuestion} />
                 <button className='section__header-btn section__header-btn_type_fix' type='button' onClick={handleSaveQuestion}>Сохранить вопрос</button>
               </div>
               <div className='test-question'>
                 <h4 className='test-question__title'>Вопрос:</h4>
                 <textarea 
-                  className='textarea textarea_height_small' 
+                  className='test-textarea' 
                   value={currentQuestion.text} 
                   name={`assessment-question-text-${currentQuestion.id}`}
                   id={`assessment-question-text-${currentQuestion.id}`}
@@ -167,6 +266,26 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
                   required
                 >
                 </textarea>
+              </div>
+              <div className='test-answer'>
+                <h4 className='test-question__title test-question__title_mt_20'>Ответы:</h4>
+                <ul className='test-answer__list'>
+                  {
+                    currentQuestion.answers.map((elem, i) => (
+                      <AssessmentKnowledgeAnswer 
+                        questionType={currentQuestion.question_type.type} 
+                        answer={elem}
+                        onChangeAnswer={handleChangeAnswer}
+                        onChangeFirstAnswerText={handleChangeFirstAnswerText}
+                        onChangeSecondAnswerText={handleChangeSecondAnswerText}
+                        onDeleteAnswer={handleDeleteAnswer}
+                        key={elem.id}
+                        index={i} 
+                      />
+                    ))
+                  }
+                </ul>
+                <button className='badge badge_type_white badge-btn badge-btn_type_add' type='button' onClick={handleAddAnswer}>Добавить</button>
               </div>
             </>
             :
@@ -197,4 +316,3 @@ function AssessmentKnowledgeData({ knowledge, currentProgram }) {
 }
 
 export default AssessmentKnowledgeData; 
- 

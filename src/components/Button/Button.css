@@ -1,0 +1,29 @@
+.button {
+  margin: 0px;
+  position: relative;
+  padding: 11px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all .3s ease-in-out;
+}
+.button:hover {
+  cursor: pointer;
+  user-select: auto;
+  pointer-events: all;
+  opacity: .8;
+  box-shadow: 0px 8px 12px -8px rgba(0, 55, 196, 0.9);
+}
+.button_width_default {
+  max-width: 216px;
+  width: 100%;
+}
+.button_color_default {
+  color: var(--main-white-color);
+  background: var(--gradient-blue-color);
+}

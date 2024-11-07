@@ -340,154 +340,6 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-.btn-icon {
-  position: relative;
-  margin: 0px;
-  padding: 0px;
-  border: none;
-  border-radius: var(--border-radius);
-  outline: none;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  color: var(--main-black-color);
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  background: var(--slider-color);
-  text-decoration: none;
-  transition: all .3s ease-in-out;
-}
-.btn-icon::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-.btn-icon_margin_left {
-  margin: 0px 0px 0px 12px;
-}
-.btn-icon_color_accent-blue {
-  color: var(--main-white-color);
-  background: var(--gradient-blue-color);
-}
-.btn-icon_color_accent-blue:hover {
-  cursor: pointer;
-  user-select: auto;
-  pointer-events: all;
-  opacity: .8;
-  box-shadow: 0px 8px 12px -8px rgba(130, 122, 233, 0.9);
-}
-.btn-icon_color_accent-orange {
-  color: var(--main-white-color);
-  background: var(--gradient-orange-color);
-}
-.btn-icon_color_accent-orange:hover {
-  cursor: pointer;
-  user-select: auto;
-  pointer-events: all;
-  opacity: .8;
-  box-shadow: 0px 8px 12px -8px rgba(213, 102, 0, 0.9);
-}
-.btn-icon_type_create::after  {
-  background-image: url('../../images/icons/main-white/plus.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_edit::after   {
-  background-image: url('../../images/icons/main-white/edit.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_remove::after  {
-  background-image: url('../../images/icons/main-white/remove.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_upload::after   {
-  background-image: url('../../images/icons/main-white/upload.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_download::after   {
-  background-image: url('../../images/icons/main-white/download.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_cancel::after  {
-  background-image: url('../../images/icons/main-white/plus.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: rotate(45deg);
-}
-.btn-icon_type_copy::after {
-  background-image: url('../../images/icons/main-white/copy.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_view::after {
-  background-image: url('../../images/icons/main-white/view.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_file-export::after {
-  background-image: url('../../images/icons/main-white/file-export.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_collapse::after {
-  background-image: url('../../images/icons/main-white/collapse.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: rotate(90deg);
-}
-.btn-icon_type_expand::after {
-  background-image: url('../../images/icons/main-white/expand.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: rotate(90deg);
-}
-.btn-icon_type_refresh::after {
-  background-image: url('../../images/icons/main-white/refresh.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: rotate(90deg);
-}
-.btn-icon_type_open::after {
-  background-image: url('../../images/icons/main-white/open.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_link::after {
-  background-image: url('../../images/icons/main-white/link.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_table::after {
-  background-image: url('../../images/icons/main-white/table.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_users::after {
-  background-image: url('../../images/icons/main-white/users.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_type_place::after {
-  background-image: url('../../images/icons/main-white/place.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.btn-icon_status_block {
-  background: var(--slider-color);
-  box-shadow: none;
-  user-select: none;
-  pointer-events: none;
-}
 .btn-add-round {
   position: relative;
   margin: 0px 0px 0px 12px;
@@ -697,19 +549,15 @@ input[type=number] {
   display: flex;
 }
 .radio {
-  margin: 12px 0px 0px 0px;
   display: block;
   cursor: pointer;
+  margin: 16px 0px 0px 0px;
 }
 .radio input {
   display: none;
 }
 .radio input + span {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-  color: var(--main-black-color);
+  font-size: 16px;
   padding-left: 22px;
   padding-top: 2px;
   display: block;
@@ -729,11 +577,11 @@ input[type=number] {
   position: absolute;
 }
 .radio input + span:before {
-  background: var(--main-grey-color);
+  background: var(--border-card-color);
   transition: background 0.2s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
 }
 .radio input + span:after {
-  background: var(--white-color);
+  background: var(--main-white-color);
   transform: scale(0.78);
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
@@ -755,28 +603,17 @@ input[type=number] {
   transform: scale(0.4);
 }
 .checkbox {
-  margin: 0px;
+  margin: 16px 0px;
   display: block;
   cursor: pointer;
-}
-.checkbox_width_small {
-  width: 22px;
-  height: 22px;
-}
-.checkbox_margin_top {
-  margin: 12px 0px 0px 0px;
 }
 .checkbox input {
   display: none;
 }
 .checkbox input + span {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-  color: var(--main-black-color);
+  font-size: 16px;
   padding-left: 22px;
-  padding-top: 2px;
+  padding-top: 3px;
   display: block;
   position: relative;
 }
@@ -794,11 +631,11 @@ input[type=number] {
   position: absolute;
 }
 .checkbox input + span:before {
-  background: var(--main-grey-color);
+  background: var(--border-card-color);
   transition: background 0.2s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
 }
 .checkbox input + span:after {
-  background: var(--white-color);
+  background: var(--main-white-color);
   transform: scale(0.78);
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }

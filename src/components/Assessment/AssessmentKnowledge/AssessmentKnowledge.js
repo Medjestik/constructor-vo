@@ -36,6 +36,11 @@ function AssessmentKnowledge({ currentProgram }) {
     }
   }
 
+  const handleChangeKnowledgeQuestions = (id, count) => {
+    const index = knowledge.indexOf(knowledge.find((elem) => (elem.id === id)));
+    setKnowledge([...knowledge.slice(0, index), { ...knowledge[index], questions_count: count }, ...knowledge.slice(index + 1)]);
+  }
+
   React.useEffect(() => {
     getData();
 
@@ -60,7 +65,7 @@ function AssessmentKnowledge({ currentProgram }) {
         />
 
         <Route exact path=':knowledgeId' element={
-          <AssessmentKnowledgeData knowledge={knowledge} currentProgram={currentProgram} />
+          <AssessmentKnowledgeData knowledge={knowledge} currentProgram={currentProgram} onChangeQuestionCount={handleChangeKnowledgeQuestions} />
         }
         />
 

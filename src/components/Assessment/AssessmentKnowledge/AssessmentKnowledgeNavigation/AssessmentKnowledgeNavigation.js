@@ -20,13 +20,13 @@ function AssessmentKnowledgeNavigation({ questions, currentQuestion, onChangeQue
               key={elem.id} 
               onClick={() => onChangeQuestion(elem)}
               >
-              <div className='test__navigation-icon'></div>
+              <div className={`test__navigation-icon test__navigation-icon_type_${elem.question_type.type}`}></div>
               <p className='test__navigation-text'>{elem.text}</p>
             </li>
           ))
         }
       </ul>
-      </nav>
+    </nav>
   )
 }
 
