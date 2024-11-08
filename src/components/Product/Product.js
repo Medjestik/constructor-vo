@@ -117,8 +117,6 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
         programApi.getNsi({ token: token, programId: currentProgram.id }),
       ])
         .then(([product, nsi]) => {
-          console.log('Products:', product);
-          console.log('Nsi:', nsi);
           setProducts(product);
           setNsi(nsi);
         })
@@ -598,7 +596,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
         >
           <Levels direction={'column'}>
             <div className='levels-carousel__control'>
-              <button className={`levels-carousel__button ${isShowStages ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('stages', 0)}>Этапы</button>
+              <button className={`levels-carousel__button ${isShowStages ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('stages', 0)}>{currentProgram.type === 2 ? 'Области' : 'Этапы'}</button>
               <button className={`levels-carousel__button ${isShowProcesses ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('processes', 1)}>Процессы</button>
               <button className={`levels-carousel__button ${isShowResults ? 'levels-carousel__button_type_active' : ''}`} onClick={() => handleCarouselScroll('results', 2)}>Результаты</button>
             </div>
@@ -608,6 +606,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                 <div className='levels-carousel__item'>
                   <ProductLevel 
                     data={products} 
+                    currentProgramType={currentProgram.type}
                     openProduct={openProduct} 
                     onAdd={openAddProductPopup} 
                     onOpen={handleOpenProduct} 
@@ -618,6 +617,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                 <div className='levels-carousel__item'> 
                   <ProductStageLevel 
                     data={stages} 
+                    currentProgramType={currentProgram.type}
                     isOpenStages={isOpenStages}
                     openProduct={openProduct}
                     openStage={openStage}
@@ -662,6 +662,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           onClose={closeProductPopup}
           onAdd={handleAddProduct}
           nsi={nsi}
+          currentProgramType={currentProgram.type}
           onOpenNsi={openNsiPopup}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -673,6 +674,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           isOpen={isOpenEditProductPopup} 
           onClose={closeProductPopup}
           currentProduct={currentProduct}
+          currentProgramType={currentProgram.type}
           onEdit={handleEditProduct}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
@@ -695,6 +697,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           isOpen={isOpenAddStagePopup} 
           onClose={closeProductPopup}
           onAdd={handleAddStage}
+          currentProgramType={currentProgram.type}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -706,6 +709,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           onClose={closeProductPopup}
           currentStage={currentStage}
           onEdit={handleEditStage}
+          currentProgramType={currentProgram.type}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />

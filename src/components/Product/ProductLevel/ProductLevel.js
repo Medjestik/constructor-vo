@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProductLevel({ data, openProduct, onAdd, onOpen, onEdit, onRemove }) {
+function ProductLevel({ data, currentProgramType, openProduct, onAdd, onOpen, onEdit, onRemove }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -29,7 +29,7 @@ function ProductLevel({ data, openProduct, onAdd, onOpen, onEdit, onRemove }) {
   return (
     <div className='levels__container'>
       <div className='levels__header'>
-        <h3 className='levels__header-title'>Продукты</h3>
+        <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Сферы' : 'Продукты'}</h3>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
         </div>
@@ -42,7 +42,7 @@ function ProductLevel({ data, openProduct, onAdd, onOpen, onEdit, onRemove }) {
             data.map((item, i) => (
               <li className={`levels__item levels__item_type_open ${openProduct.id === item.id && 'levels__item_type_active'}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
-                  <span className='badge badge_size_small badge_type_product'>Продукт {i + 1}</span>
+                  <span className='badge badge_size_small badge_type_product'>{currentProgramType === 2 ? 'Сфера' : 'Продукт'} {i + 1}</span>
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditProduct(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_remove-grey' type='button' onClick={(e) => handleRemoveProduct(e, item)}></button>
@@ -67,4 +67,4 @@ function ProductLevel({ data, openProduct, onAdd, onOpen, onEdit, onRemove }) {
   )
 }
 
-export default ProductLevel; 
+export default ProductLevel;

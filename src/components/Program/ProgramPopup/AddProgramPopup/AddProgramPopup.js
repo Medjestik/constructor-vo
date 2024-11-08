@@ -5,8 +5,26 @@ import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
 
 function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestError, isLoadingRequest }) {
 
+  const typeOptions = [
+    { name: 'Продукт', id: 1, },
+    { name: 'Сфера деятельности', id: 2, },
+  ]
+  
+  const formOptions = [
+    { name: 'Выберите уровень образования...', id: 'placeholder', },
+    { name: 'Очная', id: 'form-o', },
+    { name: 'Очно-заочная', id: 'form-oz', },
+    { name: 'Заочная', id: 'form-z', },
+  ]
+  
+  const directionOptions = [
+    { name: 'Выберите направление...', id: 'placeholder', },
+    ...directions,
+  ]
+
   const [currentDirection, setCurrentDirection] = React.useState({});
   const [currentForm, setCurrentForm] = React.useState({});
+  const [currentType, setCurrentType] = React.useState(typeOptions[0]);
 
   const [profile, setProfile] = React.useState('');
   const [profileError, setProfileError] = React.useState({ isShow: false, text: '' });
@@ -15,18 +33,6 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  const formOptions = [
-    { name: 'Выберите уровень образования...', id: 'placeholder', },
-    { name: 'Очная', id: 'form-o', },
-    { name: 'Очно-заочная', id: 'form-oz', },
-    { name: 'Заочная', id: 'form-z', },
-  ]
-
-  const directionOptions = [
-    { name: 'Выберите направление...', id: 'placeholder', },
-    ...directions,
-  ]
-
   function handleSubmit(e) {
     e.preventDefault();
     onAdd({ 
@@ -34,6 +40,7 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
       profile: profile,
       form: currentForm.name,
       annotation: annotation,
+      type: currentType.id
     })
   }
 
@@ -52,6 +59,10 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
 
   function handleChangeDirection(option) {
     setCurrentDirection(option);
+  }
+
+  function handleChangeType(option) {
+    setCurrentType(option);
   }
 
   function handleChangeAnnotation(e) {
@@ -132,6 +143,11 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
         placeholder='Введите аннотацию...'
         autoComplete='off'
         />
+      </label>
+
+      <label className='popup__field'>
+        <h4 className='popup__input-caption'>Тип программы:</h4>
+        <PopupSelect options={typeOptions} currentOption={currentType} onChooseOption={handleChangeType} />
       </label>
 
       <div className='popup__btn-container'>

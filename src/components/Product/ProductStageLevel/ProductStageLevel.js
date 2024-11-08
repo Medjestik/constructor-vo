@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProductStageLevel({ data, isOpenStages, openProduct, openStage, onAdd, onOpen, onEdit, onRemove }) {
+function ProductStageLevel({ data, currentProgramType, isOpenStages, openProduct, openStage, onAdd, onOpen, onEdit, onRemove }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -33,7 +33,7 @@ function ProductStageLevel({ data, isOpenStages, openProduct, openStage, onAdd, 
       ?
       <div className='levels__container'>
         <div className='levels__header'>
-          <h3 className='levels__header-title'>Этапы ЖЦ</h3>
+          <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Области' : 'Этапы ЖЦ'}</h3>
           <div className='levels__header-btn-container'>
             <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           </div>
@@ -50,7 +50,7 @@ function ProductStageLevel({ data, isOpenStages, openProduct, openStage, onAdd, 
                 onClick={(() => onOpen(item, i + 1))}
                 >
                   <div className='levels__item-header'>
-                    <span className='badge badge_size_small badge_type_stage'>Этап {openProduct.code}.{i + 1}</span>
+                    <span className='badge badge_size_small badge_type_stage'>{currentProgramType === 2 ? 'Область' : 'Этап'} {openProduct.code}.{i + 1}</span>
                     <div className='levels__item-header-btn-container'>
                       <button className='icon icon_margin_left-8 icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEditStage(e, item)}></button>
                       <button className='icon icon_margin_left-8 icon_size_16 icon_type_remove-grey' type='button' onClick={(e) => handleRemoveStage(e, item)}></button>
@@ -75,13 +75,12 @@ function ProductStageLevel({ data, isOpenStages, openProduct, openStage, onAdd, 
       :
       <div className='levels__container'>
         <div className='levels__header'>
-          <h3 className='levels__header-title'>Этапы ЖЦ</h3>
+          <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Области' : 'Этапы ЖЦ'}</h3>
         </div>
-        <p className='levels__item-empty'>Выберите продукт..</p>
+        <p className='levels__item-empty'>Выберите {currentProgramType === 2 ? 'сферу..' : 'продукт..'}</p>
       </div>
     }
     </>
-
   )
 }
 

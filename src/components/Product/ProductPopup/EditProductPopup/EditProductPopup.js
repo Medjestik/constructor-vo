@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditProductPopup({ isOpen, onClose, currentProduct, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditProductPopup({ isOpen, onClose, currentProduct, currentProgramType, onEdit, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -44,10 +44,10 @@ function EditProductPopup({ isOpen, onClose, currentProduct, onEdit, isShowReque
     formWidth={'medium'}
     formName={'edit-product-popup'}
     >
-      <h2 className='popup__title'>Редактирование продукта</h2>
+      <h2 className='popup__title'>Редактирование {currentProgramType === 2 ? 'сферы' : 'продукта'}</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование продукта:</h4>
+        <h4 className='popup__input-caption'>Наименование {currentProgramType === 2 ? 'сферы' : 'продукта'}:</h4>
         <div className='popup__input-field'>
           <input 
           className='popup__input'

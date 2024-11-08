@@ -2,10 +2,16 @@ import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import PopupSelect from '../../../Popup/PopupSelect/PopupSelect.js';
 
+const typeOptions = [
+  { name: 'Продукт', id: 1, },
+  { name: 'Сфера деятельности', id: 2, },
+]
+
 function EditProgramPopup({ isOpen, onClose, directions, onEdit, currentProgram, isShowRequestError, isLoadingRequest }) {
 
   const [currentDirection, setCurrentDirection] = React.useState({});
   const [currentForm, setCurrentForm] = React.useState({});
+  const [currentType, setCurrentType] = React.useState(typeOptions.find((elem) => elem.id === currentProgram.type));
 
   const [profile, setProfile] = React.useState('');
   const [profileError, setProfileError] = React.useState({ isShow: false, text: '' });
@@ -28,6 +34,7 @@ function EditProgramPopup({ isOpen, onClose, directions, onEdit, currentProgram,
       form: currentForm.name,
       annotation: annotation,
       id: currentProgram.id,
+      type: currentType.id,
     })
   }
 

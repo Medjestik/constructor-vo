@@ -23,11 +23,6 @@ function Assessment({ currentProgram }) {
           }
         />
 
-        <Route exact path='parameters/*' element={
-            <AssessmentParameters currentProgram={currentProgram} />
-          }
-        />
-
       </Routes>
 
     </SectionTabs>

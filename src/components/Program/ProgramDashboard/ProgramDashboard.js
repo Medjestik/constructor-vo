@@ -13,7 +13,7 @@ function ProgramChart({ }) {
   // eslint-disable-next-line
   }, []);
 
-  const dashboardLink = 'https://app.powerbi.com/view?r=eyJrIjoiOWY3YmFjZTgtNDE0MS00NTljLWE0MGItNGZiNGIyNThlMjE4IiwidCI6Ijk0NDUwNWJhLWEzZmEtNDVkZC1iYWI3LTY1YTk2NTVjYjdiYiIsImMiOjl9';
+  const dashboardLink = 'https://datalens.yandex/0fxmbqp1vryen';
 
   return (
     <>

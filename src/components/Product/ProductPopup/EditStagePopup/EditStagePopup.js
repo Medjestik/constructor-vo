@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function EditStagePopup({ isOpen, onClose, currentStage, onEdit, isShowRequestError, isLoadingRequest }) {
+function EditStagePopup({ isOpen, onClose, currentStage, onEdit, currentProgramType, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -44,10 +44,10 @@ function EditStagePopup({ isOpen, onClose, currentStage, onEdit, isShowRequestEr
     formWidth={'medium'}
     formName={'edit-program-stage-popup'}
     >
-      <h2 className='popup__title'>Редактирование этапа продукта</h2>
+      <h2 className='popup__title'>Редактирование {currentProgramType === 2 ? 'области' : 'этапа продукта'}</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование этапа:</h4>
+        <h4 className='popup__input-caption'>Наименование {currentProgramType === 2 ? 'области:' : 'этапа:'}</h4>
         <div className='popup__input-field'>
           <input 
           className='popup__input'

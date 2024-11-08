@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 
-function AddStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddStagePopup({ isOpen, onClose, onAdd, currentProgramType, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -44,10 +44,10 @@ function AddStagePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRe
     formWidth={'medium'}
     formName={'add-stage-popup'}
     >
-      <h2 className='popup__title'>Добавление этапа ЖЦ</h2>
+      <h2 className='popup__title'>Добавление {currentProgramType === 2 ? 'области' : 'этапа ЖЦ'}</h2>
 
       <label className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование этапа:</h4>
+        <h4 className='popup__input-caption'>Наименование {currentProgramType === 2 ? 'области:' : 'этапа:'}</h4>
         <div className='popup__input-field'>
           <input 
           className='popup__input'

@@ -50,9 +50,4 @@ export const ASSESSMENT_TABS = [
     link: '/ability',
     keyword: 'ability',
   },
-  {
-    title: 'Параметры',
-    link: '/parameters',
-    keyword: 'parameter',
-  },
 ];

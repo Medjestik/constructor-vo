@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import Nsi from '../../../Nsi/Nsi.js';
 
-function AddProductPopup({ isOpen, onClose, onAdd, nsi, onOpenNsi, isShowRequestError, isLoadingRequest }) {
+function AddProductPopup({ isOpen, onClose, onAdd, nsi, currentProgramType, onOpenNsi, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -45,10 +45,10 @@ function AddProductPopup({ isOpen, onClose, onAdd, nsi, onOpenNsi, isShowRequest
     formWidth={'large'}
     formName={'add-product-popup'}
     >
-      <h2 className='popup__title'>Добавление нового продукта</h2>
+      <h2 className='popup__title'>Добавление {currentProgramType === 2 ? 'новой сферы' : 'нового продукта'}</h2>
 
       <div className='popup__field'>
-        <h4 className='popup__input-caption'>Наименование продукта:</h4>
+        <h4 className='popup__input-caption'>Наименование {currentProgramType === 2 ? 'сферы:' : 'продукта:'}</h4>
         <textarea 
           className='popup__textarea popup__textarea_height_small scroll'
           name='add-program-product' 
