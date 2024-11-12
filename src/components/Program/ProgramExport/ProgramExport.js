@@ -1,7 +1,8 @@
 import React from 'react';
 import Section from '../../Section/Section.js';
+import './ProgramExport.css';
 
-function ProgramExport({ }) {
+function ProgramExport({ currentProgram }) {
 
   return (
     <>
@@ -11,10 +12,10 @@ function ProgramExport({ }) {
         heightType={'page'} 
         headerType={'large'}
       >
-        <a className='btn-primary' href=' ' target='_blank' rel='noreferrer'>Скачать шаблон рабочей программы</a>
+        <a className='btn-export' href={`https://vpo-api.emiit.ru/api/v1/programs/${currentProgram.id}/export/download_design`} target='_blank' rel='noreferrer'>Скачать шаблон рабочей программы</a>
       </Section>
     </>
   )
 }
 
-export default ProgramExport; 
+export default ProgramExport;

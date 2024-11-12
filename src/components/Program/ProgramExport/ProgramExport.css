@@ -1,0 +1,21 @@
+.btn-export {
+  margin: 0px;
+  position: relative;
+  width: fit-content;
+  padding: 11px;
+  background: var(--gradient-blue-color);
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--main-white-color);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all .3s ease-in-out;
+}
+.btn-export:hover {
+  cursor: pointer;
+  opacity: .7;
+}

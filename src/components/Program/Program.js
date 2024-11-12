@@ -105,7 +105,7 @@ function Program({ windowWidth, onLogout }) {
           />
 
           <Route exact path='/export/*' element={
-              <ProgramExport /> 
+              <ProgramExport currentProgram={currentProgram} /> 
             }
           />
 

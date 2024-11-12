@@ -12,15 +12,9 @@ function Main() {
         <div className='main__list'>
           <div className='main__item'>
             <p className='main__item-text'>Реконструкция деятельности (от продукта)</p>
-            <div className='main__item-links'>
-              <a className='main__item-link main__item-link_type_info' href='https://old.emiit.ru/ivan/constructor/info/1.pdf' target='_blank' rel='noreferrer'>Информация</a>
-            </div>
           </div>
           <div className='main__item'>
             <p className='main__item-text'>Создание профессиональной среды</p>
-            <div className='main__item-links'>
-              <a className='main__item-link main__item-link_type_info' href='https://old.emiit.ru/ivan/constructor/info/2.pdf' target='_blank' rel='noreferrer'>Информация</a>
-            </div>
           </div>
         </div>
       </div>

@@ -58,16 +58,20 @@ function ProgramMenu({ currentProgram }) {
 					<p className='program-menu__subtitle'>Формирование дисциплин из&nbsp;набора умений и&nbsp;знаний</p>
 				</div>
 			</li>
-			<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
-				<div className='program-menu__icon-container'>
-					<div className='program-menu__icon program-menu__icon_type_semester'></div>
-				</div>
-				<div className='program-menu__card'>
-					<h3 className='program-menu__title'>Распределение по&nbsp;семестрам</h3>
-					<p className='program-menu__subtitle'>Структурирование и&nbsp;организация дисциплин</p>
-				</div>
-			</li>
-			<li id='program-export' className={`program-menu__item ${path.pathname.includes('export') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
+			{
+				/*
+				<li id='program-semester' className={`program-menu__item ${path.pathname.includes('semester') && 'program-menu__item_type_active'} program-menu__item_type_block`}>
+					<div className='program-menu__icon-container'>
+						<div className='program-menu__icon program-menu__icon_type_semester'></div>
+					</div>
+					<div className='program-menu__card'>
+						<h3 className='program-menu__title'>Распределение по&nbsp;семестрам</h3>
+						<p className='program-menu__subtitle'>Структурирование и&nbsp;организация дисциплин</p>
+					</div>
+				</li>
+				*/
+			}
+			<li id='program-export' className={`program-menu__item ${path.pathname.includes('export') && 'program-menu__item_type_active'}`} onClick={() => handleChangeSection('export')}>
 				<div className='program-menu__icon-container'>
 					<div className='program-menu__icon program-menu__icon_type_export'></div>
 				</div>
