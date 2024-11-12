@@ -12,7 +12,7 @@ function ProgramExport({ currentProgram }) {
         heightType={'page'} 
         headerType={'large'}
       >
-        <a className='btn-export' href={`https://vpo-api.emiit.ru/api/v1/programs/${currentProgram.id}/export/download_design`} target='_blank' rel='noreferrer'>Скачать шаблон рабочей программы</a>
+        <a className='btn-export' href={`https://vpo-api.emiit.ru/api/v1/programs/${currentProgram.id}/export/download_design`} target='_blank' rel='noreferrer'>Скачать основные данные программы</a>
       </Section>
     </>
   )

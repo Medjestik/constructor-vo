@@ -77,7 +77,7 @@ function ProgramMenu({ currentProgram }) {
 				</div>
 				<div className='program-menu__card'>
 					<h3 className='program-menu__title'>Экспорт результатов</h3>
-					<p className='program-menu__subtitle'>Экспорт шаблона рабочей программы дисциплины</p>
+					<p className='program-menu__subtitle'>Экспорт ланных программы</p>
 				</div>
 			</li>
       <li id='program-dashboard' className={`program-menu__item ${path.pathname.includes('dashboard') && 'program-menu__item_type_active'}`} onClick={() => handleChangeSection('dashboard')}>
