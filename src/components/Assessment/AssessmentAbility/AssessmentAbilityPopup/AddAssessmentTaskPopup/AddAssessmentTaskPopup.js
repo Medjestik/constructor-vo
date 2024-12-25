@@ -1,10 +1,7 @@
 import React from 'react';
 import Popup from '../../../../Popup/Popup.js';
-import SelectSearch from '../../../../SelectSearch/SelectSearch.js';
 
-function AddAssessmentTaskPopup({ isOpen, onClose, onAdd, abilities, isShowRequestError, isLoadingRequest }) {
-
-  const [currentAbility, setCurrentAbility] = React.useState({ id: 'placeholder', name: 'Выберите умение..' });
+function AddAssessmentTaskPopup({ isOpen, onClose, onAdd, currentAbilityId, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -15,7 +12,7 @@ function AddAssessmentTaskPopup({ isOpen, onClose, onAdd, abilities, isShowReque
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAdd({ name: name, description: description, abilityId: currentAbility.id });
+    onAdd({ name: name, description: description, abilityId: currentAbilityId, });
   }
 
   function handleChangeName(e) {
@@ -31,12 +28,8 @@ function AddAssessmentTaskPopup({ isOpen, onClose, onAdd, abilities, isShowReque
     setDescription(e.target.value);
   }
 
-  function handleChangeAbility(option) {
-    setCurrentAbility(option);
-  }
-
   React.useEffect(() => {
-    if (name.length < 1 || nameError.isShow || currentAbility.id === 'placeholder') {
+    if (name.length < 1 || nameError.isShow || currentAbilityId === 'placeholder') {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
@@ -59,15 +52,6 @@ function AddAssessmentTaskPopup({ isOpen, onClose, onAdd, abilities, isShowReque
     formName={'add-task-popup'}
     >
       <h2 className='popup__title'>Добавление задания</h2>
-
-      <label className='popup__field'>
-        <h4 className='popup__input-caption'>Умение:</h4>
-        <SelectSearch
-          options={abilities} 
-          currentOption={currentAbility} 
-          onChooseOption={handleChangeAbility} 
-        />
-      </label>
 
       <div className='popup__field'>
         <h4 className='popup__input-caption'>Наименование:</h4>

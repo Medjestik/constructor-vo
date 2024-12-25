@@ -158,7 +158,7 @@ function DisciplineLevel({ rows, disciplines, semesters, onAdd, onAttach, onEdit
             { semesters.map((elem, i) => (
               <li className='discipline-level__column discipline-level__column_type_semester' key={i}>
                 {
-                  row.discipline[0] && row.discipline[0].semesters.includes(elem.id) 
+                  row.discipline[0] && row.discipline[0].semesters && row.discipline[0].semesters.includes(elem.id) 
                   ?
                   <div 
                     className='discipline-level__semester-circle discipline-level__semester-circle_type_active'

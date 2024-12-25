@@ -130,6 +130,18 @@ export const getAbilities = ({ token, programId }) => {
   .then(res => handleResponse(res))
 };
 
+export const getAbilityData = ({ token, abilityId }) => {
+  return fetch(`${API_URL}/abilities/${abilityId}/tasks/`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
 export const createTask = ({ token, abilityId, task }) => {
   return fetch(`${API_URL}/abilities/${abilityId}/tasks/`, {
     method: 'POST',

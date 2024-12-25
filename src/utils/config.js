@@ -47,7 +47,7 @@ export const ASSESSMENT_TABS = [
   },
   {
     title: 'Оценка умений',
-    link: '/ability',
+    link: '/ability/list',
     keyword: 'ability',
   },
 ];
