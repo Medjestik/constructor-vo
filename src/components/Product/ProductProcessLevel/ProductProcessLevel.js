@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, openProcess, onAdd, onOpen, onEdit, onRemove, onChangeOrder }) {
+function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, openProcess, onAdd, onOpen, onEdit, onRemove, onInfo, onChangeOrder }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -34,6 +34,7 @@ function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, op
       <div className='levels__container'>
         <div className='levels__header'>
           <h3 className='levels__header-title'>Процессы</h3>
+          <div className='levels__header-info' onClick={() => onInfo('Процесс', 'Описание процесса..')}></div>
           <div className='levels__header-btn-container'>
             <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           </div>
@@ -78,6 +79,7 @@ function ProductProcessLevel({ data, isOpenProcesses, openProduct, openStage, op
       <div className='levels__container'>
         <div className='levels__header'>
           <h3 className='levels__header-title'>Процессы</h3>
+          <div className='levels__header-info' onClick={() => onInfo('Процесс', 'Описание процесса..')}></div>
         </div>
         <p className='levels__item-empty'>Выберите этап..</p>
       </div>

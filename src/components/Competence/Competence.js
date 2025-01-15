@@ -17,6 +17,7 @@ import ConnectKnowledgePopup from './CompetencePopup/ConnectKnowledgePopup/Conne
 import DisconnectKnowledgePopup from './CompetencePopup/DisconnectKnowledgePopup/DisconnectKnowledgePopup.js';
 import EditKnowledgePopup from './CompetencePopup/EditKnowledgePopup/EditKnowledgePopup.js'
 import WarningRemovePopup from '../Popup/WarningRemovePopup/WarningRemovePopup.js';
+import InfoPopup from '../Popup/InfoPopup/InfoPopup.js';
 
 function Competence({ currentProgram, isEditRights }) {
 
@@ -48,6 +49,8 @@ function Competence({ currentProgram, isEditRights }) {
   const [isDisconnectKnowledgePopupOpen, setIsDisconnectKnowledgePopupOpen] = React.useState(false);
   const [isEditKnowledgePopupOpen, setIsEditKnowledgePopupOpen] = React.useState(false);
   const [isRemoveKnowledgePopupOpen, setIsRemoveKnowledgePopupOpen] = React.useState(false);
+
+  const [isOpenInfoPopup, setIsOpenInfoPopup] = React.useState({ isShow: false, title: '', text: '' });
 
   function handleChooseOption(option) {
     console.log(option);
@@ -98,6 +101,14 @@ function Competence({ currentProgram, isEditRights }) {
   function openRemoveKnowledgePopup(knowledge) {
     setCurrentKnowledge(knowledge);
     setIsRemoveKnowledgePopupOpen(true);
+  }
+
+  function openInfoPopup(title, text) {
+    setIsOpenInfoPopup({ isShow: true, title, text });
+  }
+
+  function closeInfoPopup() {
+    setIsOpenInfoPopup({ isShow: false, title: '', text: '' });
   }
 
   function closeCompetencePopup() {
@@ -522,6 +533,7 @@ function Competence({ currentProgram, isEditRights }) {
               data={processes} 
               openProcess={openProcess} 
               onOpen={handleOpenProcess} 
+              onInfo={openInfoPopup}
             />
             {
               isShowAbilities 
@@ -535,6 +547,7 @@ function Competence({ currentProgram, isEditRights }) {
                 onRemove={openRemoveAbilitiesPopup}
                 onConnect={openConnectAbilitiesPopup}
                 onDisconnect={openDisconnectAbilitiesPopup}
+                onInfo={openInfoPopup}
               />
               :
               <div className='level__tab'>
@@ -552,6 +565,7 @@ function Competence({ currentProgram, isEditRights }) {
                 onRemove={openRemoveKnowledgePopup}
                 onConnect={openConnectKnowledgePopup}
                 onDisconnect={openDisconnectKnowledgePopup}
+                onInfo={openInfoPopup}
               />
               :
               <div className='level__tab'>
@@ -686,6 +700,16 @@ function Competence({ currentProgram, isEditRights }) {
           item={currentKnowledge}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
+        />
+      }
+
+      {
+        isOpenInfoPopup.isShow &&
+        <InfoPopup
+          isOpen={isOpenInfoPopup.isShow} 
+          onClose={closeInfoPopup} 
+          title={isOpenInfoPopup.title}
+          text={isOpenInfoPopup.text}
         />
       }
 

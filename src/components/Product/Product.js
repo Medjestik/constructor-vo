@@ -21,6 +21,7 @@ import ChangeOrderPopup from '../Popup/ChangeOrderPopup/ChangeOrderPopup.js';
 import AddResultPopup from './ProductPopup/AddResultPopup/AddResultPopup.js';
 import EditResultPopup from './ProductPopup/EditResultPopup/EditResultPopup.js';
 import NsiPopup from '../Popup/NsiPopup/NsiPopup.js';
+import InfoPopup from '../Popup/InfoPopup/InfoPopup.js';
 
 function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
 
@@ -68,6 +69,8 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
   const [isOpenAddResultPopup, setIsOpenAddResultPopup] = React.useState(false);
   const [isOpenEditResultPopup, setIsOpenEditResultPopup] = React.useState(false);
   const [isOpenRemoveResultPopup, setIsOpenRemoveResultPopup] = React.useState(false);
+
+  const [isOpenInfoPopup, setIsOpenInfoPopup] = React.useState({ isShow: false, title: '', text: '' });
 
   const [isShowRequestError, setIsShowRequestError] = React.useState({ isShow: false, text: '' });
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
@@ -511,6 +514,14 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
     setIsOpenNsiPopup(false);
   }
 
+  function openInfoPopup(title, text) {
+    setIsOpenInfoPopup({ isShow: true, title, text });
+  }
+
+  function closeInfoPopup() {
+    setIsOpenInfoPopup({ isShow: false, title: '', text: '' });
+  }
+
   function closeProductPopup() {
     setIsOpenAddProductPopup(false);
     setIsOpenEditProductPopup(false);
@@ -612,6 +623,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                     onOpen={handleOpenProduct} 
                     onEdit={openEditProductPopup} 
                     onRemove={openRemoveProductPopup} 
+                    onInfo={openInfoPopup}
                   />
                 </div>
                 <div className='levels-carousel__item'> 
@@ -625,6 +637,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                     onOpen={handleOpenStage} 
                     onEdit={openEditStagePopup}
                     onRemove={openRemoveStagePopup}
+                    onInfo={openInfoPopup}
                   />
                 </div>
                 <div className='levels-carousel__item'>
@@ -639,6 +652,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                     onEdit={openEditProcessPopup}
                     onRemove={openRemoveProcessPopup}
                     onChangeOrder={openChangeOrderProcessPopup}
+                    onInfo={openInfoPopup}
                   />
                 </div>
                 <div className='levels-carousel__item'>
@@ -648,6 +662,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
                     onAdd={openAddResultPopup} 
                     onEdit={openEditResultPopup}
                     onRemove={openRemoveResultPopup}
+                    onInfo={openInfoPopup}
                   />
                 </div>
               </div>
@@ -809,6 +824,15 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           ministries={ministries} 
           onAdd={handleAddNsi} 
           isLoading={false}
+        />
+      }
+      {
+        isOpenInfoPopup.isShow &&
+        <InfoPopup
+          isOpen={isOpenInfoPopup.isShow} 
+          onClose={closeInfoPopup} 
+          title={isOpenInfoPopup.title}
+          text={isOpenInfoPopup.text}
         />
       }
     </>

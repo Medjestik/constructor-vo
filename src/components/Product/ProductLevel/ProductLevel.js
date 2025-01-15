@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProductLevel({ data, currentProgramType, openProduct, onAdd, onOpen, onEdit, onRemove }) {
+function ProductLevel({ data, currentProgramType, openProduct, onAdd, onOpen, onEdit, onRemove, onInfo }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -30,6 +30,7 @@ function ProductLevel({ data, currentProgramType, openProduct, onAdd, onOpen, on
     <div className='levels__container'>
       <div className='levels__header'>
         <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Сферы' : 'Продукты'}</h3>
+        <div className='levels__header-info' onClick={() => onInfo('Продукт', 'Описание продукта..')}></div>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
         </div>

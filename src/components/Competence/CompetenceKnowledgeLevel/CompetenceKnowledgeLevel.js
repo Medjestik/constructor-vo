@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CompetenceKnowledgeLevel({ openProcess, openAbility, onAdd, onEdit, onRemove, onConnect, onDisconnect }) {
+function CompetenceKnowledgeLevel({ openProcess, openAbility, onAdd, onEdit, onRemove, onConnect, onDisconnect, onInfo }) {
 
   function handleEdit(event, item) {
     event.stopPropagation();
@@ -37,6 +37,7 @@ function CompetenceKnowledgeLevel({ openProcess, openAbility, onAdd, onEdit, onR
     <div className='levels__container'>
       <div className='levels__header'>
         <h3 className='levels__header-title'>Знания</h3>
+        <div className='levels__header-info' onClick={() => onInfo('Знание', 'Описание знания..')}></div>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           <button className='icon icon_margin_left-8 icon_size_20 icon_type_link-grey' type='button'onClick={onConnect}></button>
@@ -53,6 +54,10 @@ function CompetenceKnowledgeLevel({ openProcess, openAbility, onAdd, onEdit, onR
               <li className={`levels__item`} key={item.id}>
                 <div className='levels__item-header'>
                   <span className='badge badge_size_small badge_type_knowledge'>Знание {openProcess.code}.{openAbility.code}.{i + 1}</span>
+                  {
+                     item.parent_id.length > 1 &&
+                     <span className='badge badge_size_small badge_type_orange badge_margin_left_12'>Сквозное знание<div className='badge__arrows'></div></span>
+                  }
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_link-grey' type='button' onClick={(e) => handleDisconnect(e, item)}></button>

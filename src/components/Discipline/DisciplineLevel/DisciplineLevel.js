@@ -155,20 +155,21 @@ function DisciplineLevel({ rows, disciplines, semesters, onAdd, onAttach, onEdit
             </div>
           </div>
           <ul className='discipline-level__semesters'>
-            { semesters.map((elem, i) => (
+            {semesters.map((elem, i) => (
               <li className='discipline-level__column discipline-level__column_type_semester' key={i}>
                 {
-                  row.discipline[0] && row.discipline[0].semesters && row.discipline[0].semesters.includes(elem.id) 
+                  elem.disciplines.some(discipline => discipline.id === row.discipline[0]?.id) // Проверка наличия id
                   ?
                   <div 
-                    className='discipline-level__semester-circle discipline-level__semester-circle_type_active'
-                    onClick={() => onRemoveSemester(elem.id, row.discipline[0].id)}
+                    className='discipline-level__semester-count'
+                    onClick={() => onAddSemester(elem.id, elem.disciplines.find(discipline => discipline.id === row.discipline[0]?.id))}
                   >
+                    {elem.disciplines.find(discipline => discipline.id === row.discipline[0]?.id).zet} ЗЕТ
                   </div>
                   :
                   <div 
                     className='discipline-level__semester-circle discipline-level__semester-circle_type_stub'
-                    onClick={() => onAddSemester(elem.id, row.discipline[0].id)}
+                    onClick={() => onAddSemester(elem.id, {...row.discipline[0], zet: null, control: null })}
                   >
                   </div>
                 }

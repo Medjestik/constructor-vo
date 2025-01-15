@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProductStageLevel({ data, currentProgramType, isOpenStages, openProduct, openStage, onAdd, onOpen, onEdit, onRemove }) {
+function ProductStageLevel({ data, currentProgramType, isOpenStages, openProduct, openStage, onAdd, onOpen, onEdit, onRemove, onInfo }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -34,6 +34,7 @@ function ProductStageLevel({ data, currentProgramType, isOpenStages, openProduct
       <div className='levels__container'>
         <div className='levels__header'>
           <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Области' : 'Этапы ЖЦ'}</h3>
+          <div className='levels__header-info' onClick={() => onInfo('Этап', 'Описание этапа..')}></div>
           <div className='levels__header-btn-container'>
             <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           </div>
@@ -76,6 +77,7 @@ function ProductStageLevel({ data, currentProgramType, isOpenStages, openProduct
       <div className='levels__container'>
         <div className='levels__header'>
           <h3 className='levels__header-title'>{currentProgramType === 2 ? 'Области' : 'Этапы ЖЦ'}</h3>
+          <div className='levels__header-info' onClick={() => onInfo('Этап', 'Описание этапа..')}></div>
         </div>
         <p className='levels__item-empty'>Выберите {currentProgramType === 2 ? 'сферу..' : 'продукт..'}</p>
       </div>

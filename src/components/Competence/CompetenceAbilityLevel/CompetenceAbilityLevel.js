@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdit, onRemove, onConnect, onDisconnect }) {
+function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdit, onRemove, onConnect, onDisconnect, onInfo }) {
 
   function handleEdit(event, item) {
     event.stopPropagation();
@@ -38,6 +38,7 @@ function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdi
     <div className='levels__container'>
       <div className='levels__header'>
         <h3 className='levels__header-title'>Умения</h3>
+        <div className='levels__header-info' onClick={() => onInfo('Умение', 'Описание умения..')}></div>
         <div className='levels__header-btn-container'>
           <button className='icon icon_size_20 icon_type_add-grey' type='button' onClick={onAdd}></button>
           <button className='icon icon_margin_left-8 icon_size_20 icon_type_link-grey' type='button'onClick={onConnect}></button>
@@ -53,6 +54,10 @@ function CompetenceAbilityLevel({ openProcess, openAbility, onAdd, onOpen, onEdi
               <li className={`levels__item levels__item_type_open ${openAbility.id === item.id ? 'levels__item_type_active' : ''}`} key={item.id} onClick={(() => onOpen(item, i + 1))}>
                 <div className='levels__item-header'>
                   <span className='badge badge_size_small badge_type_ability'>Умение {openProcess.code}.{i + 1}</span>
+                  {
+                     item.parent_id.length > 1 &&
+                     <span className='badge badge_size_small badge_type_orange badge_margin_left_12'>Сквозное умение<div className='badge__arrows'></div></span>
+                  }
                   <div className='levels__item-header-btn-container'>
                     <button className='icon icon_size_16 icon_type_edit-grey' type='button' onClick={(e) => handleEdit(e, item)}></button>
                     <button className='icon icon_margin_left-8 icon_size_16 icon_type_link-grey' type='button' onClick={(e) => handleDisconnect(e, item)}></button>

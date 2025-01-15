@@ -69,6 +69,17 @@
   line-height: 20px;
   color: var(--main-black-color);
 }
+.levels__header-info {
+  margin: 0 0 0 8px;
+  width: 24px;
+  height: 24px;
+  background-image: url('../../images/info.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  justify-content: center;
+  cursor: pointer;
+}
 .levels__header-btn-container {
   margin: 0px 0px 0px auto;
   display: flex;

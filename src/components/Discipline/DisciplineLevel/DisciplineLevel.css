@@ -194,6 +194,15 @@
   background-size: contain;
   flex-shrink: 0;
 }
+.discipline-level__semester-count {
+  margin: 0 auto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
 .discipline-level__semester-circle {
   margin: 0px;
   width: 24px;

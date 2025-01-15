@@ -197,6 +197,10 @@
   user-select: none;
   pointer-events: none;
 }
+.popup__btn-save_type_remove {
+  margin: 0 12px 0 0;
+  background: var(--gradient-orange-color);
+}
 .popup__btn-save_type_loading {
   background: var(--gradient-orange-color);
   cursor: default;

@@ -1,7 +1,6 @@
 import React from 'react';
 import './Discipline.css';
 import * as disciplineApi from '../../utils/discipline.js';
-import { DISCIPLINE_SECTION_OPTIONS } from '../../utils/config.js';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Preloader from '../Preloader/Preloader.js';
 import Section from '../Section/Section.js';
@@ -15,10 +14,9 @@ import EditDisciplinePopup from './DisciplinePopup/EditDisciplinePopup/EditDisci
 import ConstructDisciplinePopup from './DisciplinePopup/ConstructDisciplinePopup/ConstructDisciplinePopup.js';
 import ConfirmRemovePopup from '../Popup/ConfirmRemovePopup/ConfirmRemovePopup.js';
 import ViewResultsPopup from './DisciplinePopup/ViewResultsPopup/ViewResultsPopup.js';
+import AttachSemesterPopup from './DisciplinePopup/AttachSemesterPopup/AttachSemesterPopup.js';
 
 function Discipline({ currentProgram, isEditRights }) {
-
-  const [sectionOptions, setSectionOptions] = React.useState(DISCIPLINE_SECTION_OPTIONS);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,6 +24,7 @@ function Discipline({ currentProgram, isEditRights }) {
   const [currentStage, setCurrentStage] = React.useState({});
   const [currentProcess, setCurrentProcess] = React.useState({});
   const [currentDiscipline, setCurrentDiscipline] = React.useState({});
+  const [currentSemester, setCurrentSemester] = React.useState({});
 
   const [rows, setRows] = React.useState([]);
   const [stages, setStages] = React.useState([]);
@@ -34,6 +33,7 @@ function Discipline({ currentProgram, isEditRights }) {
 
   const [isOpenAddDisciplinePopup, setIsOpenAddDisciplinePopup] = React.useState(false);
   const [isOpenAttachDisciplinePopup, setIsOpenAttachDisciplinePopup] = React.useState(false);
+  const [isOpenAttachSemesterPopup, setIsOpenAttachSemesterPopup] = React.useState(false);
   const [isOpenEditDisciplinePopup, setIsOpenEditDisciplinePopup] = React.useState(false);
   const [isOpenRemoveDisciplinePopup, setIsOpenRemoveDisciplinePopup] = React.useState(false);
   const [isOpenConstructDisciplinePopup, setIsOpenConstructDisciplinePopup] = React.useState(false);
@@ -148,6 +148,12 @@ function Discipline({ currentProgram, isEditRights }) {
     setIsOpenAttachDisciplinePopup(true);
   }
 
+  function openAttachSemesterPopup(semester, discipline) {
+    console.log(semester);
+    setCurrentSemester(semester)
+    setCurrentDiscipline(discipline);
+    setIsOpenAttachSemesterPopup(true);
+  }
 
   function openEditDisciplinePopup(item) {
     setCurrentDiscipline(item);
@@ -171,6 +177,7 @@ function Discipline({ currentProgram, isEditRights }) {
   function closeDisciplinePopup() {
     setIsOpenAddDisciplinePopup(false);
     setIsOpenAttachDisciplinePopup(false);
+    setIsOpenAttachSemesterPopup(false);
     setIsOpenEditDisciplinePopup(false);
     setIsOpenConstructDisciplinePopup(false);
     setIsOpenRemoveDisciplinePopup(false);
@@ -294,10 +301,16 @@ function Discipline({ currentProgram, isEditRights }) {
       });
   }
 
-  function handleAddSemester(semesterId, disciplineId) {
-    //setIsLoadingRequest(true);
+  function handleAddSemester(data) {
+    setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.addSemester({ token: token, semesterId: semesterId, disciplineId: disciplineId })
+    disciplineApi.addSemester({ 
+        token: token, 
+        semesterId: currentSemester, 
+        disciplineId: currentDiscipline.id,
+        zet: data.zet,
+        control: data.control,
+      })
       .then(() => {
         getDiscipline();
       })
@@ -306,14 +319,19 @@ function Discipline({ currentProgram, isEditRights }) {
         setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
       })
       .finally(() => {
-        //setIsLoadingRequest(false);
+        setIsLoadingRequest(false);
+        closeDisciplinePopup();
       });
   }
 
-  function handleRemoveSemester(semesterId, disciplineId) {
-    //setIsLoadingRequest(true);
+  function handleRemoveSemester() {
+    setIsLoadingRequest(true);
     const token = localStorage.getItem('token');
-    disciplineApi.removeSemester({ token: token, semesterId: semesterId, disciplineId: disciplineId })
+    disciplineApi.removeSemester({ 
+      token: token,         
+      semesterId: currentSemester, 
+      disciplineId: currentDiscipline.id, 
+    })
       .then(() => {
         getDiscipline();
       })
@@ -322,7 +340,8 @@ function Discipline({ currentProgram, isEditRights }) {
         setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
       })
       .finally(() => {
-        //setIsLoadingRequest(false);
+        setIsLoadingRequest(false);
+        closeDisciplinePopup();
       });
   }
 
@@ -399,28 +418,13 @@ function Discipline({ currentProgram, isEditRights }) {
   }
 
   React.useEffect(() => {
-    if (location.pathname.includes('level')) {
-      const newOptions = sectionOptions.map((elem) => elem.id === 'level' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
-      setSectionOptions(newOptions);
-    }
-    if (location.pathname.includes('list')) {
-      const newOptions = sectionOptions.map((elem) => elem.id === 'list' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
-      setSectionOptions(newOptions);
-    }
-    if (location.pathname.includes('chart')) {
-      const newOptions = sectionOptions.map((elem) => elem.id === 'chart' ? {...elem, status: 'active'} : {...elem, status: 'inactive'});
-      setSectionOptions(newOptions);
-    }
-    // eslint-disable-next-line
-  }, [location]);
-
-  React.useEffect(() => {
     getDiscipline();
     return(() => {
       setRows([]);
       setStages([]);
       setDisciplines([]);
       setSemesters([]);
+      setCurrentSemester({});
       setCurrentProcess({});
       setCurrentDiscipline({});
     })
@@ -436,7 +440,7 @@ function Discipline({ currentProgram, isEditRights }) {
       :
       <Section 
         title={'Проектирование дисциплин'} 
-        options={sectionOptions} 
+        options={[]} 
         onChooseOption={handleChooseOption} 
         heightType={'page'} 
         headerType={'large'}
@@ -453,7 +457,7 @@ function Discipline({ currentProgram, isEditRights }) {
               onViewProcess={openViewResultsPopup}
               onConstruct={openConstructDisciplinePopup}
               onRemove={openRemoveDisciplinePopup}
-              onAddSemester={handleAddSemester}
+              onAddSemester={openAttachSemesterPopup}
               onRemoveSemester={handleRemoveSemester}
             />
           }>
@@ -535,6 +539,18 @@ function Discipline({ currentProgram, isEditRights }) {
         isOpen={isOpenViewResultsPopup}
         onClose={closeDisciplinePopup}
         currentProcess={currentProcess}
+      />
+    }
+    {
+      isOpenAttachSemesterPopup &&
+      <AttachSemesterPopup
+        isOpen={isOpenAttachSemesterPopup}
+        onClose={closeDisciplinePopup}
+        onAttach={handleAddSemester}
+        onRemove={handleRemoveSemester}
+        currentDiscipline={currentDiscipline}
+        isShowRequestError={isShowRequestError}
+        isLoadingRequest={isLoadingRequest}
       />
     }
     </>

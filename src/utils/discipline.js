@@ -9,7 +9,7 @@ function handleResponse (res) {
 }
 
 export const getSemesters = ({ token, programId }) => { 
-  return fetch(`${API_URL}/programs/${programId}/semesters?short=true/`, {
+  return fetch(`${API_URL}/programs/${programId}/semesters`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -96,7 +96,7 @@ export const attachDiscipline = ({ token, programId, source_id, destination_id }
   .then(res => handleResponse(res))
 };
 
-export const addSemester = ({ token, semesterId, disciplineId }) => {
+export const addSemester = ({ token, semesterId, disciplineId, zet, control }) => {
   return fetch(`${API_URL}/semesters/${semesterId}/attach_discipline/${disciplineId}/`, {
     method: 'POST',
     headers: {
@@ -104,6 +104,7 @@ export const addSemester = ({ token, semesterId, disciplineId }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
+    body: JSON.stringify({ zet, control })
   })
   .then(res => handleResponse(res))
 };

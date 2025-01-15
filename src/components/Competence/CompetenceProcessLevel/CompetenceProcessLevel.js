@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CompetenceProcessLevel({ data, openProcess, onOpen }) {
+function CompetenceProcessLevel({ data, openProcess, onOpen, onInfo }) {
 
   const containerHeightRef = React.createRef();
   const [listHeight, setListHeight] = React.useState(0);
@@ -22,6 +22,7 @@ function CompetenceProcessLevel({ data, openProcess, onOpen }) {
     <div  className='levels__container'>
       <div className='levels__header'>
         <h3 className='levels__header-title'>Процессы</h3>
+        <div className='levels__header-info' onClick={() => onInfo('Процесс', 'Описание процесса..')}></div>
       </div>
       {
         data.length > 0
