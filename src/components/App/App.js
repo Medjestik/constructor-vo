@@ -136,7 +136,6 @@ function App() {
       setIsLoadingPage(true);
       api.getUser({ token: token })
         .then((res) => {
-          console.log('UserInfo', res);
           setCurrentUser(res);
           setLoggedIn(true);
           if (pathname === '/') {

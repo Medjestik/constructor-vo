@@ -206,3 +206,28 @@ export const addNsi = ({ token, programId, nsi }) => {
   })
   .then(res => handleResponse(res))
 };
+
+export const editNsi = ({ token, programId, nsi }) => {
+  return fetch(`${API_URL}/programs/${programId}/nsis/${nsi.id}/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nsi })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeNsi = ({ token, programId, nsiId }) => {
+  return fetch(`${API_URL}/programs/${programId}/nsis/${nsiId}/`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};

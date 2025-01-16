@@ -1,7 +1,8 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
+import NsiList from '../../../Nsi/NsiList.js';
 
-function AddKnowledgePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadingRequest }) {
+function AddKnowledgePopup({ isOpen, onClose, onAdd, currentProcess, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
@@ -66,6 +67,8 @@ function AddKnowledgePopup({ isOpen, onClose, onAdd, isShowRequestError, isLoadi
           {nameError.text}
         </span>
       </label>
+
+      <NsiList nsi={currentProcess.nsis} />
 
       <div className='popup__btn-container'>
         <button className='popup__btn-cancel' type='button' onClick={() => onClose()}>Отменить</button>

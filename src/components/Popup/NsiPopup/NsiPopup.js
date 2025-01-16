@@ -46,7 +46,7 @@ import DispositionMinistryPopup from './DispositionMinistryPopup/DispositionMini
 import InternationalDocumentPopup from './InternationalDocumentPopup/InternationalDocumentPopup.js';
 import OtherPopup from './OtherPopup/OtherPopup.js';
 
-function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
+function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, onRemove, isLoading }) {
   
   const [isFederalLawPopupOpen, setIsFederalLawPopupOpen] = React.useState(false);
   const [isRussiaLawPopupOpen, setIsRussiaLawPopupOpen] = React.useState(false);

@@ -2,16 +2,18 @@ import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import Nsi from '../../../Nsi/Nsi.js';
 
-function AddProductPopup({ isOpen, onClose, onAdd, nsi, currentProgramType, onOpenNsi, isShowRequestError, isLoadingRequest }) {
+function AddProductPopup({ isOpen, onClose, onAdd, nsi: nsiList, currentProgramType, onOpenNsi, onEditNsi, onRemoveNsi, isShowRequestError, isLoadingRequest }) {
 
   const [name, setName] = React.useState('');
   const [nameError, setNameError] = React.useState({ isShow: false, text: '' });
 
+  const [nsi, setNsi] = React.useState([]);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAdd({ name: name, })
+    const data = { name, nsis: nsi };
+    onAdd(data);
   }
 
   function handleChangeName(e) {
@@ -23,27 +25,37 @@ function AddProductPopup({ isOpen, onClose, onAdd, nsi, currentProgramType, onOp
     }
   }
 
+  function handleToggleNsi(selectedNsi) {
+    setNsi((prevState) => {
+      const exists = prevState.find((item) => item.id === selectedNsi.id);
+      if (exists) {
+        return prevState.filter((item) => item !== selectedNsi.id);
+      } else {
+        return [...prevState, selectedNsi.id];
+      }
+    });
+  }
+
   React.useEffect(() => {
     if (name.length < 1 || nameError.isShow) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
-  // eslint-disable-next-line
-  }, [name]);
+  }, [name, nameError]);
 
   React.useEffect(() => {
     setName('');
     setNameError({ isShow: false, text: '' });
-  // eslint-disable-next-line
+    setNsi([]); // Очищаем выбранные NSI при открытии
   }, [isOpen]);
 
   return (
     <Popup
-    isOpen={isOpen}
-    onSubmit={handleSubmit}
-    formWidth={'large'}
-    formName={'add-product-popup'}
+      isOpen={isOpen}
+      onSubmit={handleSubmit}
+      formWidth={'large'}
+      formName={'add-product-popup'}
     >
       <h2 className='popup__title'>Добавление {currentProgramType === 2 ? 'новой сферы' : 'нового продукта'}</h2>
 
@@ -59,15 +71,14 @@ function AddProductPopup({ isOpen, onClose, onAdd, nsi, currentProgramType, onOp
           autoComplete='off'
           minLength={1}
           required 
-        >
-        </textarea>
+        ></textarea>
         <span className={`popup__input-error ${nameError.isShow ? 'popup__input-error_status_show' : ''}`}>
           {nameError.text}
         </span>
       </div>
 
       <div className='popup__field'>
-        <Nsi nsi={nsi} onOpenNsi={onOpenNsi} />
+        <Nsi nsi={nsiList} selectedNsi={nsi} onToggleNsi={handleToggleNsi} onOpenNsi={onOpenNsi} onEditNsi={onEditNsi} onRemoveNsi={onRemoveNsi} />
       </div>
 
       <div className='popup__btn-container'>
@@ -81,7 +92,7 @@ function AddProductPopup({ isOpen, onClose, onAdd, nsi, currentProgramType, onOp
       </div>
       <span className={`popup__input-error ${isShowRequestError.isShow && 'popup__input-error_status_show'}`}>{isShowRequestError.text}</span>
     </Popup>
-  )
+  );
 }
 
 export default AddProductPopup;

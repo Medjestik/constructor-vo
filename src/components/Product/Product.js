@@ -21,6 +21,7 @@ import ChangeOrderPopup from '../Popup/ChangeOrderPopup/ChangeOrderPopup.js';
 import AddResultPopup from './ProductPopup/AddResultPopup/AddResultPopup.js';
 import EditResultPopup from './ProductPopup/EditResultPopup/EditResultPopup.js';
 import NsiPopup from '../Popup/NsiPopup/NsiPopup.js';
+import EditNsiPopup from '../Popup/NsiPopup/EditNsiPopup.js';
 import InfoPopup from '../Popup/InfoPopup/InfoPopup.js';
 
 function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
@@ -77,6 +78,9 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
   const [isOpenNsiPopup, setIsOpenNsiPopup] = React.useState(false);
+  const [isOpenEditNsiPopup, setIsOpenEditNsiPopup] = React.useState(false);
+
+  const [currentNsi, setCurrentNsi] = React.useState({});
 
   const containerRef = React.useRef(null);
 
@@ -139,6 +143,39 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
       .then((res) => {
         setNsi([...nsi, res]);
         closeNsiPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+  
+  function handleEditNsi(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    programApi.editNsi({ token: token, programId: currentProgram.id, nsi: item })
+      .then((res) => {
+        // setNsi([...nsi, res]);
+        closeNsiPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsShowRequestError({ isShow: true, text: 'К сожалению произошла ошибка!' });
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+  }
+
+  function handleRemoveNsi(item) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem('token');
+    programApi.removeNsi({ token: token, programId: currentProgram.id, nsiId: item.id })
+      .then(() => {
+        setNsi(nsi.filter((elem) => elem.id !== item.id));
       })
       .catch((err) => {
         console.log(err);
@@ -510,8 +547,14 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
     setIsOpenNsiPopup(true);
   }
 
+  function openEditNsiPopup(nsi) {
+    setIsOpenEditNsiPopup(true);
+    setCurrentNsi(nsi);
+  }
+
   function closeNsiPopup() {
     setIsOpenNsiPopup(false);
+    setIsOpenEditNsiPopup(false);
   }
 
   function openInfoPopup(title, text) {
@@ -581,6 +624,7 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
       setStages([]);
       setProcesses([]);
       setResults([]);
+      setCurrentNsi({});
       setCurrentProduct({});
       setCurrentStage({});
       setCurrentProcess({});
@@ -679,6 +723,8 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           nsi={nsi}
           currentProgramType={currentProgram.type}
           onOpenNsi={openNsiPopup}
+          onEditNsi={openEditNsiPopup}
+          onRemoveNsi={handleRemoveNsi}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -691,6 +737,10 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           currentProduct={currentProduct}
           currentProgramType={currentProgram.type}
           onEdit={handleEditProduct}
+          nsi={nsi}
+          onOpenNsi={openNsiPopup}
+          onEditNsi={openEditNsiPopup}
+          onRemoveNsi={handleRemoveNsi}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -822,7 +872,19 @@ function Product({ currentProgram, nsiTypes, ministries, isEditRights }) {
           onClose={closeNsiPopup} 
           nsiTypes={nsiTypes}
           ministries={ministries} 
-          onAdd={handleAddNsi} 
+          onAdd={handleAddNsi}
+          isLoading={false}
+        />
+      }
+      {
+        isOpenEditNsiPopup &&
+        <EditNsiPopup
+          isOpen={isOpenEditNsiPopup} 
+          onClose={closeNsiPopup} 
+          nsiTypes={nsiTypes}
+          ministries={ministries} 
+          currentNsi={currentNsi}
+          onEdit={handleEditNsi}
           isLoading={false}
         />
       }

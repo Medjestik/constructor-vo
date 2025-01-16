@@ -17,7 +17,7 @@ export const login = ({ login: email, password }) => {
     },
     body: JSON.stringify({ email, password })
   })
-  .then(res => handleResponse(res));
+  .then(res => handleResponse(res))
 };
 
 export const getUsers = ({ token }) => {

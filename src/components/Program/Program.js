@@ -39,9 +39,6 @@ function Program({ windowWidth, onLogout }) {
       programApi.getMinistries({ token, }),
     ])
     .then(([programData, nsiTypes, ministries]) => {
-      console.log(programData, 'Program');
-      console.log(nsiTypes, 'nsi');
-      console.log(ministries, 'ministries');
       setCurrentProgram(programData);
       setNsiTypes(nsiTypes);
       setMinistries(ministries);

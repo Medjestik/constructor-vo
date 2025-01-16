@@ -644,6 +644,7 @@ function Competence({ currentProgram, isEditRights }) {
           isOpen={isAddKnowledgePopupOpen}
           onClose={closeCompetencePopup}
           onAdd={handleAddKnowledge}
+          currentProcess={processes.find((elem) => elem.id === openProcess.id)}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />
@@ -680,6 +681,7 @@ function Competence({ currentProgram, isEditRights }) {
           onClose={closeCompetencePopup}
           currentKnowledge={currentKnowledge}
           onEdit={handleEditKnowledge}
+          currentProcess={processes.find((elem) => elem.id === openProcess.id)}
           isShowRequestError={isShowRequestError}
           isLoadingRequest={isLoadingRequest}
         />

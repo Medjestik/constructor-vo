@@ -11,10 +11,11 @@
   padding: 0px;
   margin: 12px 0px 0px 0px;
   width: 100%;
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
 }
 .nsi__item {
+  width: calc(100% - 12px);
   margin: 0px 12px 16px 0px;
   padding: 10px 16px;
   display: flex;
@@ -22,11 +23,52 @@
   box-sizing: border-box;
   background-color: var(--main-grey-color);
   border: 2px solid var(--border-color);
-  box-sizing: border-box;
   border-radius: 10px;
   transition: .3s;
   position: relative;
 }
 .nsi__item:last-of-type {
   margin: 0px 12px 0px 0px;
+}
+.nsi__header {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.nsi__title {
+  margin: 0;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+}
+.nsi__header-btn-container {
+  margin: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+.nsi__text {
+  margin: 8px 0 0 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+}
+.nsi__main {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.nsi__checkbox {
+  margin: 0 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.nsi__checkbox-item {
+  margin: 0px;
+}
+.nsi__checkbox-item input + span {
+  margin-top: -10px;
 }
