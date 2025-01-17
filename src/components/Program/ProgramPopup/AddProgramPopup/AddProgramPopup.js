@@ -26,6 +26,9 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
   const [currentForm, setCurrentForm] = React.useState({});
   const [currentType, setCurrentType] = React.useState(typeOptions[0]);
 
+  const [semesterCount, setSemesterCount] = React.useState(0);
+  const [semesterCountError, setSemesterCountError] = React.useState({ isShow: false, text: '' });
+
   const [profile, setProfile] = React.useState('');
   const [profileError, setProfileError] = React.useState({ isShow: false, text: '' });
 
@@ -40,12 +43,9 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
       profile: profile,
       form: currentForm.name,
       annotation: annotation,
-      type: currentType.id
+      type: currentType.id,
+      max_semesters: Number(semesterCount),
     })
-  }
-
-  function handleChangeForm(option) {
-    setCurrentForm(option);
   }
 
   function handleChangeProfile(e) {
@@ -57,8 +57,63 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
     }
   }
 
+  function handleChangeSemesterCount(e) {
+    setSemesterCount(e.target.value);
+    if (e.target.checkValidity()) {
+      setSemesterCountError({ text: '', isShow: false });
+    } else {
+      setSemesterCountError({ text: 'Поле не может быть пустым', isShow: true });
+    }
+  }
+
   function handleChangeDirection(option) {
     setCurrentDirection(option);
+    calculateSemesterCount(option, currentForm);
+  }
+  
+  function handleChangeForm(option) {
+    setCurrentForm(option);
+    calculateSemesterCount(currentDirection, option);
+  }
+  
+  function calculateSemesterCount(direction, form) {
+    console.log(direction, form);
+    if (!direction || !form || direction.id === 'placeholder' || form.id === 'placeholder') {
+      setSemesterCount(0);
+      return;
+    }
+  
+    const code = direction.code.split('.')[1];
+    if (!code) {
+      setSemesterCount(0);
+      return;
+    }
+  
+    const number = parseInt(code, 10);
+    if (isNaN(number)) {
+      setSemesterCount(0);
+      return;
+    }
+
+    let count = 0;
+    if (form.id === 'form-o') {
+      // Очная форма
+      if (number === 3) count = 8;
+      else if (number === 4) count = 4;
+      else if (number === 5) count = 10;
+    } else if (form.id === 'form-oz') {
+      // Очно-заочная форма
+      if (number === 3) count = 9;
+      else if (number === 4) count = 5;
+      else if (number === 5) count = 11;
+    } else if (form.id === 'form-z') {
+      // Заочная форма
+      if (number === 3) count = 10;
+      else if (number === 4) count = 6;
+      else if (number === 5) count = 12;
+    }
+  
+    setSemesterCount(count);
   }
 
   function handleChangeType(option) {
@@ -73,14 +128,15 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
     if (
       currentDirection.id === 'placeholder'  || 
       profile.length < 1 || profileError.isShow || 
-      currentForm.id === 'placeholder' 
+      currentForm.id === 'placeholder' ||
+      semesterCount < 1 || semesterCount.isShow
       ) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
   // eslint-disable-next-line
-  }, [currentDirection, profile, currentForm]);
+  }, [currentDirection, profile, currentForm, semesterCount]);
 
   React.useEffect(() => {
     setCurrentForm(formOptions[0]);
@@ -108,6 +164,27 @@ function AddProgramPopup({ isOpen, onClose, directions, onAdd, isShowRequestErro
       <label className='popup__field'>
         <h4 className='popup__input-caption'>Форма обучения:</h4>
         <PopupSelect options={formOptions} currentOption={currentForm} onChooseOption={handleChangeForm} />
+      </label>
+
+      <label className='popup__field'>
+        <h4 className='popup__input-caption'>Количество семестров:</h4>
+        <div className='popup__input-field'>
+          <input 
+          className='popup__input'
+          type='number'
+          id='add-program-semester-count'
+          value={semesterCount}
+          onChange={handleChangeSemesterCount}
+          name='add-program-semester-count' 
+          placeholder='Введите количество семестров...'
+          autoComplete='off'
+          minLength={1}
+          required 
+          />
+        </div>
+        <span className={`popup__input-error ${semesterCountError.isShow ? 'popup__input-error_status_show' : ''}`}>
+          {semesterCountError.text}
+        </span>
       </label>
 
       <label className='popup__field'>
